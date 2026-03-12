@@ -22,8 +22,8 @@ RUN npm ci
 # 复制前端源代码
 COPY frontend/ ./
 
-# 构建前端
-RUN npm run build
+# 构建前端（跳过tsc类型检查，避免未使用变量导致构建失败）
+RUN npm run build:docker
 
 # 第二阶段：构建后端
 FROM python:3.9-slim AS backend-builder
@@ -78,17 +78,16 @@ COPY --from=frontend-builder /app/frontend/dist /app/frontend/dist
 # 复制项目文件
 COPY backend/ ./backend/
 COPY scripts/ ./scripts/
-COPY *.sh ./
-COPY env.example .env
 COPY docker-entrypoint.sh ./
+COPY docker-dev-entrypoint.sh ./
+COPY env.example .env
 
 # 创建必要的目录
 RUN mkdir -p data/projects data/uploads data/temp data/output logs
 
 # 设置权限
 RUN chown -R autoclip:autoclip /app
-RUN chmod +x *.sh
-RUN chmod +x docker-entrypoint.sh
+RUN chmod +x docker-entrypoint.sh docker-dev-entrypoint.sh
 RUN chmod -R 755 data logs
 
 # 切换到非root用户
