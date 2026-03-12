@@ -66,7 +66,7 @@ check_docker() {
     fi
     log_success "Docker已安装"
     
-    if ! command -v docker-compose >/dev/null 2>&1; then
+    if ! docker compose version >/dev/null 2>&1; then
         log_error "Docker Compose未安装，请先安装Docker Compose"
         exit 1
     fi
@@ -132,11 +132,11 @@ start_services() {
     # 选择启动模式
     if [[ "${1:-}" == "dev" ]]; then
         log_info "启动开发环境..."
-        docker-compose -f docker-compose.dev.yml up -d
+        docker compose -f docker-compose.dev.yml up -d
         COMPOSE_FILE="docker-compose.dev.yml"
     else
         log_info "启动生产环境..."
-        docker-compose up -d
+        docker compose up -d
         COMPOSE_FILE="docker-compose.yml"
     fi
     
@@ -145,11 +145,11 @@ start_services() {
     sleep 10
     
     # 检查服务状态
-    if docker-compose -f "$COMPOSE_FILE" ps | grep -q "Up"; then
+    if docker compose -f "$COMPOSE_FILE" ps | grep -q "Up"; then
         log_success "服务启动成功"
     else
         log_error "服务启动失败"
-        log_info "查看日志: docker-compose -f $COMPOSE_FILE logs"
+        log_info "查看日志: docker compose -f $COMPOSE_FILE logs"
         exit 1
     fi
 }
@@ -158,7 +158,7 @@ show_status() {
     log_header "服务状态"
     
     echo -e "${CYAN}📊 容器状态:${NC}"
-    docker-compose ps
+    docker compose ps
     
     echo -e "\n${CYAN}🌐 访问地址:${NC}"
     echo -e "  前端界面: http://localhost:3000"
@@ -167,10 +167,10 @@ show_status() {
     echo -e "  Flower监控: http://localhost:5555"
     
     echo -e "\n${CYAN}📝 常用命令:${NC}"
-    echo -e "  查看日志: docker-compose logs -f"
-    echo -e "  停止服务: docker-compose down"
-    echo -e "  重启服务: docker-compose restart"
-    echo -e "  进入容器: docker-compose exec autoclip bash"
+    echo -e "  查看日志: docker compose logs -f"
+    echo -e "  停止服务: docker compose down"
+    echo -e "  重启服务: docker compose restart"
+    echo -e "  进入容器: docker compose exec autoclip bash"
 }
 
 # =============================================================================

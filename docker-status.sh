@@ -68,7 +68,7 @@ check_docker() {
     fi
     log_success "Docker已安装"
     
-    if ! command -v docker-compose >/dev/null 2>&1; then
+    if ! docker compose version >/dev/null 2>&1; then
         log_error "Docker Compose未安装"
         return 1
     fi
@@ -183,10 +183,10 @@ show_access_info() {
     echo -e "  Flower监控: http://localhost:5555"
     
     echo -e "\n${CYAN}📝 常用命令:${NC}"
-    echo -e "  查看日志: docker-compose logs -f"
-    echo -e "  停止服务: docker-compose down"
-    echo -e "  重启服务: docker-compose restart"
-    echo -e "  进入容器: docker-compose exec autoclip bash"
+    echo -e "  查看日志: docker compose logs -f"
+    echo -e "  停止服务: docker compose down"
+    echo -e "  重启服务: docker compose restart"
+    echo -e "  进入容器: docker compose exec autoclip bash"
 }
 
 # =============================================================================
@@ -232,8 +232,8 @@ main() {
     else
         log_error "部分服务存在问题"
         echo -e "\n${YELLOW}💡 建议操作:${NC}"
-        echo -e "  1. 查看详细日志: docker-compose logs"
-        echo -e "  2. 重启服务: docker-compose restart"
+        echo -e "  1. 查看详细日志: docker compose logs"
+        echo -e "  2. 重启服务: docker compose restart"
         echo -e "  3. 重新启动: ./docker-start.sh"
     fi
 }
