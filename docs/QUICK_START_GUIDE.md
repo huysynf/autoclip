@@ -1,68 +1,68 @@
-# 🚀 AI切片项目重构 - 快速开始指南
+# 🚀 AI Clip Project Refactoring - Quick Start Guide
 
-## 📋 项目简介
+## 📋 Project Overview
 
-AI切片工具是一个基于AI的视频自动切片工具，能够将长视频自动切分为多个精彩片段。本项目正在进行重构，目标是建立现代化的后端架构。
+AI Clip Tool is an AI-based automatic video clipping tool that can automatically split long videos into multiple highlight clips. This project is undergoing refactoring with the goal of establishing a modern backend architecture.
 
-## 🎯 重构目标
+## 🎯 Refactoring Goals
 
-1. **数据持久化**: 引入SQLite + SQLAlchemy管理数据
-2. **服务模块化**: 重构FastAPI，实现服务模块化管理
-3. **任务调度**: 前后端打通任务调度系统
+1. **Data Persistence**: Introduce SQLite + SQLAlchemy for data management
+2. **Service Modularization**: Refactor FastAPI to implement modular service management
+3. **Task Scheduling**: Connect frontend and backend task scheduling system
 
-## 🏗️ 项目结构
+## 🏗️ Project Structure
 
 ```
 autoclip/
-├── backend/                    # 后端服务
-│   ├── app/                   # FastAPI应用
-│   ├── api/                   # API路由
-│   ├── core/                  # 核心模块
-│   ├── models/                # 数据模型
-│   ├── services/              # 业务服务
-│   └── tasks/                 # 任务队列
-├── frontend/                   # 前端应用
-├── shared/                     # 共享代码
-├── docs/                       # 文档
-└── data/                       # 数据文件
+├── backend/                    # Backend service
+│   ├── app/                   # FastAPI application
+│   ├── api/                   # API routes
+│   ├── core/                  # Core modules
+│   ├── models/                # Data models
+│   ├── services/              # Business services
+│   └── tasks/                 # Task queue
+├── frontend/                   # Frontend application
+├── shared/                     # Shared code
+├── docs/                       # Documentation
+└── data/                       # Data files
 ```
 
-## 🛠️ 开发环境准备
+## 🛠️ Development Environment Setup
 
-### 必需工具
+### Required Tools
 - Python 3.9+
 - Node.js 16+
 - Redis
 - Git
 
-### 安装步骤
+### Installation Steps
 
-1. **克隆项目**
+1. **Clone the project**
 ```bash
 git clone <repository-url>
 cd autoclip
 ```
 
-2. **后端环境设置**
+2. **Backend environment setup**
 ```bash
 cd backend
-# 安装Poetry (如果未安装)
+# Install Poetry (if not installed)
 curl -sSL https://install.python-poetry.org | python3 -
 
-# 安装依赖
+# Install dependencies
 poetry install
 
-# 激活虚拟环境
+# Activate virtual environment
 poetry shell
 ```
 
-3. **前端环境设置**
+3. **Frontend environment setup**
 ```bash
 cd frontend
 npm install
 ```
 
-4. **启动Redis**
+4. **Start Redis**
 ```bash
 # macOS
 brew install redis
@@ -73,33 +73,33 @@ sudo apt-get install redis-server
 sudo systemctl start redis
 ```
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 1. 启动后端服务
+### 1. Start backend service
 ```bash
 cd backend
 poetry run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### 2. 启动前端服务
+### 2. Start frontend service
 ```bash
 cd frontend
 npm run dev
 ```
 
-### 3. 访问应用
-- 前端: http://localhost:3000
-- 后端API: http://localhost:8000
-- API文档: http://localhost:8000/docs
+### 3. Access the application
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
 
-## 📚 开发指南
+## 📚 Development Guide
 
-### 后端开发
+### Backend Development
 
-#### 添加新的API路由
-1. 在 `backend/api/v1/` 下创建新的路由文件
-2. 在 `backend/app/main.py` 中注册路由
-3. 在 `backend/services/` 下实现对应的服务逻辑
+#### Adding new API routes
+1. Create a new route file under `backend/api/v1/`
+2. Register the route in `backend/app/main.py`
+3. Implement corresponding service logic under `backend/services/`
 
 ```python
 # backend/api/v1/example.py
@@ -116,10 +116,10 @@ async def get_example(db: Session = Depends(get_db)):
     return service.get_examples()
 ```
 
-#### 添加新的数据模型
-1. 在 `backend/models/` 下创建新的模型文件
-2. 继承 `Base` 类并添加必要的字段
-3. 运行数据库迁移
+#### Adding new data models
+1. Create a new model file under `backend/models/`
+2. Inherit from `Base` class and add necessary fields
+3. Run database migration
 
 ```python
 # backend/models/example.py
@@ -134,10 +134,10 @@ class Example(Base, TimestampMixin):
     description = Column(String(500))
 ```
 
-#### 添加新的服务
-1. 在 `backend/services/` 下创建新的服务文件
-2. 实现业务逻辑
-3. 添加错误处理和日志记录
+#### Adding new services
+1. Create a new service file under `backend/services/`
+2. Implement business logic
+3. Add error handling and logging
 
 ```python
 # backend/services/example_service.py
@@ -157,12 +157,12 @@ class ExampleService:
         return example
 ```
 
-### 前端开发
+### Frontend Development
 
-#### 添加新的页面
-1. 在 `frontend/src/pages/` 下创建新的页面组件
-2. 在路由配置中添加新页面
-3. 在导航菜单中添加链接
+#### Adding new pages
+1. Create a new page component under `frontend/src/pages/`
+2. Add the new page to route configuration
+3. Add link to navigation menu
 
 ```typescript
 // frontend/src/pages/ExamplePage.tsx
@@ -171,7 +171,7 @@ import { Card, Table } from 'antd';
 
 const ExamplePage: React.FC = () => {
   return (
-    <Card title="示例页面">
+    <Card title="Example Page">
       <Table />
     </Card>
   );
@@ -180,10 +180,10 @@ const ExamplePage: React.FC = () => {
 export default ExamplePage;
 ```
 
-#### 添加新的API调用
-1. 在 `frontend/src/services/` 下添加API方法
-2. 在组件中使用API调用
-3. 添加错误处理和加载状态
+#### Adding new API calls
+1. Add API methods under `frontend/src/services/`
+2. Use API calls in components
+3. Add error handling and loading states
 
 ```typescript
 // frontend/src/services/api.ts
@@ -200,141 +200,141 @@ export const exampleApi = {
 };
 ```
 
-## 🧪 测试指南
+## 🧪 Testing Guide
 
-### 运行后端测试
+### Run backend tests
 ```bash
 cd backend
 poetry run pytest
 ```
 
-### 运行前端测试
+### Run frontend tests
 ```bash
 cd frontend
 npm test
 ```
 
-### 运行端到端测试
+### Run end-to-end tests
 ```bash
-# 启动所有服务
+# Start all services
 npm run test:e2e
 ```
 
-## 📊 数据库操作
+## 📊 Database Operations
 
-### 创建迁移
+### Create migration
 ```bash
 cd backend
-alembic revision --autogenerate -m "描述变更"
+alembic revision --autogenerate -m "Describe changes"
 ```
 
-### 应用迁移
+### Apply migration
 ```bash
 alembic upgrade head
 ```
 
-### 回滚迁移
+### Rollback migration
 ```bash
 alembic downgrade -1
 ```
 
-## 🔧 常用命令
+## 🔧 Common Commands
 
-### 开发命令
+### Development commands
 ```bash
-# 启动后端开发服务器
+# Start backend development server
 poetry run uvicorn app.main:app --reload
 
-# 启动前端开发服务器
+# Start frontend development server
 npm run dev
 
-# 构建前端
+# Build frontend
 npm run build
 
-# 运行测试
+# Run tests
 poetry run pytest
 npm test
 ```
 
-### 数据库命令
+### Database commands
 ```bash
-# 创建迁移
-alembic revision --autogenerate -m "描述"
+# Create migration
+alembic revision --autogenerate -m "Description"
 
-# 应用迁移
+# Apply migration
 alembic upgrade head
 
-# 查看迁移历史
+# View migration history
 alembic history
 ```
 
-### 部署命令
+### Deployment commands
 ```bash
-# 构建Docker镜像
+# Build Docker image
 docker build -t autoclip .
 
-# 运行Docker容器
+# Run Docker container
 docker run -p 8000:8000 autoclip
 ```
 
-## 🐛 常见问题
+## 🐛 Common Issues
 
-### 1. 数据库连接失败
-**问题**: 无法连接到数据库
-**解决方案**:
-- 检查数据库文件是否存在
-- 确认数据库权限设置
-- 检查数据库连接字符串
+### 1. Database connection failure
+**Issue**: Cannot connect to database
+**Solution**:
+- Check if database file exists
+- Confirm database permission settings
+- Check database connection string
 
-### 2. Redis连接失败
-**问题**: Celery无法连接到Redis
-**解决方案**:
-- 确认Redis服务正在运行
-- 检查Redis连接配置
-- 确认Redis端口未被占用
+### 2. Redis connection failure
+**Issue**: Celery cannot connect to Redis
+**Solution**:
+- Confirm Redis service is running
+- Check Redis connection configuration
+- Confirm Redis port is not occupied
 
-### 3. 前端构建失败
-**问题**: npm run build 失败
-**解决方案**:
-- 清除node_modules并重新安装
-- 检查TypeScript类型错误
-- 确认所有依赖都已安装
+### 3. Frontend build failure
+**Issue**: npm run build fails
+**Solution**:
+- Clear node_modules and reinstall
+- Check TypeScript type errors
+- Confirm all dependencies are installed
 
-### 4. API调用失败
-**问题**: 前端无法调用后端API
-**解决方案**:
-- 确认后端服务正在运行
-- 检查CORS配置
-- 验证API端点路径
+### 4. API call failure
+**Issue**: Frontend cannot call backend API
+**Solution**:
+- Confirm backend service is running
+- Check CORS configuration
+- Verify API endpoint path
 
-## 📞 获取帮助
+## 📞 Get Help
 
-### 文档资源
-- [重构实施规划](./REFACTOR_IMPLEMENTATION_PLAN.md)
-- [工作项拆解](./WORK_ITEMS_BREAKDOWN.md)
-- [项目管理](./PROJECT_MANAGEMENT.md)
+### Documentation Resources
+- [Refactoring Implementation Plan](./REFACTOR_IMPLEMENTATION_PLAN.md)
+- [Work Items Breakdown](./WORK_ITEMS_BREAKDOWN.md)
+- [Project Management](./PROJECT_MANAGEMENT.md)
 
-### 技术栈文档
-- [FastAPI文档](https://fastapi.tiangolo.com/)
-- [SQLAlchemy文档](https://docs.sqlalchemy.org/)
-- [Celery文档](https://docs.celeryproject.org/)
-- [React文档](https://reactjs.org/docs/)
+### Tech Stack Documentation
+- [FastAPI Documentation](https://fastapi.tiangolo.com/)
+- [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+- [Celery Documentation](https://docs.celeryproject.org/)
+- [React Documentation](https://reactjs.org/docs/)
 
-### 问题反馈
-- 创建GitHub Issue
-- 联系项目维护者
-- 查看项目Wiki
+### Issue Feedback
+- Create GitHub Issue
+- Contact project maintainers
+- Check project Wiki
 
-## 🎉 下一步
+## 🎉 Next Steps
 
-1. **熟悉项目结构**: 阅读代码和文档
-2. **设置开发环境**: 按照上述步骤配置环境
-3. **运行示例**: 启动服务并测试功能
-4. **开始开发**: 选择工作项开始开发
-5. **提交代码**: 遵循项目的代码规范
+1. **Familiarize with project structure**: Read code and documentation
+2. **Set up development environment**: Configure environment following the steps above
+3. **Run examples**: Start services and test functionality
+4. **Start development**: Choose work items to begin development
+5. **Submit code**: Follow project coding standards
 
 ---
 
-**文档版本**: 1.0  
-**创建日期**: 2024年12月  
-**最后更新**: 2024年12月 
+**Documentation Version**: 1.0  
+**Created**: December 2024  
+**Last Updated**: December 2024

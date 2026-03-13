@@ -1,344 +1,344 @@
-# 📋 AI切片项目重构工作项拆解
+# 📋 AI Clip Project Refactoring Work Items Breakdown
 
-## 🎯 总体目标
-将AI切片项目重构为具有数据持久化、模块化服务和实时任务调度的现代化架构。
+## 🎯 Overall Objective
+Refactor the AI clip project into a modern architecture with data persistence, modular services, and real-time task scheduling.
 
-## 📅 第一阶段：数据持久化存储 (1周)
+## 📅 Phase 1: Data Persistence Storage (1 week)
 
-### 工作项 1.1：数据库模型设计 (2天)
+### Work Item 1.1: Database Model Design (2 days)
 
-#### 任务 1.1.1：基础模型设计 (0.5天)
-- [ ] 创建 `backend/models/base.py`
-  - [ ] 定义 `Base` 类继承 `declarative_base()`
-  - [ ] 创建 `TimestampMixin` 混入类
-  - [ ] 实现 `created_at` 和 `updated_at` 字段
-  - [ ] 添加 `id` 字段的UUID生成逻辑
+#### Task 1.1.1: Base Model Design (0.5 days)
+- [ ] Create `backend/models/base.py`
+  - [ ] Define `Base` class inheriting from `declarative_base()`
+  - [ ] Create `TimestampMixin` mixin class
+  - [ ] Implement `created_at` and `updated_at` fields
+  - [ ] Add UUID generation logic for `id` field
 
-#### 任务 1.1.2：项目模型设计 (0.5天)
-- [ ] 创建 `backend/models/project.py`
-  - [ ] 定义 `Project` 模型类
-  - [ ] 实现项目状态枚举 (`ProjectStatus`)
-  - [ ] 添加项目基本信息字段
-  - [ ] 定义与切片和合集的关联关系
+#### Task 1.1.2: Project Model Design (0.5 days)
+- [ ] Create `backend/models/project.py`
+  - [ ] Define `Project` model class
+  - [ ] Implement project status enum (`ProjectStatus`)
+  - [ ] Add project basic information fields
+  - [ ] Define relationships with clips and collections
 
-#### 任务 1.1.3：切片模型设计 (0.5天)
-- [ ] 创建 `backend/models/clip.py`
-  - [ ] 定义 `Clip` 模型类
-  - [ ] 实现切片状态枚举 (`ClipStatus`)
-  - [ ] 添加切片元数据字段
-  - [ ] 定义与项目和合集的关联关系
+#### Task 1.1.3: Clip Model Design (0.5 days)
+- [ ] Create `backend/models/clip.py`
+  - [ ] Define `Clip` model class
+  - [ ] Implement clip status enum (`ClipStatus`)
+  - [ ] Add clip metadata fields
+  - [ ] Define relationships with projects and collections
 
-#### 任务 1.1.4：合集模型设计 (0.5天)
-- [ ] 创建 `backend/models/collection.py`
-  - [ ] 定义 `Collection` 模型类
-  - [ ] 实现合集状态枚举 (`CollectionStatus`)
-  - [ ] 添加合集元数据字段
-  - [ ] 定义与项目和切片的关联关系
+#### Task 1.1.4: Collection Model Design (0.5 days)
+- [ ] Create `backend/models/collection.py`
+  - [ ] Define `Collection` model class
+  - [ ] Implement collection status enum (`CollectionStatus`)
+  - [ ] Add collection metadata fields
+  - [ ] Define relationships with projects and clips
 
-### 工作项 1.2：SQLAlchemy集成 (2天)
+### Work Item 1.2: SQLAlchemy Integration (2 days)
 
-#### 任务 1.2.1：数据库配置 (0.5天)
-- [ ] 创建 `backend/core/database.py`
-  - [ ] 配置SQLite数据库连接
-  - [ ] 创建数据库引擎 (`create_engine`)
-  - [ ] 配置会话工厂 (`SessionLocal`)
-  - [ ] 实现数据库依赖注入函数
+#### Task 1.2.1: Database Configuration (0.5 days)
+- [ ] Create `backend/core/database.py`
+  - [ ] Configure SQLite database connection
+  - [ ] Create database engine (`create_engine`)
+  - [ ] Configure session factory (`SessionLocal`)
+  - [ ] Implement database dependency injection function
 
-#### 任务 1.2.2：Alembic迁移配置 (0.5天)
-- [ ] 安装和配置Alembic
-- [ ] 创建 `alembic.ini` 配置文件
-- [ ] 初始化迁移环境
-- [ ] 创建初始迁移脚本
+#### Task 1.2.2: Alembic Migration Configuration (0.5 days)
+- [ ] Install and configure Alembic
+- [ ] Create `alembic.ini` configuration file
+- [ ] Initialize migration environment
+- [ ] Create initial migration script
 
-#### 任务 1.2.3：数据库初始化 (0.5天)
-- [ ] 创建数据库初始化脚本
-- [ ] 实现数据库表创建逻辑
-- [ ] 添加数据库连接测试
-- [ ] 创建数据库重置功能
+#### Task 1.2.3: Database Initialization (0.5 days)
+- [ ] Create database initialization script
+- [ ] Implement database table creation logic
+- [ ] Add database connection testing
+- [ ] Create database reset functionality
 
-#### 任务 1.2.4：数据迁移工具 (0.5天)
-- [ ] 创建现有数据迁移脚本
-- [ ] 实现JSON数据到数据库的转换
-- [ ] 添加数据验证逻辑
-- [ ] 创建迁移回滚功能
+#### Task 1.2.4: Data Migration Tools (0.5 days)
+- [ ] Create existing data migration script
+- [ ] Implement JSON data to database conversion
+- [ ] Add data validation logic
+- [ ] Create migration rollback functionality
 
-### 工作项 1.3：数据访问层实现 (1天)
+### Work Item 1.3: Data Access Layer Implementation (1 day)
 
-#### 任务 1.3.1：Repository模式实现 (0.5天)
-- [ ] 创建 `backend/repositories/` 目录
-- [ ] 实现基础Repository类
-- [ ] 创建项目Repository
-- [ ] 创建切片Repository
-- [ ] 创建合集Repository
+#### Task 1.3.1: Repository Pattern Implementation (0.5 days)
+- [ ] Create `backend/repositories/` directory
+- [ ] Implement base Repository class
+- [ ] Create project Repository
+- [ ] Create clip Repository
+- [ ] Create collection Repository
 
-#### 任务 1.3.2：CRUD操作实现 (0.5天)
-- [ ] 实现项目的CRUD操作
-- [ ] 实现切片的CRUD操作
-- [ ] 实现合集的CRUD操作
-- [ ] 添加数据验证和约束检查
+#### Task 1.3.2: CRUD Operations Implementation (0.5 days)
+- [ ] Implement project CRUD operations
+- [ ] Implement clip CRUD operations
+- [ ] Implement collection CRUD operations
+- [ ] Add data validation and constraint checking
 
-## 📅 第二阶段：FastAPI服务模块化重构 (2周)
+## 📅 Phase 2: FastAPI Service Modularization Refactoring (2 weeks)
 
-### 工作项 2.1：API路由重构 (3天)
+### Work Item 2.1: API Route Refactoring (3 days)
 
-#### 任务 2.1.1：API依赖配置 (0.5天)
-- [ ] 创建 `backend/api/deps.py`
-  - [ ] 实现数据库会话依赖
-  - [ ] 添加认证依赖（为未来扩展）
-  - [ ] 实现错误处理依赖
-  - [ ] 添加日志记录依赖
+#### Task 2.1.1: API Dependency Configuration (0.5 days)
+- [ ] Create `backend/api/deps.py`
+  - [ ] Implement database session dependency
+  - [ ] Add authentication dependency (for future expansion)
+  - [ ] Implement error handling dependency
+  - [ ] Add logging dependency
 
-#### 任务 2.1.2：项目API路由 (0.5天)
-- [ ] 创建 `backend/api/v1/projects.py`
-  - [ ] 实现项目创建API (`POST /projects`)
-  - [ ] 实现项目列表API (`GET /projects`)
-  - [ ] 实现项目详情API (`GET /projects/{id}`)
-  - [ ] 实现项目更新API (`PUT /projects/{id}`)
-  - [ ] 实现项目删除API (`DELETE /projects/{id}`)
+#### Task 2.1.2: Project API Routes (0.5 days)
+- [ ] Create `backend/api/v1/projects.py`
+  - [ ] Implement project creation API (`POST /projects`)
+  - [ ] Implement project list API (`GET /projects`)
+  - [ ] Implement project details API (`GET /projects/{id}`)
+  - [ ] Implement project update API (`PUT /projects/{id}`)
+  - [ ] Implement project deletion API (`DELETE /projects/{id}`)
 
-#### 任务 2.1.3：处理任务API路由 (0.5天)
-- [ ] 创建 `backend/api/v1/processing.py`
-  - [ ] 实现任务启动API (`POST /processing/start`)
-  - [ ] 实现任务状态API (`GET /processing/{id}/status`)
-  - [ ] 实现任务取消API (`POST /processing/{id}/cancel`)
-  - [ ] 实现任务列表API (`GET /processing`)
+#### Task 2.1.3: Processing Task API Routes (0.5 days)
+- [ ] Create `backend/api/v1/processing.py`
+  - [ ] Implement task start API (`POST /processing/start`)
+  - [ ] Implement task status API (`GET /processing/{id}/status`)
+  - [ ] Implement task cancel API (`POST /processing/{id}/cancel`)
+  - [ ] Implement task list API (`GET /processing`)
 
-#### 任务 2.1.4：文件上传API路由 (0.5天)
-- [ ] 创建 `backend/api/v1/files.py`
-  - [ ] 实现文件上传API (`POST /files/upload`)
-  - [ ] 实现文件列表API (`GET /files`)
-  - [ ] 实现文件删除API (`DELETE /files/{id}`)
-  - [ ] 添加文件类型和大小验证
+#### Task 2.1.4: File Upload API Routes (0.5 days)
+- [ ] Create `backend/api/v1/files.py`
+  - [ ] Implement file upload API (`POST /files/upload`)
+  - [ ] Implement file list API (`GET /files`)
+  - [ ] Implement file deletion API (`DELETE /files/{id}`)
+  - [ ] Add file type and size validation
 
-#### 任务 2.1.5：切片管理API路由 (0.5天)
-- [ ] 创建 `backend/api/v1/clips.py`
-  - [ ] 实现切片列表API (`GET /clips`)
-  - [ ] 实现切片详情API (`GET /clips/{id}`)
-  - [ ] 实现切片更新API (`PUT /clips/{id}`)
-  - [ ] 实现切片删除API (`DELETE /clips/{id}`)
+#### Task 2.1.5: Clip Management API Routes (0.5 days)
+- [ ] Create `backend/api/v1/clips.py`
+  - [ ] Implement clip list API (`GET /clips`)
+  - [ ] Implement clip details API (`GET /clips/{id}`)
+  - [ ] Implement clip update API (`PUT /clips/{id}`)
+  - [ ] Implement clip deletion API (`DELETE /clips/{id}`)
 
-#### 任务 2.1.6：合集管理API路由 (0.5天)
-- [ ] 创建 `backend/api/v1/collections.py`
-  - [ ] 实现合集创建API (`POST /collections`)
-  - [ ] 实现合集列表API (`GET /collections`)
-  - [ ] 实现合集详情API (`GET /collections/{id}`)
-  - [ ] 实现合集更新API (`PUT /collections/{id}`)
-  - [ ] 实现合集删除API (`DELETE /collections/{id}`)
+#### Task 2.1.6: Collection Management API Routes (0.5 days)
+- [ ] Create `backend/api/v1/collections.py`
+  - [ ] Implement collection creation API (`POST /collections`)
+  - [ ] Implement collection list API (`GET /collections`)
+  - [ ] Implement collection details API (`GET /collections/{id}`)
+  - [ ] Implement collection update API (`PUT /collections/{id}`)
+  - [ ] Implement collection deletion API (`DELETE /collections/{id}`)
 
-### 工作项 2.2：服务层重构 (3天)
+### Work Item 2.2: Service Layer Refactoring (3 days)
 
-#### 任务 2.2.1：项目服务实现 (0.5天)
-- [ ] 创建 `backend/services/project_service.py`
-  - [ ] 实现项目创建逻辑
-  - [ ] 实现项目查询逻辑
-  - [ ] 实现项目更新逻辑
-  - [ ] 实现项目删除逻辑
-  - [ ] 添加业务规则验证
+#### Task 2.2.1: Project Service Implementation (0.5 days)
+- [ ] Create `backend/services/project_service.py`
+  - [ ] Implement project creation logic
+  - [ ] Implement project query logic
+  - [ ] Implement project update logic
+  - [ ] Implement project deletion logic
+  - [ ] Add business rule validation
 
-#### 任务 2.2.2：处理服务实现 (1天)
-- [ ] 创建 `backend/services/processing_service.py`
-  - [ ] 集成现有的6步处理流水线
-  - [ ] 实现处理任务创建逻辑
-  - [ ] 实现处理状态管理
-  - [ ] 实现处理结果存储
-  - [ ] 添加错误处理和重试机制
+#### Task 2.2.2: Processing Service Implementation (1 day)
+- [ ] Create `backend/services/processing_service.py`
+  - [ ] Integrate existing 6-step processing pipeline
+  - [ ] Implement processing task creation logic
+  - [ ] Implement processing status management
+  - [ ] Implement processing result storage
+  - [ ] Add error handling and retry mechanisms
 
-#### 任务 2.2.3：文件服务实现 (0.5天)
-- [ ] 创建 `backend/services/file_service.py`
-  - [ ] 实现文件上传逻辑
-  - [ ] 实现文件存储管理
-  - [ ] 实现文件验证逻辑
-  - [ ] 实现文件清理机制
+#### Task 2.2.3: File Service Implementation (0.5 days)
+- [ ] Create `backend/services/file_service.py`
+  - [ ] Implement file upload logic
+  - [ ] Implement file storage management
+  - [ ] Implement file validation logic
+  - [ ] Implement file cleanup mechanism
 
-#### 任务 2.2.4：切片服务实现 (0.5天)
-- [ ] 创建 `backend/services/clip_service.py`
-  - [ ] 实现切片创建逻辑
-  - [ ] 实现切片查询逻辑
-  - [ ] 实现切片更新逻辑
-  - [ ] 实现切片删除逻辑
+#### Task 2.2.4: Clip Service Implementation (0.5 days)
+- [ ] Create `backend/services/clip_service.py`
+  - [ ] Implement clip creation logic
+  - [ ] Implement clip query logic
+  - [ ] Implement clip update logic
+  - [ ] Implement clip deletion logic
 
-#### 任务 2.2.5：合集服务实现 (0.5天)
-- [ ] 创建 `backend/services/collection_service.py`
-  - [ ] 实现合集创建逻辑
-  - [ ] 实现合集查询逻辑
-  - [ ] 实现合集更新逻辑
-  - [ ] 实现合集删除逻辑
+#### Task 2.2.5: Collection Service Implementation (0.5 days)
+- [ ] Create `backend/services/collection_service.py`
+  - [ ] Implement collection creation logic
+  - [ ] Implement collection query logic
+  - [ ] Implement collection update logic
+  - [ ] Implement collection deletion logic
 
-### 工作项 2.3：中间件和依赖注入 (2天)
+### Work Item 2.3: Middleware and Dependency Injection (2 days)
 
-#### 任务 2.3.1：错误处理中间件 (0.5天)
-- [ ] 创建 `backend/app/middleware.py`
-  - [ ] 实现全局异常处理
-  - [ ] 添加自定义异常类
-  - [ ] 实现错误响应格式化
-  - [ ] 添加错误日志记录
+#### Task 2.3.1: Error Handling Middleware (0.5 days)
+- [ ] Create `backend/app/middleware.py`
+  - [ ] Implement global exception handling
+  - [ ] Add custom exception classes
+  - [ ] Implement error response formatting
+  - [ ] Add error logging
 
-#### 任务 2.3.2：CORS中间件配置 (0.5天)
-- [ ] 配置CORS中间件
-- [ ] 设置允许的源和请求方法
-- [ ] 配置认证头支持
-- [ ] 添加预检请求处理
+#### Task 2.3.2: CORS Middleware Configuration (0.5 days)
+- [ ] Configure CORS middleware
+- [ ] Set allowed origins and request methods
+- [ ] Configure authentication header support
+- [ ] Add preflight request handling
 
-#### 任务 2.3.3：日志中间件 (0.5天)
-- [ ] 实现请求日志记录
-- [ ] 添加响应时间统计
-- [ ] 实现结构化日志格式
-- [ ] 配置日志级别控制
+#### Task 2.3.3: Logging Middleware (0.5 days)
+- [ ] Implement request logging
+- [ ] Add response time statistics
+- [ ] Implement structured log format
+- [ ] Configure log level control
 
-#### 任务 2.3.4：认证中间件（为未来扩展） (0.5天)
-- [ ] 创建认证中间件框架
-- [ ] 实现JWT token验证
-- [ ] 添加用户权限检查
-- [ ] 实现会话管理
+#### Task 2.3.4: Authentication Middleware (for future expansion) (0.5 days)
+- [ ] Create authentication middleware framework
+- [ ] Implement JWT token validation
+- [ ] Add user permission checking
+- [ ] Implement session management
 
-### 工作项 2.4：测试和调试 (2天)
+### Work Item 2.4: Testing and Debugging (2 days)
 
-#### 任务 2.4.1：单元测试编写 (1天)
-- [ ] 为服务层编写单元测试
-- [ ] 为API层编写单元测试
-- [ ] 为数据访问层编写单元测试
-- [ ] 配置测试环境和依赖
+#### Task 2.4.1: Unit Test Writing (1 day)
+- [ ] Write unit tests for service layer
+- [ ] Write unit tests for API layer
+- [ ] Write unit tests for data access layer
+- [ ] Configure test environment and dependencies
 
-#### 任务 2.4.2：集成测试编写 (0.5天)
-- [ ] 编写API集成测试
-- [ ] 编写数据库集成测试
-- [ ] 编写文件上传测试
-- [ ] 配置测试数据
+#### Task 2.4.2: Integration Test Writing (0.5 days)
+- [ ] Write API integration tests
+- [ ] Write database integration tests
+- [ ] Write file upload tests
+- [ ] Configure test data
 
-#### 任务 2.4.3：性能测试和优化 (0.5天)
-- [ ] 进行API性能测试
-- [ ] 优化数据库查询
-- [ ] 添加缓存机制
-- [ ] 优化文件处理性能
+#### Task 2.4.3: Performance Testing and Optimization (0.5 days)
+- [ ] Conduct API performance testing
+- [ ] Optimize database queries
+- [ ] Add caching mechanisms
+- [ ] Optimize file processing performance
 
-## 📅 第三阶段：任务调度系统 (1周)
+## 📅 Phase 3: Task Scheduling System (1 week)
 
-### 工作项 3.1：Celery集成 (2天)
+### Work Item 3.1: Celery Integration (2 days)
 
-#### 任务 3.1.1：Celery配置 (0.5天)
-- [ ] 创建 `backend/tasks/celery_app.py`
-  - [ ] 配置Celery应用
-  - [ ] 设置Redis作为消息代理
-  - [ ] 配置任务结果后端
-  - [ ] 设置任务路由
+#### Task 3.1.1: Celery Configuration (0.5 days)
+- [ ] Create `backend/tasks/celery_app.py`
+  - [ ] Configure Celery application
+  - [ ] Set Redis as message broker
+  - [ ] Configure task result backend
+  - [ ] Set task routing
 
-#### 任务 3.1.2：处理任务实现 (1天)
-- [ ] 创建 `backend/tasks/processing_tasks.py`
-  - [ ] 实现视频处理任务
-  - [ ] 实现6步流水线任务
-  - [ ] 添加任务进度跟踪
-  - [ ] 实现任务状态更新
+#### Task 3.1.2: Processing Task Implementation (1 day)
+- [ ] Create `backend/tasks/processing_tasks.py`
+  - [ ] Implement video processing tasks
+  - [ ] Implement 6-step pipeline tasks
+  - [ ] Add task progress tracking
+  - [ ] Implement task status updates
 
-#### 任务 3.1.3：文件处理任务 (0.5天)
-- [ ] 创建 `backend/tasks/file_tasks.py`
-  - [ ] 实现文件上传任务
-  - [ ] 实现文件处理任务
-  - [ ] 实现文件清理任务
-  - [ ] 添加任务错误处理
+#### Task 3.1.3: File Processing Tasks (0.5 days)
+- [ ] Create `backend/tasks/file_tasks.py`
+  - [ ] Implement file upload tasks
+  - [ ] Implement file processing tasks
+  - [ ] Implement file cleanup tasks
+  - [ ] Add task error handling
 
-### 工作项 3.2：WebSocket实现 (2天)
+### Work Item 3.2: WebSocket Implementation (2 days)
 
-#### 任务 3.2.1：WebSocket服务器 (1天)
-- [ ] 创建 `backend/api/v1/websocket.py`
-  - [ ] 实现WebSocket连接管理
-  - [ ] 实现消息广播机制
-  - [ ] 添加连接认证
-  - [ ] 实现连接状态管理
+#### Task 3.2.1: WebSocket Server (1 day)
+- [ ] Create `backend/api/v1/websocket.py`
+  - [ ] Implement WebSocket connection management
+  - [ ] Implement message broadcasting mechanism
+  - [ ] Add connection authentication
+  - [ ] Implement connection state management
 
-#### 任务 3.2.2：实时消息推送 (0.5天)
-- [ ] 实现任务进度推送
-- [ ] 实现处理状态更新
-- [ ] 实现错误消息推送
-- [ ] 添加消息格式定义
+#### Task 3.2.2: Real-time Message Push (0.5 days)
+- [ ] Implement task progress push
+- [ ] Implement processing status updates
+- [ ] Implement error message push
+- [ ] Add message format definition
 
-#### 任务 3.2.3：前端WebSocket集成 (0.5天)
-- [ ] 更新前端WebSocket客户端
-- [ ] 实现实时状态更新
-- [ ] 添加连接重连机制
-- [ ] 实现消息处理逻辑
+#### Task 3.2.3: Frontend WebSocket Integration (0.5 days)
+- [ ] Update frontend WebSocket client
+- [ ] Implement real-time status updates
+- [ ] Add connection reconnection mechanism
+- [ ] Implement message processing logic
 
-### 工作项 3.3：前后端联调 (2天)
+### Work Item 3.3: Frontend-Backend Integration Testing (2 days)
 
-#### 任务 3.3.1：API接口联调 (1天)
-- [ ] 测试所有API接口
-- [ ] 验证数据格式一致性
-- [ ] 测试错误处理机制
-- [ ] 验证文件上传功能
+#### Task 3.3.1: API Interface Integration Testing (1 day)
+- [ ] Test all API interfaces
+- [ ] Verify data format consistency
+- [ ] Test error handling mechanisms
+- [ ] Verify file upload functionality
 
-#### 任务 3.3.2：任务调度联调 (0.5天)
-- [ ] 测试任务创建和启动
-- [ ] 验证任务状态更新
-- [ ] 测试任务取消功能
-- [ ] 验证实时进度推送
+#### Task 3.3.2: Task Scheduling Integration Testing (0.5 days)
+- [ ] Test task creation and startup
+- [ ] Verify task status updates
+- [ ] Test task cancellation functionality
+- [ ] Verify real-time progress push
 
-#### 任务 3.3.3：端到端测试 (0.5天)
-- [ ] 进行完整的用户流程测试
-- [ ] 验证数据处理正确性
-- [ ] 测试错误恢复机制
-- [ ] 验证性能表现
+#### Task 3.3.3: End-to-End Testing (0.5 days)
+- [ ] Conduct complete user flow testing
+- [ ] Verify data processing correctness
+- [ ] Test error recovery mechanisms
+- [ ] Verify performance metrics
 
-## 📊 工作项优先级
+## 📊 Work Item Priority
 
-### 高优先级 (必须完成)
-1. 数据库模型设计
-2. SQLAlchemy集成
-3. 项目API路由
-4. 处理服务实现
-5. 错误处理中间件
+### High Priority (Must Complete)
+1. Database model design
+2. SQLAlchemy integration
+3. Project API routes
+4. Processing service implementation
+5. Error handling middleware
 
-### 中优先级 (重要)
-1. 数据访问层实现
-2. 文件上传API
-3. 切片和合集API
-4. Celery集成
-5. WebSocket实现
+### Medium Priority (Important)
+1. Data access layer implementation
+2. File upload API
+3. Clip and collection APIs
+4. Celery integration
+5. WebSocket implementation
 
-### 低优先级 (可选)
-1. 认证中间件
-2. 性能优化
-3. 高级测试
-4. 监控和日志
+### Low Priority (Optional)
+1. Authentication middleware
+2. Performance optimization
+3. Advanced testing
+4. Monitoring and logging
 
-## 🛠️ 开发环境准备
+## 🛠️ Development Environment Setup
 
-### 必需工具
+### Required Tools
 - [ ] Python 3.9+
 - [ ] Node.js 16+
 - [ ] Redis
 - [ ] Git
 
-### 开发依赖
-- [ ] Poetry (Python包管理)
-- [ ] npm/yarn (Node.js包管理)
-- [ ] Docker (可选，用于容器化)
+### Development Dependencies
+- [ ] Poetry (Python package management)
+- [ ] npm/yarn (Node.js package management)
+- [ ] Docker (optional, for containerization)
 
-### 开发工具
-- [ ] VS Code 或 PyCharm
-- [ ] Postman 或 Insomnia (API测试)
-- [ ] SQLite Browser (数据库查看)
+### Development Tools
+- [ ] VS Code or PyCharm
+- [ ] Postman or Insomnia (API testing)
+- [ ] SQLite Browser (database viewing)
 
-## 📝 验收标准
+## 📝 Acceptance Criteria
 
-### 第一阶段验收标准
-- [ ] 数据库模型设计完成并通过测试
-- [ ] SQLAlchemy集成正常工作
-- [ ] 现有数据成功迁移到数据库
-- [ ] 数据访问层功能完整
+### Phase 1 Acceptance Criteria
+- [ ] Database model design completed and tested
+- [ ] SQLAlchemy integration working properly
+- [ ] Existing data successfully migrated to database
+- [ ] Data access layer functionality complete
 
-### 第二阶段验收标准
-- [ ] 所有API接口正常工作
-- [ ] 服务层业务逻辑正确
-- [ ] 中间件功能正常
-- [ ] 测试覆盖率达到80%以上
+### Phase 2 Acceptance Criteria
+- [ ] All API interfaces working properly
+- [ ] Service layer business logic correct
+- [ ] Middleware functionality normal
+- [ ] Test coverage reaches 80% or above
 
-### 第三阶段验收标准
-- [ ] 任务调度系统正常工作
-- [ ] WebSocket实时通信正常
-- [ ] 前后端联调通过
-- [ ] 端到端测试通过
+### Phase 3 Acceptance Criteria
+- [ ] Task scheduling system working properly
+- [ ] WebSocket real-time communication normal
+- [ ] Frontend-backend integration testing passed
+- [ ] End-to-end testing passed
 
 ---
 
-**文档版本**: 1.0  
-**创建日期**: 2024年12月  
-**最后更新**: 2024年12月 
+**Document Version**: 1.0  
+**Creation Date**: December 2024  
+**Last Updated**: December 2024 

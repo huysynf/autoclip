@@ -1,76 +1,76 @@
-# 简化进度系统实现指南
+# Simple Progress System Implementation Guide
 
-## 概述
+## Overview
 
-这是一个基于"做笨做稳"理念的简化进度同步系统，使用固定阶段 + 固定权重来驱动进度，不再依赖复杂的订阅机制。
+This is a simplified progress synchronization system based on the "keep it simple and stable" philosophy, using fixed stages + fixed weights to drive progress, no longer relying on complex subscription mechanisms.
 
-## 核心特性
+## Core Features
 
-- **固定阶段**: 6个预定义阶段，每个阶段有固定权重
-- **简单轮询**: 前端通过HTTP API轮询获取进度，无需WebSocket
-- **Redis存储**: 后端使用Redis存储进度快照，支持持久化
-- **极简事件**: 每个阶段切换时发送一次事件，最多6次
+- **Fixed Stages**: 6 predefined stages, each with fixed weight
+- **Simple Polling**: Frontend polls progress via HTTP API, no WebSocket needed
+- **Redis Storage**: Backend uses Redis to store progress snapshots, supports persistence
+- **Minimal Events**: Send one event per stage transition, maximum 6 times
 
-## 系统架构
+## System Architecture
 
-### 后端组件
+### Backend Components
 
-1. **`backend/services/simple_progress.py`** - 核心进度服务
-   - 阶段定义和权重计算
-   - Redis存储和事件发布
-   - 进度快照管理
+1. **`backend/services/simple_progress.py`** - Core progress service
+   - Stage definition and weight calculation
+   - Redis storage and event publishing
+   - Progress snapshot management
 
-2. **`backend/api/v1/simple_progress.py`** - API接口
-   - `/api/v1/simple-progress/snapshot` - 批量获取进度快照
-   - `/api/v1/simple-progress/snapshot/{project_id}` - 单个项目进度
-   - `/api/v1/simple-progress/stages` - 获取阶段配置
+2. **`backend/api/v1/simple_progress.py`** - API interface
+   - `/api/v1/simple-progress/snapshot` - Batch get progress snapshots
+   - `/api/v1/simple-progress/snapshot/{project_id}` - Single project progress
+   - `/api/v1/simple-progress/stages` - Get stage configuration
 
-3. **`backend/services/simple_pipeline_adapter.py`** - 流水线适配器
-   - 集成进度上报到现有流水线
-   - 自动发送阶段切换事件
+3. **`backend/services/simple_pipeline_adapter.py`** - Pipeline adapter
+   - Integrate progress reporting into existing pipeline
+   - Automatically send stage transition events
 
-### 前端组件
+### Frontend Components
 
-1. **`frontend/src/stores/useSimpleProgressStore.ts`** - 状态管理
-   - Zustand状态管理
-   - 轮询控制
-   - 进度数据缓存
+1. **`frontend/src/stores/useSimpleProgressStore.ts`** - State management
+   - Zustand state management
+   - Polling control
+   - Progress data caching
 
-2. **`frontend/src/components/SimpleProgressBar.tsx`** - 进度条组件
-   - 单个项目进度显示
-   - 批量项目进度显示
-   - 自动轮询集成
+2. **`frontend/src/components/SimpleProgressBar.tsx`** - Progress bar component
+   - Single project progress display
+   - Batch project progress display
+   - Auto-polling integration
 
-3. **`frontend/src/components/SimpleProjectCard.tsx`** - 项目卡片
-   - 集成进度显示
-   - 状态管理
-   - 操作按钮
+3. **`frontend/src/components/SimpleProjectCard.tsx`** - Project card
+   - Integrated progress display
+   - State management
+   - Action buttons
 
-## 阶段定义
+## Stage Definition
 
 ```python
 STAGES = [
-    ("INGEST", 10),        # 下载/就绪
-    ("SUBTITLE", 15),      # 字幕/对齐  
-    ("ANALYZE", 20),       # 语义分析/大纲
-    ("HIGHLIGHT", 25),     # 片段定位/打分
-    ("EXPORT", 20),        # 导出/封装
-    ("DONE", 10),          # 校验/归档
+    ("INGEST", 10),        # Download/Ready
+    ("SUBTITLE", 15),      # Subtitle/Alignment  
+    ("ANALYZE", 20),       # Semantic Analysis/Outline
+    ("HIGHLIGHT", 25),     # Segment Location/Scoring
+    ("EXPORT", 20),        # Export/Packaging
+    ("DONE", 10),          # Validation/Archive
 ]
 ```
 
-## 进度计算
+## Progress Calculation
 
 ```python
 def compute_percent(stage: str, subpercent: Optional[float] = None) -> int:
-    # 累加之前阶段权重
+    # Accumulate previous stage weights
     done = 0
     for s in ORDER:
         if s == stage:
             break
         done += WEIGHTS[s]
     
-    # 当前阶段
+    # Current stage
     cur = WEIGHTS.get(stage, 0)
     
     if subpercent is None:
@@ -79,34 +79,34 @@ def compute_percent(stage: str, subpercent: Optional[float] = None) -> int:
         return min(99, done + int(cur * subpercent / 100))
 ```
 
-## 事件格式
+## Event Format
 
 ```json
 {
   "project_id": "46ab50a6-....",
   "stage": "HIGHLIGHT", 
   "percent": 70,
-  "message": "已完成片段定位，共 12 段候选",
+  "message": "Segment location completed, 12 candidate segments found",
   "ts": 1640995200
 }
 ```
 
-## 使用方法
+## Usage
 
-### 后端集成
+### Backend Integration
 
-1. **在流水线中发送进度事件**:
+1. **Send progress events in pipeline**:
 ```python
 from backend.services.simple_progress import emit_progress
 
-# 阶段切换
-emit_progress(project_id, "ANALYZE", "开始内容分析")
+# Stage transition
+emit_progress(project_id, "ANALYZE", "Starting content analysis")
 
-# 带子进度
-emit_progress(project_id, "ANALYZE", "分析中(50%)", subpercent=50)
+# With sub-progress
+emit_progress(project_id, "ANALYZE", "Analyzing (50%)", subpercent=50)
 ```
 
-2. **使用简化的流水线适配器**:
+2. **Use simplified pipeline adapter**:
 ```python
 from backend.services.simple_pipeline_adapter import create_simple_pipeline_adapter
 
@@ -114,22 +114,22 @@ adapter = create_simple_pipeline_adapter(project_id, task_id)
 result = adapter.process_project_sync(video_path, srt_path)
 ```
 
-### 前端集成
+### Frontend Integration
 
-1. **使用进度状态管理**:
+1. **Use progress state management**:
 ```typescript
 import { useSimpleProgressStore } from '../stores/useSimpleProgressStore'
 
 const { startPolling, stopPolling, getProgress } = useSimpleProgressStore()
 
-// 开始轮询
+// Start polling
 startPolling(['project-1', 'project-2'], 2000)
 
-// 获取进度
+// Get progress
 const progress = getProgress('project-1')
 ```
 
-2. **使用进度条组件**:
+2. **Use progress bar component**:
 ```tsx
 import { SimpleProgressBar } from '../components/SimpleProgressBar'
 
@@ -142,7 +142,7 @@ import { SimpleProgressBar } from '../components/SimpleProgressBar'
 />
 ```
 
-3. **使用项目卡片组件**:
+3. **Use project card component**:
 ```tsx
 import { SimpleProjectCard } from '../components/SimpleProjectCard'
 
@@ -155,101 +155,101 @@ import { SimpleProjectCard } from '../components/SimpleProjectCard'
 />
 ```
 
-## API接口
+## API Interfaces
 
-### 获取进度快照
+### Get Progress Snapshots
 
 ```bash
-# 批量获取
+# Batch get
 GET /api/v1/simple-progress/snapshot?project_ids=project-1&project_ids=project-2
 
-# 单个获取
+# Single get
 GET /api/v1/simple-progress/snapshot/project-1
 ```
 
-### 获取阶段配置
+### Get Stage Configuration
 
 ```bash
 GET /api/v1/simple-progress/stages
 ```
 
-## 配置选项
+## Configuration Options
 
-### 轮询间隔
-- 默认: 2000ms (2秒)
-- 建议范围: 1000-5000ms
-- 可根据网络状况调整
+### Polling Interval
+- Default: 2000ms (2 seconds)
+- Recommended range: 1000-5000ms
+- Can be adjusted based on network conditions
 
-### 阶段权重
-- 总权重: 100
-- 可调整各阶段权重以适应实际处理时间
-- 权重分配应考虑各阶段的实际耗时
+### Stage Weights
+- Total weight: 100
+- Can adjust individual stage weights to match actual processing time
+- Weight allocation should consider actual time consumption of each stage
 
-## 故障处理
+## Error Handling
 
-### Redis连接失败
-- 系统会记录警告日志
-- 进度事件发送会被跳过
-- 前端轮询会返回空数据
+### Redis Connection Failure
+- System will log warning messages
+- Progress event sending will be skipped
+- Frontend polling will return empty data
 
-### 网络中断
-- 前端轮询会自动重试
-- 进度数据会缓存在本地状态
-- 网络恢复后自动同步
+### Network Interruption
+- Frontend polling will automatically retry
+- Progress data will be cached in local state
+- Automatic sync when network recovers
 
-### 阶段异常
-- 支持失败状态检测
-- 自动标记为失败状态
-- 提供重试机制
+### Stage Exceptions
+- Support failure state detection
+- Automatically mark as failed state
+- Provide retry mechanism
 
-## 性能优化
+## Performance Optimization
 
-1. **批量轮询**: 一次请求获取多个项目进度
-2. **智能缓存**: 避免重复请求相同数据
-3. **条件轮询**: 只在需要时启动轮询
-4. **自动清理**: 定期清理过期进度数据
+1. **Batch Polling**: Get multiple project progress in one request
+2. **Smart Caching**: Avoid duplicate requests for same data
+3. **Conditional Polling**: Only start polling when needed
+4. **Auto Cleanup**: Periodically clean expired progress data
 
-## 扩展性
+## Extensibility
 
-1. **新增阶段**: 修改STAGES配置即可
-2. **调整权重**: 重新分配各阶段权重
-3. **自定义消息**: 支持阶段特定的消息格式
-4. **多环境支持**: 通过配置支持不同环境
+1. **Add New Stages**: Simply modify STAGES configuration
+2. **Adjust Weights**: Redistribute stage weights
+3. **Custom Messages**: Support stage-specific message formats
+4. **Multi-environment Support**: Support different environments through configuration
 
-## 监控和调试
+## Monitoring and Debugging
 
-1. **日志记录**: 详细的进度事件日志
-2. **状态检查**: 实时进度状态查询
-3. **错误追踪**: 完整的错误信息记录
-4. **性能指标**: 轮询频率和响应时间监控
+1. **Logging**: Detailed progress event logs
+2. **Status Check**: Real-time progress status queries
+3. **Error Tracking**: Complete error information recording
+4. **Performance Metrics**: Polling frequency and response time monitoring
 
-## 迁移指南
+## Migration Guide
 
-从旧的复杂进度系统迁移到简化系统：
+Migrating from old complex progress system to simplified system:
 
-1. **后端迁移**:
-   - 替换进度回调为emit_progress调用
-   - 使用SimplePipelineAdapter替换旧适配器
-   - 移除复杂的WebSocket进度发布
+1. **Backend Migration**:
+   - Replace progress callbacks with emit_progress calls
+   - Use SimplePipelineAdapter to replace old adapters
+   - Remove complex WebSocket progress publishing
 
-2. **前端迁移**:
-   - 使用useSimpleProgressStore替换旧状态管理
-   - 使用SimpleProgressBar替换旧进度组件
-   - 配置轮询替代WebSocket订阅
+2. **Frontend Migration**:
+   - Use useSimpleProgressStore to replace old state management
+   - Use SimpleProgressBar to replace old progress components
+   - Configure polling to replace WebSocket subscriptions
 
-3. **数据迁移**:
-   - 清理旧的进度数据
-   - 初始化新的Redis进度存储
-   - 更新项目状态映射
+3. **Data Migration**:
+   - Clean old progress data
+   - Initialize new Redis progress storage
+   - Update project status mapping
 
-## 总结
+## Summary
 
-这个简化进度系统通过"做笨做稳"的设计理念，提供了：
+This simplified progress system provides through the "keep it simple and stable" design philosophy:
 
-- ✅ **可靠性**: 基于HTTP轮询，不依赖WebSocket
-- ✅ **简单性**: 固定阶段，易于理解和维护
-- ✅ **性能**: 最小化网络请求，智能缓存
-- ✅ **扩展性**: 易于添加新阶段和功能
-- ✅ **调试性**: 完整的日志和状态追踪
+- ✅ **Reliability**: Based on HTTP polling, no WebSocket dependency
+- ✅ **Simplicity**: Fixed stages, easy to understand and maintain
+- ✅ **Performance**: Minimize network requests, smart caching
+- ✅ **Extensibility**: Easy to add new stages and features
+- ✅ **Debuggability**: Complete logging and status tracking
 
-相比之前的复杂系统，这个方案更加稳定可靠，易于维护和扩展。
+Compared to the previous complex system, this solution is more stable and reliable, easier to maintain and extend.

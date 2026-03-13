@@ -1,114 +1,114 @@
-# AutoClip 文档中心
+# AutoClip Documentation Center
 
-欢迎来到AutoClip文档中心！这里包含了项目的完整文档和指南。
+Welcome to the AutoClip Documentation Center! This contains complete project documentation and guides.
 
-## 📚 文档目录
+## 📚 Documentation Index
 
-### 🚀 快速开始
-- [安装指南](installation.md) - 详细的安装和配置说明
-- [快速开始](quick-start.md) - 5分钟快速上手
-- [Docker部署](docker-deployment.md) - 使用Docker快速部署
+### 🚀 Quick Start
+- [Installation Guide](installation.md) - Detailed installation and configuration instructions
+- [Quick Start](quick-start.md) - Get started in 5 minutes
+- [Docker Deployment](docker-deployment.md) - Quick deployment using Docker
 
-### 📖 用户指南
-- [功能说明](features.md) - 详细的功能介绍
-- [使用教程](tutorial.md) - 完整的使用教程
-- [配置说明](configuration.md) - 系统配置指南
-- [故障排除](troubleshooting.md) - 常见问题解决方案
+### 📖 User Guide
+- [Features](features.md) - Detailed feature introduction
+- [Tutorial](tutorial.md) - Complete usage tutorial
+- [Configuration](configuration.md) - System configuration guide
+- [Troubleshooting](troubleshooting.md) - Common issues and solutions
 
-### 🛠️ 开发指南
-- [开发环境搭建](development.md) - 开发环境配置
-- [API文档](api.md) - 完整的API接口文档
-- [贡献指南](contributing.md) - 如何参与项目贡献
-- [代码规范](coding-standards.md) - 代码编写规范
+### 🛠️ Developer Guide
+- [Development Setup](development.md) - Development environment configuration
+- [API Documentation](api.md) - Complete API interface documentation
+- [Contributing Guide](contributing.md) - How to contribute to the project
+- [Coding Standards](coding-standards.md) - Code writing standards
 
-### 🌐 国际化
-- [多语言支持](i18n.md) - 国际化配置指南
+### 🌐 Internationalization
+- [Multi-language Support](i18n.md) - Internationalization configuration guide
 - [English Documentation](README-EN.md) - English documentation
-- [中文文档](README-CN.md) - 中文文档
+- [Chinese Documentation](README-CN.md) - Chinese documentation
 
-### 📊 部署运维
-- [生产环境部署](production-deployment.md) - 生产环境部署指南
-- [性能优化](performance-optimization.md) - 系统性能优化
-- [监控告警](monitoring.md) - 系统监控和告警
-- [备份恢复](backup-recovery.md) - 数据备份和恢复
+### 📊 Deployment & Operations
+- [Production Deployment](production-deployment.md) - Production environment deployment guide
+- [Performance Optimization](performance-optimization.md) - System performance optimization
+- [Monitoring & Alerts](monitoring.md) - System monitoring and alerting
+- [Backup & Recovery](backup-recovery.md) - Data backup and recovery
 
-### 🔧 高级功能
-- [插件开发](plugin-development.md) - 插件开发指南
-- [自定义模型](custom-models.md) - 自定义AI模型
-- [API集成](api-integration.md) - 第三方API集成
-- [扩展开发](extension-development.md) - 功能扩展开发
+### 🔧 Advanced Features
+- [Plugin Development](plugin-development.md) - Plugin development guide
+- [Custom Models](custom-models.md) - Custom AI models
+- [API Integration](api-integration.md) - Third-party API integration
+- [Extension Development](extension-development.md) - Feature extension development
 
-## 🌍 语言支持
+## 🌍 Language Support
 
-### 当前支持的语言
-- 🇨🇳 **中文** (简体) - 主要语言
-- 🇺🇸 **English** - 英文版本
+### Currently Supported Languages
+- 🇨🇳 **Chinese** (Simplified) - Primary language
+- 🇺🇸 **English** - English version
 
-### 语言切换
+### Language Switching
 - [English Documentation](README-EN.md)
-- [中文文档](README-CN.md)
+- [Chinese Documentation](README-CN.md)
 
-## 📞 获取帮助
+## 📞 Get Help
 
-### 联系方式
-- **个人微信**: your_wechat_id
-- **飞书**: your_feishu_id
+### Contact Information
+- **WeChat**: your_wechat_id
+- **Feishu**: your_feishu_id
 
-### 问题反馈
-- **Bug报告**: [GitHub Issues](https://github.com/your-username/autoclip/issues)
-- **功能建议**: [GitHub Discussions](https://github.com/your-username/autoclip/discussions)
-- **代码贡献**: [GitHub Pull Requests](https://github.com/your-username/autoclip/pulls)
+### Feedback
+- **Bug Reports**: [GitHub Issues](https://github.com/your-username/autoclip/issues)
+- **Feature Requests**: [GitHub Discussions](https://github.com/your-username/autoclip/discussions)
+- **Code Contributions**: [GitHub Pull Requests](https://github.com/your-username/autoclip/pulls)
 
-## 🎯 项目状态
+## 🎯 Project Status
 
-### 当前版本
-- **版本**: v1.0.0
-- **状态**: 稳定版
-- **更新**: 2024-01-15
+### Current Version
+- **Version**: v1.0.0
+- **Status**: Stable
+- **Updated**: 2024-01-15
 
-### 开发进度
-- ✅ 核心功能完成
-- ✅ Docker支持完成
-- ✅ 多语言文档完成
-- 🚧 B站上传功能开发中
-- 🚧 字幕编辑功能开发中
+### Development Progress
+- ✅ Core features completed
+- ✅ Docker support completed
+- ✅ Multi-language documentation completed
+- 🚧 Bilibili upload feature in development
+- 🚧 Subtitle editor feature in development
 
-### 路线图
-- [ ] B站上传功能
-- [ ] 字幕编辑功能
-- [ ] 多语言支持
-- [ ] 云端存储
-- [ ] 移动应用
+### Roadmap
+- [ ] Bilibili upload feature
+- [ ] Subtitle editor feature
+- [ ] Multi-language support
+- [ ] Cloud storage
+- [ ] Mobile application
 
-## 📈 项目统计
+## 📈 Project Statistics
 
-### GitHub统计
+### GitHub Statistics
 - ⭐ Stars: 800+
 - 🍴 Forks: 140+
 - 🐛 Issues: 13
 - 🔄 Pull Requests: 1
 
-### 技术栈
-- **后端**: Python, FastAPI, Celery, Redis, SQLite
-- **前端**: React, TypeScript, Ant Design, Vite
-- **AI**: 通义千问, DashScope
-- **部署**: Docker, Docker Compose
+### Tech Stack
+- **Backend**: Python, FastAPI, Celery, Redis, SQLite
+- **Frontend**: React, TypeScript, Ant Design, Vite
+- **AI**: Tongyi Qianwen, DashScope
+- **Deployment**: Docker, Docker Compose
 
-## 🙏 致谢
+## 🙏 Acknowledgments
 
-感谢所有为AutoClip项目做出贡献的开发者、用户和社区成员！
+Thanks to all developers, users, and community members who have contributed to the AutoClip project!
 
-### 特别感谢
-- 开源社区的支持
-- 用户的反馈和建议
-- 贡献者的代码和文档
-- 测试用户的参与
+### Special Thanks
+- Open source community support
+- User feedback and suggestions
+- Contributor code and documentation
+- Testing user participation
 
 ---
 
 <div align="center">
 
-**如果这个项目对你有帮助，请给我们一个 ⭐ Star！**
+**If this project helps you, please give us a ⭐ Star!**
 
 Made with ❤️ by AutoClip Team
 

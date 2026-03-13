@@ -1,52 +1,55 @@
-# 多模型提供商接入指南
+# Multi-Model Provider Integration Guide
 
-## 🎯 功能概述
+## 🎯 Feature Overview
 
-系统现在支持多个AI模型提供商，用户可以根据需要选择不同的服务商和模型，实现更灵活的AI自动切片功能。
+The system now supports multiple AI model providers, allowing users to choose different service providers and models based on their needs, enabling more flexible AI auto-clipping functionality.
 
-## 🏗️ 架构设计
+## 🏗️ Architecture Design
 
-### 支持的提供商
+### Supported Providers
 
-| 提供商 | 显示名称 | 主要模型 | 特点 |
-|--------|----------|----------|------|
-| `dashscope` | 阿里通义千问 | qwen-plus, qwen-max, qwen-turbo | 国内访问稳定，中文理解好 |
-| `openai` | OpenAI | gpt-3.5-turbo, gpt-4, gpt-4-turbo | 全球领先，功能强大 |
-| `gemini` | Google Gemini | gemini-2.5-flash, gemini-1.5-pro | 多模态支持，上下文长 |
-| `siliconflow` | 硅基流动 | Qwen2.5系列, DeepSeek-V2.5 | 性价比高，国产化 |
+| Provider | Display Name | Main Models | Features |
+|----------|--------------|-------------|----------|
+| `dashscope` | Alibaba Tongyi Qianwen | qwen-plus, qwen-max, qwen-turbo | Stable domestic access, good Chinese understanding |
+| `openai` | OpenAI | gpt-3.5-turbo, gpt-4, gpt-4-turbo | Global leader, powerful features |
+| `gemini` | Google Gemini | gemini-2.5-flash, gemini-1.5-pro | Multimodal support, long context |
+| `siliconflow` | SiliconFlow | Qwen2.5 series, DeepSeek-V2.5 | Cost-effective, domestically produced |
 
-### 系统架构
+### System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    前端设置页面                              │
+│                    Frontend Settings Page                    │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │ 提供商选择  │  │ API密钥输入 │  │  模型选择   │         │
+│  │ Provider    │  │ API Key     │  │  Model      │         │
+│  │ Selection   │  │ Input       │  │  Selection  │         │
 │  └─────────────┘  └─────────────┘  └─────────────┘         │
 └─────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   后端API服务                               │
+│                   Backend API Service                       │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │ 设置管理API │  │ 连接测试API │  │ 模型查询API │         │
+│  │ Settings    │  │ Connection  │  │ Model Query │         │
+│  │ Management  │  │ Test API    │  │ API         │         │
 │  └─────────────┘  └─────────────┘  └─────────────┘         │
 └─────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   LLM管理器                                 │
+│                   LLM Manager                               │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │ 提供商工厂  │  │ 统一接口    │  │ 配置管理    │         │
+│  │ Provider    │  │ Unified     │  │ Config      │         │
+│  │ Factory     │  │ Interface   │  │ Management  │         │
 │  └─────────────┘  └─────────────┘  └─────────────┘         │
 └─────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   具体提供商实现                            │
+│                   Specific Provider Implementation          │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
 │  │ DashScope   │  │   OpenAI    │  │   Gemini    │         │
@@ -59,113 +62,113 @@
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 1. 安装依赖
+### 1. Install Dependencies
 
 ```bash
-# 运行依赖安装脚本
+# Run dependency installation script
 python install_llm_dependencies.py
 
-# 或手动安装
+# Or install manually
 pip install openai>=1.0.0 google-generativeai>=0.3.0 requests>=2.25.0 dashscope>=1.10.0
 ```
 
-### 2. 启动系统
+### 2. Start System
 
 ```bash
-# 启动后端服务
+# Start backend service
 python backend/main.py
 
-# 启动前端服务
+# Start frontend service
 cd frontend && npm run dev
 ```
 
-### 3. 配置API密钥
+### 3. Configure API Keys
 
-1. 访问系统设置页面
-2. 选择AI模型提供商
-3. 输入对应的API密钥
-4. 选择模型
-5. 测试连接
-6. 保存配置
+1. Access system settings page
+2. Select AI model provider
+3. Enter corresponding API key
+4. Select model
+5. Test connection
+6. Save configuration
 
-## 📋 详细配置说明
+## 📋 Detailed Configuration Instructions
 
-### 阿里通义千问 (DashScope)
+### Alibaba Tongyi Qianwen (DashScope)
 
-**获取API密钥:**
-1. 访问 [阿里云控制台](https://dashscope.console.aliyun.com/)
-2. 开通通义千问服务
-3. 创建API密钥
+**Get API Key:**
+1. Visit [Alibaba Cloud Console](https://dashscope.console.aliyun.com/)
+2. Enable Tongyi Qianwen service
+3. Create API key
 
-**支持模型:**
-- `qwen-plus`: 通义千问Plus (推荐)
-- `qwen-max`: 通义千问Max (最强性能)
-- `qwen-turbo`: 通义千问Turbo (快速响应)
+**Supported Models:**
+- `qwen-plus`: Tongyi Qianwen Plus (Recommended)
+- `qwen-max`: Tongyi Qianwen Max (Best performance)
+- `qwen-turbo`: Tongyi Qianwen Turbo (Fast response)
 
 ### OpenAI
 
-**获取API密钥:**
-1. 访问 [OpenAI Platform](https://platform.openai.com/)
-2. 注册账号并充值
-3. 创建API密钥
+**Get API Key:**
+1. Visit [OpenAI Platform](https://platform.openai.com/)
+2. Register account and add credits
+3. Create API key
 
-**支持模型:**
-- `gpt-3.5-turbo`: GPT-3.5 Turbo (性价比高)
-- `gpt-4`: GPT-4 (高质量)
-- `gpt-4-turbo`: GPT-4 Turbo (最新最强)
+**Supported Models:**
+- `gpt-3.5-turbo`: GPT-3.5 Turbo (Cost-effective)
+- `gpt-4`: GPT-4 (High quality)
+- `gpt-4-turbo`: GPT-4 Turbo (Latest and strongest)
 
 ### Google Gemini
 
-**获取API密钥:**
-1. 访问 [Google AI Studio](https://ai.google.dev/)
-2. 登录Google账号
-3. 创建API密钥
+**Get API Key:**
+1. Visit [Google AI Studio](https://ai.google.dev/)
+2. Login with Google account
+3. Create API key
 
-**支持模型:**
-- `gemini-2.5-flash`: Gemini 2.5 Flash (快速)
-- `gemini-1.5-pro`: Gemini 1.5 Pro (高质量)
-- `gemini-1.5-flash`: Gemini 1.5 Flash (平衡)
+**Supported Models:**
+- `gemini-2.5-flash`: Gemini 2.5 Flash (Fast)
+- `gemini-1.5-pro`: Gemini 1.5 Pro (High quality)
+- `gemini-1.5-flash`: Gemini 1.5 Flash (Balanced)
 
-### 硅基流动
+### SiliconFlow
 
-**获取API密钥:**
-1. 访问 [硅基流动控制台](https://cloud.siliconflow.cn/)
-2. 注册账号
-3. 创建API密钥
+**Get API Key:**
+1. Visit [SiliconFlow Console](https://cloud.siliconflow.cn/)
+2. Register account
+3. Create API key
 
-**支持模型:**
+**Supported Models:**
 - `Qwen/Qwen2.5-7B-Instruct`: Qwen2.5-7B
 - `Qwen/Qwen2.5-14B-Instruct`: Qwen2.5-14B
 - `Qwen/Qwen2.5-32B-Instruct`: Qwen2.5-32B
 - `deepseek-ai/DeepSeek-V2.5`: DeepSeek-V2.5
 
-## 🔧 技术实现
+## 🔧 Technical Implementation
 
-### 核心组件
+### Core Components
 
-#### 1. LLMProvider 抽象基类
+#### 1. LLMProvider Abstract Base Class
 
 ```python
 class LLMProvider(ABC):
     @abstractmethod
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> LLMResponse:
-        """调用模型API"""
+        """Call model API"""
         pass
     
     @abstractmethod
     def test_connection(self) -> bool:
-        """测试API连接"""
+        """Test API connection"""
         pass
     
     @abstractmethod
     def get_available_models(self) -> List[ModelInfo]:
-        """获取可用模型列表"""
+        """Get available model list"""
         pass
 ```
 
-#### 2. 提供商工厂
+#### 2. Provider Factory
 
 ```python
 class LLMProviderFactory:
@@ -178,191 +181,191 @@ class LLMProviderFactory:
     
     @classmethod
     def create_provider(cls, provider_type: ProviderType, api_key: str, model_name: str, **kwargs) -> LLMProvider:
-        """创建提供商实例"""
+        """Create provider instance"""
         pass
 ```
 
-#### 3. LLM管理器
+#### 3. LLM Manager
 
 ```python
 class LLMManager:
     def __init__(self, settings_file: Optional[Path] = None):
-        """初始化管理器"""
+        """Initialize manager"""
         pass
     
     def set_provider(self, provider_type: ProviderType, api_key: str, model_name: str):
-        """设置提供商"""
+        """Set provider"""
         pass
     
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> str:
-        """调用LLM"""
+        """Call LLM"""
         pass
 ```
 
-### API接口
+### API Interfaces
 
-#### 设置管理
+#### Settings Management
 
 ```http
 GET /api/v1/settings
 POST /api/v1/settings
 ```
 
-#### 连接测试
+#### Connection Testing
 
 ```http
 POST /api/v1/settings/test-api-key
 ```
 
-#### 模型查询
+#### Model Query
 
 ```http
 GET /api/v1/settings/available-models
 GET /api/v1/settings/current-provider
 ```
 
-## 🎨 前端界面
+## 🎨 Frontend Interface
 
-### 设置页面功能
+### Settings Page Features
 
-1. **提供商选择**: 下拉选择AI模型提供商
-2. **API密钥输入**: 动态显示对应提供商的密钥输入框
-3. **模型选择**: 根据选择的提供商显示可用模型
-4. **连接测试**: 测试API密钥和模型是否可用
-5. **状态显示**: 显示当前使用的提供商和模型
+1. **Provider Selection**: Dropdown to select AI model provider
+2. **API Key Input**: Dynamic display of corresponding provider's key input field
+3. **Model Selection**: Show available models based on selected provider
+4. **Connection Test**: Test if API key and model are available
+5. **Status Display**: Show currently used provider and model
 
-### 界面特点
+### Interface Features
 
-- 响应式设计，支持不同屏幕尺寸
-- 深色主题，符合系统整体风格
-- 实时状态反馈，操作结果即时显示
-- 详细的使用说明和帮助信息
+- Responsive design, supports different screen sizes
+- Dark theme, matches overall system style
+- Real-time status feedback, immediate display of operation results
+- Detailed usage instructions and help information
 
-## 🔍 故障排除
+## 🔍 Troubleshooting
 
-### 常见问题
+### Common Issues
 
-#### 1. API密钥无效
+#### 1. Invalid API Key
 
-**症状**: 测试连接失败，提示"API Key无效"
+**Symptoms**: Connection test fails, shows "Invalid API Key"
 
-**解决方案**:
-- 检查API密钥是否正确复制
-- 确认API密钥是否已激活
-- 检查账户余额是否充足
+**Solutions**:
+- Check if API key is correctly copied
+- Confirm if API key is activated
+- Check if account balance is sufficient
 
-#### 2. 网络连接问题
+#### 2. Network Connection Issues
 
-**症状**: 连接超时或网络错误
+**Symptoms**: Connection timeout or network errors
 
-**解决方案**:
-- 检查网络连接
-- 确认防火墙设置
-- 尝试使用代理（如需要）
+**Solutions**:
+- Check network connection
+- Confirm firewall settings
+- Try using proxy (if needed)
 
-#### 3. 模型不可用
+#### 3. Model Unavailable
 
-**症状**: 选择的模型无法使用
+**Symptoms**: Selected model cannot be used
 
-**解决方案**:
-- 检查模型名称是否正确
-- 确认账户是否有权限使用该模型
-- 尝试切换到其他可用模型
+**Solutions**:
+- Check if model name is correct
+- Confirm if account has permission to use the model
+- Try switching to other available models
 
-#### 4. 依赖包问题
+#### 4. Dependency Package Issues
 
-**症状**: 导入错误或功能异常
+**Symptoms**: Import errors or functional abnormalities
 
-**解决方案**:
+**Solutions**:
 ```bash
-# 重新安装依赖
+# Reinstall dependencies
 python install_llm_dependencies.py
 
-# 或手动安装
+# Or install manually
 pip install --upgrade openai google-generativeai requests dashscope
 ```
 
-### 日志查看
+### Log Viewing
 
-系统会在以下位置记录详细日志：
+The system records detailed logs in the following locations:
 
-- 后端日志: `logs/backend.log`
-- 前端日志: 浏览器开发者工具控制台
+- Backend logs: `logs/backend.log`
+- Frontend logs: Browser developer tools console
 
-## 🚀 扩展开发
+## 🚀 Extension Development
 
-### 添加新的提供商
+### Adding New Providers
 
-1. **创建提供商类**:
+1. **Create Provider Class**:
 ```python
 class NewProvider(LLMProvider):
     def __init__(self, api_key: str, model_name: str, **kwargs):
         super().__init__(api_key, model_name, **kwargs)
     
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> LLMResponse:
-        # 实现API调用逻辑
+        # Implement API call logic
         pass
     
     def test_connection(self) -> bool:
-        # 实现连接测试逻辑
+        # Implement connection test logic
         pass
     
     def get_available_models(self) -> List[ModelInfo]:
-        # 返回可用模型列表
+        # Return available model list
         pass
 ```
 
-2. **注册到工厂**:
+2. **Register to Factory**:
 ```python
-# 在 llm_providers.py 中添加
+# Add in llm_providers.py
 class LLMProviderFactory:
     _providers = {
-        # ... 现有提供商
+        # ... existing providers
         ProviderType.NEW_PROVIDER: NewProvider,
     }
 ```
 
-3. **更新前端配置**:
+3. **Update Frontend Configuration**:
 ```typescript
-// 在 SettingsPage.tsx 中添加
+// Add in SettingsPage.tsx
 const providerConfig = {
-  // ... 现有配置
+  // ... existing configuration
   new_provider: {
-    name: '新提供商',
+    name: 'New Provider',
     icon: <RobotOutlined />,
     color: '#ff4d4f',
-    description: '新提供商描述',
+    description: 'New provider description',
     apiKeyField: 'new_provider_api_key',
-    placeholder: '请输入新提供商API密钥'
+    placeholder: 'Please enter new provider API key'
   }
 }
 ```
 
-## 📊 性能对比
+## 📊 Performance Comparison
 
-| 提供商 | 响应速度 | 中文理解 | 成本 | 稳定性 | 推荐场景 |
-|--------|----------|----------|------|--------|----------|
-| 阿里通义千问 | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 中文内容处理 |
-| OpenAI | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐ | 高质量要求 |
-| Google Gemini | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | 多模态需求 |
-| 硅基流动 | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | 性价比优先 |
+| Provider | Response Speed | Chinese Understanding | Cost | Stability | Recommended Scenario |
+|----------|----------------|----------------------|------|-----------|---------------------|
+| Alibaba Tongyi Qianwen | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Chinese content processing |
+| OpenAI | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐ | High quality requirements |
+| Google Gemini | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | Multimodal needs |
+| SiliconFlow | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Cost-effectiveness priority |
 
-## 🎯 最佳实践
+## 🎯 Best Practices
 
-1. **选择合适的提供商**: 根据具体需求选择最适合的提供商
-2. **定期测试连接**: 确保API密钥和模型始终可用
-3. **监控使用量**: 避免超出配额限制
-4. **备份配置**: 定期备份API密钥和配置信息
-5. **安全存储**: 不要在代码中硬编码API密钥
+1. **Choose Appropriate Provider**: Select the most suitable provider based on specific needs
+2. **Regular Connection Testing**: Ensure API keys and models are always available
+3. **Monitor Usage**: Avoid exceeding quota limits
+4. **Backup Configuration**: Regularly backup API keys and configuration information
+5. **Secure Storage**: Do not hardcode API keys in code
 
-## 📞 技术支持
+## 📞 Technical Support
 
-如果在使用过程中遇到问题，可以通过以下方式获取帮助：
+If you encounter problems during use, you can get help through the following methods:
 
-1. 查看系统日志文件
-2. 检查API提供商官方文档
-3. 联系技术支持团队
+1. Check system log files
+2. Review API provider official documentation
+3. Contact technical support team
 
 ---
 
-**注意**: 请妥善保管您的API密钥，不要在公共场所或不安全的环境中暴露。建议定期轮换API密钥以确保安全。
+**Note**: Please keep your API keys safe and do not expose them in public places or insecure environments. It is recommended to rotate API keys regularly to ensure security.

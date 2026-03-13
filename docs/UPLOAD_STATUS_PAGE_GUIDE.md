@@ -1,145 +1,145 @@
-# 投稿状态页面使用指南
+# Upload Status Page Guide
 
-## 功能概述
+## Feature Overview
 
-投稿状态页面是一个专门用于查看和管理B站投稿任务的界面，提供了完整的任务监控和管理功能。
+The upload status page is a dedicated interface for viewing and managing Bilibili upload tasks, providing complete task monitoring and management functionality.
 
-## 页面访问
+## Page Access
 
 - **URL**: `http://localhost:3000/upload-status`
-- **导航**: 点击顶部导航栏的"投稿状态"按钮
+- **Navigation**: Click the "Upload Status" button in the top navigation bar
 
-## 主要功能
+## Main Features
 
-### 1. 任务列表展示
+### 1. Task List Display
 
-页面以表格形式展示所有投稿任务，包含以下信息：
+The page displays all upload tasks in table format with the following information:
 
-- **任务ID**: 唯一标识符
-- **标题**: 投稿视频的标题
-- **投稿账号**: 使用的B站账号（显示昵称和用户名）
-- **分区**: 投稿的分区信息
-- **状态**: 任务当前状态（等待中/处理中/成功/失败/已取消）
-- **进度**: 上传进度条（0-100%）
-- **文件大小**: 视频文件大小
-- **创建时间**: 任务创建时间
+- **Task ID**: Unique identifier
+- **Title**: Title of the uploaded video
+- **Upload Account**: Bilibili account used (displays nickname and username)
+- **Category**: Upload category information
+- **Status**: Current task status (Pending/Processing/Success/Failed/Cancelled)
+- **Progress**: Upload progress bar (0-100%)
+- **File Size**: Video file size
+- **Created Time**: Task creation time
 
-### 2. 统计信息
+### 2. Statistics Information
 
-页面顶部显示统计卡片：
+Statistics cards displayed at the top of the page:
 
-- **总任务数**: 所有投稿任务的总数
-- **成功**: 成功完成的任务数量
-- **失败**: 失败的任务数量
-- **进行中**: 正在处理或等待中的任务数量
+- **Total Tasks**: Total number of all upload tasks
+- **Success**: Number of successfully completed tasks
+- **Failed**: Number of failed tasks
+- **In Progress**: Number of tasks being processed or pending
 
-### 3. 任务管理操作
+### 3. Task Management Operations
 
-每个任务支持以下操作：
+Each task supports the following operations:
 
-#### 查看详情
-- 点击"详情"按钮查看任务的完整信息
-- 包括任务ID、状态、账号信息、项目信息、进度、文件信息、BV号/AV号等
-- 显示错误信息（如果有）
+#### View Details
+- Click the "Details" button to view complete task information
+- Includes task ID, status, account information, project information, progress, file information, BV/AV number, etc.
+- Displays error messages (if any)
 
-#### 重试任务
-- 仅对失败状态的任务显示"重试"按钮
-- 点击后重新提交任务到队列
-- 需要确认操作
+#### Retry Task
+- "Retry" button only appears for failed tasks
+- Click to resubmit the task to the queue
+- Requires confirmation
 
-#### 取消任务
-- 仅对等待中或处理中状态的任务显示"取消"按钮
-- 点击后停止任务执行
-- 需要确认操作
+#### Cancel Task
+- "Cancel" button only appears for pending or processing tasks
+- Click to stop task execution
+- Requires confirmation
 
-### 4. 自动刷新
+### 4. Auto Refresh
 
-- 页面每30秒自动刷新数据
-- 手动点击"刷新"按钮立即更新
-- 实时显示任务状态变化
+- Page automatically refreshes data every 30 seconds
+- Click "Refresh" button to update immediately
+- Real-time display of task status changes
 
-## 状态说明
+## Status Explanation
 
-### 任务状态
+### Task Status
 
-| 状态 | 图标 | 说明 | 可执行操作 |
-|------|------|------|------------|
-| 等待中 | ⏰ | 任务已创建，等待处理 | 查看详情、取消 |
-| 处理中 | ▶️ | 任务正在执行 | 查看详情、取消 |
-| 成功 | ✅ | 任务成功完成 | 查看详情 |
-| 完成 | ✅ | 任务完成（同成功） | 查看详情 |
-| 失败 | ❌ | 任务执行失败 | 查看详情、重试 |
-| 已取消 | ⏹️ | 任务被取消 | 查看详情 |
+| Status | Icon | Description | Available Operations |
+|--------|------|-------------|----------------------|
+| Pending | ⏰ | Task created, waiting for processing | View Details, Cancel |
+| Processing | ▶️ | Task is executing | View Details, Cancel |
+| Success | ✅ | Task completed successfully | View Details |
+| Completed | ✅ | Task completed (same as success) | View Details |
+| Failed | ❌ | Task execution failed | View Details, Retry |
+| Cancelled | ⏹️ | Task was cancelled | View Details |
 
-### 进度显示
+### Progress Display
 
-- **0%**: 任务未开始或刚开始
-- **1-99%**: 任务进行中，显示实际进度
-- **100%**: 任务完成
-- **异常**: 失败状态显示红色进度条
+- **0%**: Task not started or just started
+- **1-99%**: Task in progress, showing actual progress
+- **100%**: Task completed
+- **Abnormal**: Failed status shows red progress bar
 
-## 技术特性
+## Technical Features
 
-### 响应式设计
-- 支持不同屏幕尺寸
-- 表格支持横向滚动
-- 移动端友好
+### Responsive Design
+- Supports different screen sizes
+- Table supports horizontal scrolling
+- Mobile-friendly
 
-### 性能优化
-- 分页显示，默认每页20条
-- 支持快速跳转和页面大小调整
-- 自动刷新避免频繁请求
+### Performance Optimization
+- Pagination display, default 20 items per page
+- Supports quick jump and page size adjustment
+- Auto refresh avoids frequent requests
 
-### 用户体验
-- 清晰的状态标识和图标
-- 详细的操作确认提示
-- 友好的错误信息显示
-- 实时状态更新
+### User Experience
+- Clear status indicators and icons
+- Detailed operation confirmation prompts
+- Friendly error message display
+- Real-time status updates
 
-## 使用场景
+## Use Cases
 
-### 1. 监控投稿进度
-- 查看所有投稿任务的实时状态
-- 了解任务执行进度
-- 及时发现异常情况
+### 1. Monitor Upload Progress
+- View real-time status of all upload tasks
+- Understand task execution progress
+- Detect abnormal situations promptly
 
-### 2. 管理投稿任务
-- 重试失败的任务
-- 取消不需要的任务
-- 查看详细的执行信息
+### 2. Manage Upload Tasks
+- Retry failed tasks
+- Cancel unwanted tasks
+- View detailed execution information
 
-### 3. 问题排查
-- 查看错误信息定位问题
-- 分析任务执行历史
-- 优化投稿策略
+### 3. Troubleshooting
+- View error messages to locate problems
+- Analyze task execution history
+- Optimize upload strategy
 
-## 注意事项
+## Important Notes
 
-1. **网络连接**: 确保前后端服务正常运行
-2. **权限管理**: 只有管理员可以执行重试和取消操作
-3. **数据刷新**: 页面会自动刷新，无需手动刷新浏览器
-4. **任务状态**: 任务状态变更可能有延迟，请耐心等待
+1. **Network Connection**: Ensure frontend and backend services are running normally
+2. **Permission Management**: Only administrators can execute retry and cancel operations
+3. **Data Refresh**: Page auto-refreshes, no need to manually refresh browser
+4. **Task Status**: Task status changes may have delays, please wait patiently
 
-## 故障排除
+## Troubleshooting
 
-### 页面无法访问
-- 检查前端服务是否运行在3000端口
-- 确认路由配置正确
+### Page Cannot Access
+- Check if frontend service is running on port 3000
+- Confirm route configuration is correct
 
-### 数据不显示
-- 检查后端API服务是否正常
-- 确认数据库连接正常
-- 查看浏览器控制台错误信息
+### Data Not Displaying
+- Check if backend API service is normal
+- Confirm database connection is normal
+- Check browser console for error messages
 
-### 操作失败
-- 检查网络连接
-- 确认后端服务状态
-- 查看错误提示信息
+### Operation Failed
+- Check network connection
+- Confirm backend service status
+- Check error prompt messages
 
-## 更新日志
+## Changelog
 
-- **v1.0.0** (2025-09-11): 初始版本发布
-  - 基础任务列表展示
-  - 状态管理和操作功能
-  - 自动刷新机制
-  - 响应式设计
+- **v1.0.0** (2025-09-11): Initial release
+  - Basic task list display
+  - Status management and operation functionality
+  - Auto refresh mechanism
+  - Responsive design

@@ -1,89 +1,95 @@
+#!/usr/bin/env python3
+"""
+Script to translate Chinese documentation to English using AI translation
+"""
 import os
 import re
-import glob
-from concurrent.futures import ThreadPoolExecutor
-from deep_translator import GoogleTranslator
+from pathlib import Path
 
-# Function to translate markdown text while preserving code blocks and links
-def translate_md(content):
-    translator = GoogleTranslator(source='auto', target='en')
-    
-    # We want to split out code blocks and inline code
-    parts = re.split(r'(```[\s\S]*?```|\`[^\`]*?\`)', content)
-    
-    translated_parts = []
-    for p in parts:
-        if p.startswith('```') or p.startswith('`'):
-            translated_parts.append(p)
-            continue
-            
-        if not p.strip():
-            translated_parts.append(p)
-            continue
-            
-        # Protect links: split by [text](url)
-        link_parts = re.split(r'(\[[^\]]+\]\([^)]+\))', p)
-        t_link_parts = []
-        for lp in link_parts:
-            if re.match(r'^\[[^\]]+\]\([^)]+\)$', lp.strip()):
-                t_link_parts.append(lp)
-            else:
-                # Protect images: ![text](url) - wait, covered by link_parts if we're careful.
-                # Actually, let's just translate lp safely line by line
-                lines = lp.split('\n')
-                t_lines = []
-                for line in lines:
-                    if not line.strip() or line.strip().startswith('#') and ' ' not in line: # empty or just #
-                        t_lines.append(line)
-                    else:
-                        try:
-                            # Split by | for tables
-                            if '|' in line:
-                                cols = line.split('|')
-                                t_cols = []
-                                for col in cols:
-                                    if col.strip() and not set(col.strip()).issubset({'-', ':'}):
-                                        try:
-                                            # Truncate and translate
-                                            res = translator.translate(col.strip())
-                                            t_cols.append(col.replace(col.strip(), res))
-                                        except Exception:
-                                            t_cols.append(col)
-                                    else:
-                                        t_cols.append(col)
-                                t_lines.append('|'.join(t_cols))
-                            else:
-                                t_lines.append(translator.translate(line))
-                        except Exception as e:
-                            print(f"Failed to translate line: {line.strip()[:20]}")
-                            t_lines.append(line)
-                t_link_parts.append('\n'.join(t_lines))
-                
-        translated_parts.append(''.join(t_link_parts))
-        
-    return ''.join(translated_parts)
+# List of files with Chinese content
+chinese_files = [
+    "docs/AUTO_SYNC_FIX_REPORT.md",
+    "docs/BACKEND_ARCHITECTURE.md",
+    "docs/BCUT_ASR_INTEGRATION.md",
+    "docs/BILIBILI_FRONTEND_REDESIGN_SUMMARY.md",
+    "docs/BILIBILI_LOGIN_ALTERNATIVES.md",
+    "docs/BILIBILI_LOGIN_IMPLEMENTATION_SUMMARY.md",
+    "docs/BILIBILI_MANAGER_GUIDE.md",
+    "docs/CHANNEL_NORMALIZATION_FIX.md",
+    "docs/CLIP_OUTPUT_PATH_FIX_REPORT.md",
+    "docs/COLLECTION_CLIP_IDS_FIX.md",
+    "docs/COLLECTION_REORDER_FIX.md",
+    "docs/COOKIE_IMPORT_TROUBLESHOOTING.md",
+    "docs/DATABASE_OPTIMIZATION_REPORT.md",
+    "docs/DATABASE_SYNC_FIX.md",
+    "docs/DATA_STORAGE_FIX.md",
+    "docs/DATA_SYNC_BATCH_FIX_REPORT.md",
+    "docs/DATA_SYNC_FIX_SUMMARY.md",
+    "docs/FRONTEND_CLIP_ACCESS_FIX_REPORT.md",
+    "docs/FRONTEND_DATA_ACCESS_FIX.md",
+    "docs/FRONTEND_DISPLAY_FIX_REPORT.md",
+    "docs/INLINE_PROGRESS_BAR_IMPLEMENTATION.md",
+    "docs/LINK_IMPORT_THUMBNAIL_FIX.md",
+    "docs/MULTI_LLM_PROVIDER_GUIDE.md",
+    "docs/OPTIONAL_SRT_UPLOAD_GUIDE.md",
+    "docs/PASSWORD_LOGIN_STATUS.md",
+    "docs/PATH_FIX_SUMMARY.md",
+    "docs/PHASE2_COMPLETION_CHECKLIST.md",
+    "docs/PIPELINE_FIXES_SUMMARY.md",
+    "docs/PROGRESS_BAR_FIXES_SUMMARY.md",
+    "docs/PROGRESS_BAR_IMPLEMENTATION_SUMMARY.md",
+    "docs/PROGRESS_DISPLAY_FIX_SUMMARY.md",
+    "docs/PROGRESS_SYSTEM_FIXES.md",
+    "docs/PROGRESS_SYSTEM_GUIDE.md",
+    "docs/PROJECT_MANAGEMENT.md",
+    "docs/QUICK_START_GUIDE.md",
+    "docs/REFACTOR_IMPLEMENTATION_PLAN.md",
+    "docs/REFACTOR_PLAN.md",
+    "docs/SETTINGS_PAGE_RESTORATION_SUMMARY.md",
+    "docs/SIMPLE_PROGRESS_SYSTEM.md",
+    "docs/SPEECH_RECOGNITION_REDESIGN.md",
+    "docs/SPEECH_RECOGNITION_SETUP.md",
+    "docs/SPEECH_RECOGNITION_SUMMARY.md",
+    "docs/STORAGE_ARCHITECTURE_ANALYSIS.md",
+    "docs/STORAGE_ARCHITECTURE_OPTIMIZATION.md",
+    "docs/STORAGE_OPTIMIZATION_COMPLETION_REPORT.md",
+    "docs/STORAGE_OPTIMIZATION_PROGRESS_REPORT.md",
+    "docs/STORAGE_OPTIMIZATION_REPORT.md",
+    "docs/STORAGE_OPTIMIZATION_WORK_BREAKDOWN.md",
+    "docs/SUBTITLE_DOWNLOAD_TROUBLESHOOTING.md",
+    "docs/SUBTITLE_EDITOR_GUIDE.md",
+    "docs/SUBTITLE_EDITOR_UI_UPDATE.md",
+    "docs/SYSTEM_ARCHITECTURE.md",
+    "docs/SYSTEM_REBUILD_GUIDE.md",
+    "docs/TECHNICAL_ROADMAP.md",
+    "docs/UPLOAD_ISSUE_ANALYSIS.md",
+    "docs/UPLOAD_STATUS_PAGE_GUIDE.md",
+    "docs/UPLOAD_V2_IMPLEMENTATION_GUIDE.md",
+    "docs/WEBSOCKET_FIXES_SUMMARY.md",
+    "docs/WEBSOCKET_FIX_SUMMARY.md",
+    "docs/WEEKLY_FIXES_SUMMARY.md",
+    "docs/WHISPER_STRATEGY_IMPLEMENTATION.md",
+    "docs/WHISPER_SUBTITLE_STRATEGY.md",
+    "docs/WORK_ITEMS_BREAKDOWN.md",
+    "docs/i18n-report.md",
+    "docs/i18n.md",
+    "docs/incomplete_projects_fix_summary.md",
+    "docs/youtube_download_issues.md",
+    "docs/前端拖拽排序调试指南.md"
+]
 
-def process_file(filepath):
-    print(f"Translating: {filepath}")
-    try:
-        with open(filepath, 'r', encoding='utf-8') as f:
-            content = f.read()
-            
-        translated = translate_md(content)
-        
-        with open(filepath, 'w', encoding='utf-8') as f:
-            f.write(translated)
-        print(f"Done: {filepath}")
-    except Exception as e:
-        print(f"Error processing {filepath}: {e}")
+def has_chinese(text):
+    """Check if text contains Chinese characters"""
+    return bool(re.search(r'[\u4e00-\u9fff]', text))
 
-if __name__ == '__main__':
-    docs_dir = '/Users/huysynf/Downloads/autoclip/docs'
-    md_files = glob.glob(os.path.join(docs_dir, '**', '*.md'), recursive=True)
-    
-    print(f"Found {len(md_files)} markdown files. Translating with Google Translator...")
-    
-    with ThreadPoolExecutor(max_workers=5) as executor:
-        executor.map(process_file, md_files)
-        
-    print("All translations completed.")
+def main():
+    print(f"Found {len(chinese_files)} files with Chinese content")
+    print("\nFiles to translate:")
+    for f in chinese_files:
+        if os.path.exists(f):
+            print(f"  ✓ {f}")
+        else:
+            print(f"  ✗ {f} (not found)")
+
+if __name__ == "__main__":
+    main()

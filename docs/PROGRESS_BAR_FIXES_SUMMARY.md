@@ -1,29 +1,29 @@
-# 进度条问题修复总结
+# Summary of progress bar problem repairs
 
-## 问题描述
+## Problem description
 
-用户反馈了两个主要问题：
-1. **色块高度太高**：需要将所有信息合并到1行中展示
-2. **没有实时同步**：一直显示"初始化"状态，成功后才更新状态
+Users reported two main issues:
+1. **Color block height is too high**: All information needs to be merged into one line for display
+2. **No real-time synchronization**: The "initialization" status is always displayed, and the status is updated only after success.
 
-## 修复方案
+## Repair plan
 
-### 1. 压缩色块高度 ✅
+### 1. Compress color block height ✅
 
-**修改文件**: `frontend/src/components/InlineProgressBar.tsx`
+**Modify file**: `frontend/src/components/InlineProgressBar.tsx`
 
-**主要改动**:
-- 将多行布局改为单行布局
-- 固定高度为32px
-- 使用flexbox布局：左侧(图标+步骤名) + 中间(进度条) + 右侧(步骤信息+百分比)
+**Main changes**:
+- Change multi-line layout to single-line layout
+- Fixed height is 32px
+- Use flexbox layout: left (icon + step name) + middle (progress bar) + right (step information + percentage)
 
-**布局结构**:
+**Layout structure**:
 ```
 [图标] [步骤名称] ————————————— [步骤信息] [百分比]
        [进度条: ████████░░░░]
 ```
 
-**关键代码**:
+**Key code**:
 ```typescript
 <div style={{
   height: '32px', // 固定高度
@@ -45,17 +45,17 @@
 </div>
 ```
 
-### 2. 修复实时进度同步 ✅
+### 2. Fix real-time progress synchronization ✅
 
-**问题根因**:
-- 后端WebSocket通知在同步环境中使用`asyncio.create_task()`导致错误
-- 前端WebSocket连接使用了错误的用户ID
+**Root cause of the problem**:
+- Backend WebSocket notification using `asyncio.create_task()` in a synchronous environment resulted in an error
+- Frontend WebSocket connection uses wrong user ID
 
-**修复方案**:
+**Repair**:
 
-#### 后端修复 (`backend/services/processing_orchestrator.py`)
-- 使用线程池处理异步WebSocket通知
-- 避免在同步环境中直接调用异步函数
+#### Backend fix (`backend/services/processing_orchestrator.py`)
+- Use a thread pool to handle asynchronous WebSocket notifications
+- Avoid calling asynchronous functions directly in a synchronous environment
 
 ```python
 def _send_realtime_progress_update(self, status, progress, error_message):
@@ -78,10 +78,10 @@ def _send_realtime_progress_update(self, status, progress, error_message):
     thread.start()
 ```
 
-#### 前端修复 (`frontend/src/components/InlineProgressBar.tsx`)
-- 修正WebSocket用户ID为项目ID
-- 添加调试日志
-- 优化消息处理逻辑
+#### Frontend fix (`frontend/src/components/InlineProgressBar.tsx`)
+- Corrected WebSocket user ID to project ID
+- Add debug log
+- Optimize message processing logic
 
 ```typescript
 const { isConnected, subscribeToTopic, unsubscribeFromTopic } = useWebSocket({
@@ -96,9 +96,9 @@ const { isConnected, subscribeToTopic, unsubscribeFromTopic } = useWebSocket({
 });
 ```
 
-#### WebSocket消息格式优化 (`backend/services/websocket_notification_service.py`)
-- 增强消息结构，包含更多进度信息
-- 添加调试日志
+#### WebSocket message format optimization (`backend/services/websocket_notification_service.py`)
+- Enhanced message structure to include more progress information
+- Add debug log
 
 ```python
 notification = {
@@ -115,16 +115,16 @@ notification = {
 }
 ```
 
-## 测试验证
+## Test verification
 
-### WebSocket功能测试
-创建了测试脚本 `scripts/test_websocket_progress.py`，验证：
-- ✅ WebSocket连接正常
-- ✅ 进度消息发送成功
-- ✅ 消息格式正确
-- ✅ 主题订阅功能正常
+### WebSocket functional testing
+Created test script `scripts/test_websocket_progress.py`, verified:
+- ✅ WebSocket connection is normal
+- ✅ Progress message sent successfully
+- ✅ The message format is correct
+- ✅ Topic subscription function is normal
 
-### 测试结果
+### Test results
 ```
 INFO: 处理进度通知已发送: test-project-123 - test-task-456 - 10% - 大纲提取
 INFO: 处理进度通知已发送: test-project-123 - test-task-456 - 30% - 时间定位
@@ -135,59 +135,59 @@ INFO: 处理进度通知已发送: test-project-123 - test-task-456 - 95% - 视�
 INFO: 处理进度通知已发送: test-project-123 - test-task-456 - 100% - 处理完成
 ```
 
-## 功能特性
+## Features
 
-### 1. 单行布局设计
-- **高度固定**: 32px，与原色块高度一致
-- **信息完整**: 图标、步骤名、进度条、步骤信息、百分比
-- **响应式**: 自适应宽度，长文本自动省略
+### 1. Single-line layout design
+- **Fixed height**: 32px, consistent with the height of the original color block
+- **Complete information**: icon, step name, progress bar, step information, percentage
+- **Responsive**: adaptive width, long text is automatically omitted
 
-### 2. 实时进度同步
-- **WebSocket连接**: 自动建立和维护连接
-- **主题订阅**: 按项目ID订阅进度更新
-- **实时更新**: 后端进度变化立即反映到前端
-- **错误处理**: 连接断开时自动重连
+### 2. Real-time progress synchronization
+- **WebSocket Connection**: Automatically establish and maintain connections
+- **Topic Subscription**: Subscription progress updates by project ID
+- **Real-time updates**: Back-end progress changes are immediately reflected in the front-end
+- **Error handling**: Automatically reconnect when the connection is disconnected
 
-### 3. 进度映射
-- 步骤1 (大纲提取): 0-10%
-- 步骤2 (时间定位): 10-30%
-- 步骤3 (内容评分): 30-50%
-- 步骤4 (标题生成): 50-70%
-- 步骤5 (主题聚类): 70-85%
-- 步骤6 (视频切割): 85-100%
+### 3. Progress mapping
+- Step 1 (outline extraction): 0-10%
+- Step 2 (Time Positioning): 10-30%
+- Step 3 (Content Rating): 30-50%
+- Step 4 (Title Generation): 50-70%
+- Step 5 (topic clustering): 70-85%
+- Step 6 (Video cutting): 85-100%
 
-### 4. 视觉效果
-- **动态背景**: 进度条背景随进度变化
-- **动画效果**: 平滑的进度填充动画
-- **状态指示**: 清晰的步骤名称和进度百分比
+### 4. Visual effects
+- **Dynamic Background**: The background of the progress bar changes with the progress
+- **Animation Effect**: Smooth progress fill animation
+- **Status Indication**: Clear step names and progress percentages
 
-## 部署说明
+## Deployment instructions
 
-### 前端部署
-1. 确保WebSocket连接配置正确
-2. 验证组件导入路径
-3. 测试不同浏览器的兼容性
+### Front-end deployment
+1. Make sure the WebSocket connection is configured correctly
+2. Verify component import path
+3. Test the compatibility of different browsers
 
-### 后端部署
-1. 确保WebSocket服务正常运行
-2. 验证进度推送逻辑
-3. 监控WebSocket连接状态
+### Backend deployment
+1. Make sure the WebSocket service is running properly
+2. Verify progress push logic
+3. Monitor WebSocket connection status
 
-### 测试验证
-1. 启动项目处理任务
-2. 观察进度条实时更新
-3. 验证步骤信息正确显示
-4. 检查WebSocket连接状态
+### Test verification
+1. Start project processing tasks
+2. Observe the progress bar updating in real time
+3. Verification step information is displayed correctly
+4. Check WebSocket connection status
 
-## 总结
+## Summarize
 
-✅ **问题1已解决**: 色块高度压缩到32px，所有信息合并到1行显示
-✅ **问题2已解决**: 实时进度同步正常工作，能正确接收后端进度更新
+✅ **Problem 1 has been solved**: The height of the color block is compressed to 32px, and all information is merged into one line for display.
+✅ **Issue 2 Solved**: Real-time progress synchronization is working properly and backend progress updates are received correctly
 
-新的进度条组件提供了：
-- 紧凑的单行布局
-- 实时的进度更新
-- 丰富的视觉反馈
-- 稳定的WebSocket连接
+The new progress bar component provides:
+- Compact single-row layout
+- Real-time progress updates
+- Rich visual feedback
+- Stable WebSocket connection
 
-用户现在可以看到详细的处理进度，而不是简单的"正在处理中"状态。
+Users can now see detailed processing progress instead of a simple "Processing" status.

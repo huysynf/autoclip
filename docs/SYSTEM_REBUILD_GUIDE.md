@@ -1,172 +1,172 @@
-# AutoClip 系统重建指南
+# AutoClip System Rebuild Guide
 
-## 🎯 重建目标
+## 🎯 Rebuild Objectives
 
-经过数据清理后，系统已经回到完全干净的状态。现在可以重新开始，建立一个干净、一致、可维护的系统。
+After data cleanup, the system has returned to a completely clean state. Now we can start fresh and establish a clean, consistent, and maintainable system.
 
-## 📋 当前状态
+## 📋 Current Status
 
-### **✅ 已完成**
-- [x] 数据库完全清空（所有表记录为0）
-- [x] 文件系统清理完成
-- [x] 临时文件和日志清理完成
-- [x] 干净的目录结构已创建
-- [x] 数据库备份已保存
+### **✅ Completed**
+- [x] Database completely cleared (all tables have 0 records)
+- [x] File system cleanup completed
+- [x] Temporary files and logs cleaned
+- [x] Clean directory structure created
+- [x] Database backup saved
 
-### **🏗️ 需要重建**
-- [ ] 数据库表结构验证
-- [ ] 系统配置检查
-- [ ] 前端状态重置
-- [ ] 新项目创建测试
+### **🏗️ Needs Rebuilding**
+- [ ] Database table structure validation
+- [ ] System configuration check
+- [ ] Frontend state reset
+- [ ] New project creation test
 
-## 🔧 重建步骤
+## 🔧 Rebuild Steps
 
-### **第一步：验证系统基础**
+### **Step 1: Validate System Foundation**
 
-1. **检查数据库表结构**
+1. **Check database table structure**
    ```bash
    sqlite3 data/autoclip.db ".schema"
    ```
 
-2. **检查目录结构**
+2. **Check directory structure**
    ```bash
    tree data/ -L 3
    ```
 
-3. **验证配置文件**
+3. **Verify configuration files**
    - `backend/core/config.py`
    - `backend/core/unified_paths.py`
 
-### **第二步：系统启动测试**
+### **Step 2: System Startup Test**
 
-1. **启动后端服务**
+1. **Start backend service**
    ```bash
    cd backend
    python main.py
    ```
 
-2. **启动前端服务**
+2. **Start frontend service**
    ```bash
    cd frontend
    npm run dev
    ```
 
-3. **检查服务状态**
-   - 后端API: http://localhost:8000/health
-   - 前端页面: http://localhost:3000
+3. **Check service status**
+   - Backend API: http://localhost:8000/health
+   - Frontend page: http://localhost:3000
 
-### **第三步：创建测试项目**
+### **Step 3: Create Test Project**
 
-1. **上传测试视频**
-   - 使用前端界面上传一个短视频
-   - 验证项目创建流程
+1. **Upload test video**
+   - Use frontend interface to upload a short video
+   - Verify project creation process
 
-2. **检查数据一致性**
-   - 验证数据库记录
-   - 验证文件系统结构
-   - 验证前端显示
+2. **Check data consistency**
+   - Verify database records
+   - Verify file system structure
+   - Verify frontend display
 
-## 📁 新的目录结构
+## 📁 New Directory Structure
 
 ```
 data/
-├── autoclip.db                 # 干净的数据库
-├── autoclip_backup_*.db        # 数据库备份
-├── projects/                   # 空的项目目录
-├── output/                     # 空的输出目录
-│   ├── clips/                  # 切片视频
-│   ├── collections/            # 合集视频
-│   └── metadata/               # 元数据
-├── temp/                       # 临时文件
-├── cache/                      # 缓存文件
-├── uploads/                    # 上传文件
-└── backups/                    # 备份文件
+├── autoclip.db                 # Clean database
+├── autoclip_backup_*.db        # Database backups
+├── projects/                   # Empty project directory
+├── output/                     # Empty output directory
+│   ├── clips/                  # Clip videos
+│   ├── collections/            # Collection videos
+│   └── metadata/               # Metadata
+├── temp/                       # Temporary files
+├── cache/                      # Cache files
+├── uploads/                    # Upload files
+└── backups/                    # Backup files
 ```
 
-## 🚀 最佳实践
+## 🚀 Best Practices
 
-### **1. 数据管理**
-- 每个项目完成后立即同步元数据到数据库
-- 定期运行数据一致性检查
-- 及时清理临时文件和缓存
+### **1. Data Management**
+- Sync metadata to database immediately after each project completion
+- Run data consistency checks regularly
+- Clean temporary files and cache promptly
 
-### **2. 路径管理**
-- 使用统一的路径管理器
-- 避免硬编码路径
-- 定期验证路径配置
+### **2. Path Management**
+- Use unified path manager
+- Avoid hardcoded paths
+- Validate path configuration regularly
 
-### **3. 状态同步**
-- 确保文件系统、数据库、前端状态一致
-- 使用WebSocket实时更新状态
-- 提供手动同步机制
+### **3. State Synchronization**
+- Ensure file system, database, and frontend state consistency
+- Use WebSocket for real-time status updates
+- Provide manual sync mechanism
 
-## 🔍 监控和检查
+## 🔍 Monitoring and Checking
 
-### **1. 定期检查项目**
+### **1. Regular Project Checks**
 ```bash
-# 检查数据库状态
+# Check database status
 python scripts/check_database_status.py
 
-# 检查文件系统一致性
+# Check file system consistency
 python scripts/validate_paths.py
 
-# 检查前端状态
+# Check frontend state
 python scripts/check_frontend_state.py
 ```
 
-### **2. 数据同步**
+### **2. Data Synchronization**
 ```bash
-# 同步所有项目元数据
+# Sync all project metadata
 python scripts/sync_complete_metadata.py
 
-# 同步特定项目
+# Sync specific project
 python scripts/sync_complete_metadata.py <project_id>
 ```
 
-### **3. 路径验证**
+### **3. Path Validation**
 ```bash
-# 验证所有路径配置
+# Validate all path configurations
 python scripts/validate_paths.py
 ```
 
-## 🚨 注意事项
+## 🚨 Important Notes
 
-### **1. 开发阶段**
-- 每次测试前备份重要数据
-- 使用小文件进行功能测试
-- 及时清理测试数据
+### **1. Development Phase**
+- Backup important data before each test
+- Use small files for functionality testing
+- Clean test data promptly
 
-### **2. 生产环境**
-- 定期备份数据库和重要文件
-- 监控磁盘空间使用
-- 设置日志轮转和清理
+### **2. Production Environment**
+- Regular backups of database and important files
+- Monitor disk space usage
+- Set up log rotation and cleanup
 
-### **3. 故障恢复**
-- 保留数据库备份
-- 记录系统配置变更
-- 建立故障恢复流程
+### **3. Disaster Recovery**
+- Keep database backups
+- Record system configuration changes
+- Establish disaster recovery procedures
 
-## 📚 相关文档
+## 📚 Related Documentation
 
-- [系统架构说明](SYSTEM_ARCHITECTURE.md)
-- [路径修复总结](PATH_FIX_SUMMARY.md)
-- [快速开始指南](../QUICK_START_GUIDE.md)
+- [System Architecture](SYSTEM_ARCHITECTURE.md)
+- [Path Fix Summary](PATH_FIX_SUMMARY.md)
+- [Quick Start Guide](../QUICK_START_GUIDE.md)
 
-## 🎉 重建完成检查清单
+## 🎉 Rebuild Completion Checklist
 
-- [ ] 系统启动正常
-- [ ] 数据库连接正常
-- [ ] 前端显示正常
-- [ ] 项目创建流程正常
-- [ ] 数据一致性检查通过
-- [ ] 路径配置验证通过
-- [ ] 文档更新完成
+- [ ] System starts normally
+- [ ] Database connection normal
+- [ ] Frontend display normal
+- [ ] Project creation process normal
+- [ ] Data consistency check passed
+- [ ] Path configuration validation passed
+- [ ] Documentation updated
 
 ---
 
-**重建完成后，系统将具备：**
-- 清晰的数据存储架构
-- 一致的数据同步机制
-- 可靠的路径管理
-- 完善的监控和检查工具
-- 详细的文档和指南
+**After rebuild completion, the system will have:**
+- Clear data storage architecture
+- Consistent data synchronization mechanism
+- Reliable path management
+- Complete monitoring and checking tools
+- Detailed documentation and guides
