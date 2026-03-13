@@ -1,149 +1,154 @@
-# 未完成项目重试问题修复总结
+# Incomplete Projects Retry Fix Summary
 
-## 问题描述
+## Problem description
 
-用户报告有两个未完成的项目，点击重试后依然无法重启：
+Two incomplete projects could not be restarted even after clicking “Retry”:
 
-1. **项目1**: `19cdeea4-16fb-49ce-b114-54cdff7419cd` (iPhone 17/Pro/Air Impressions)
-2. **项目2**: `e11ab97b-6dd2-4d50-97c6-d934b835232c` (成为up主的43天，我拍了部电影)
+1. **Project 1**: `19cdeea4-16fb-49ce-b114-54cdff7419cd` (iPhone 17/Pro/Air Impressions)  
+2. **Project 2**: `e11ab97b-6dd2-4d50-97c6-d934b835232c` (Chinese title: “43 days as a creator, I shot a film”)
 
-## 问题分析
+## Analysis
 
-### 项目1问题分析
-- ✅ 视频文件存在 (42.5MB)
-- ❌ 有18个重复的任务记录
-- ❌ 项目状态为失败
-- ❌ 多个Celery任务ID冲突
-- ❌ 流水线代码中存在变量作用域问题
+### Project 1
+- ✅ Video file exists (42.5 MB).  
+- ❌ 18 duplicate task records.  
+- ❌ Project status marked as failed.  
+- ❌ Multiple conflicting Celery task IDs.  
+- ❌ Variable scope issue in pipeline code.
 
-### 项目2问题分析
-- ❌ 没有视频文件
-- ❌ 项目状态为等待中
-- ❌ 需要重新下载B站视频
-- ⚠️ 源URL: `https://www.bilibili.com/video/BV1ihbYzGErq/`
+### Project 2
+- ❌ Video file is missing.  
+- ❌ Project status stuck in “pending/waiting”.  
+- ❌ Needs Bilibili video to be re-downloaded.  
+- ⚠️ Source URL: `https://www.bilibili.com/video/BV1ihbYzGErq/`
 
-## 修复措施
+## Fixes
 
-### 1. 修复流水线变量作用域问题
+### 1. Fix pipeline variable-scope issue
 
-**问题**: `cannot access local variable 'timeline_data' where it is not associated with a value`
+**Error**: `cannot access local variable 'timeline_data' where it is not associated with a value`
 
-**修复**: 在 `backend/services/simple_pipeline_adapter.py` 中修复变量初始化问题
+**Fix**: Initialize all required variables in `backend/services/simple_pipeline_adapter.py` when outline data is missing.
 
 ```python
-# 修复前：当没有大纲数据时，timeline_data变量未定义
+# Before: when there is no outline data, timeline_data is not defined
 else:
-    logger.warning("没有大纲数据，跳过时间线提取和内容评分")
-    # 创建空文件...
+    logger.warning("No outline data, skipping timeline extraction and scoring")
+    # Create empty files...
 
-# 修复后：初始化所有必要的变量
+# After: initialize all required variables
 else:
-    logger.warning("没有大纲数据，跳过时间线提取和内容评分")
-    # 创建空文件...
-    # 初始化空变量
+    logger.warning("No outline data, skipping timeline extraction and scoring")
+    # Create empty files...
+    # Initialize empty variables
     timeline_data = []
     scored_clips = []
     titled_clips = []
     collections = []
 ```
 
-### 2. 清理重复任务
+### 2. Clean up duplicate tasks
 
-**问题**: 项目1有18个重复的任务记录，导致冲突
+**Issue**: Project 1 had 18 duplicate task records causing conflicts.
 
-**修复**: 创建了 `scripts/fix_incomplete_projects.py` 脚本
-- 删除重复的任务记录
-- 保留最新的任务记录
-- 清理Celery任务ID冲突
+**Fix**: Added `scripts/fix_incomplete_projects.py`:
 
-### 3. 实现自动重新下载功能
+- Remove duplicate task records.  
+- Keep the latest valid task.  
+- Clean up conflicting Celery task IDs.
 
-**问题**: 项目2没有视频文件，需要重新下载
+### 3. Implement automatic re-download
 
-**修复**: 修改 `backend/api/v1/projects.py` 中的重试API
-- 检测视频文件是否存在
-- 从项目元数据中获取源URL
-- 根据URL类型自动选择下载方式（B站/YouTube）
-- 使用安全的任务管理器启动下载任务
+**Issue**: Project 2 had no video file; retry needs to re-download the video.
+
+**Fix**: Updated the retry API in `backend/api/v1/projects.py`:
+
+- Check if the video file exists.  
+- Pull the source URL from project metadata.  
+- Choose download method based on URL type (Bilibili / YouTube).  
+- Use the safe async task manager to kick off a new download.
 
 ```python
-# 检查视频文件是否存在，如果不存在则尝试重新下载
+# If video is missing, try to re-download
 if not video_path.exists():
-    logger.warning(f"视频文件不存在: {video_path}，尝试重新下载")
-    
-    # 检查项目元数据中是否有源URL
-    if hasattr(project, 'project_metadata') and project.project_metadata:
-        source_url = project.project_metadata.get('source_url')
+    logger.warning(f"Video file missing: {video_path}, attempting re-download")
+
+    if hasattr(project, "project_metadata") and project.project_metadata:
+        source_url = project.project_metadata.get("source_url")
         if source_url:
-            # 根据URL类型选择下载方式
-            if 'bilibili.com' in source_url:
-                # B站视频重新下载
-                # ...
-            elif 'youtube.com' in source_url or 'youtu.be' in source_url:
-                # YouTube视频重新下载
-                # ...
+            if "bilibili.com" in source_url:
+                # Bilibili re-download
+                ...
+            elif "youtube.com" in source_url or "youtu.be" in source_url:
+                # YouTube re-download
+                ...
 ```
 
-### 4. 改进异常处理
+### 4. Improve exception handling
 
-**修复**: 使用 `backend/api/v1/async_task_manager.py` 安全任务管理器
-- 防止未捕获异常导致后端重启
-- 提供任务状态跟踪
-- 支持任务取消和清理
+**Fix**: Use `backend/api/v1/async_task_manager.py` as a safe task manager:
 
-## 修复结果
+- Prevent unhandled exceptions from crashing/restarting the backend.  
+- Track task state for debugging.  
+- Support task cancellation and cleanup.
 
-### 项目1修复结果
-- ✅ 清理了重复任务
-- ✅ 修复了流水线变量作用域问题
-- ✅ 重试功能正常工作
-- ✅ 可以重新启动处理
+## Results
 
-### 项目2修复结果
-- ✅ 实现了自动重新下载功能
-- ✅ 检测到源URL并开始重新下载
-- ✅ 使用安全的任务管理器
-- ✅ 支持B站和YouTube视频重新下载
+### Project 1
+- ✅ Duplicate tasks cleaned up.  
+- ✅ Variable-scope bug fixed.  
+- ✅ Retry API now works correctly.  
+- ✅ Pipeline can be restarted successfully.
 
-## 测试验证
+### Project 2
+- ✅ Automatic re-download logic implemented.  
+- ✅ Source URL detected and used to start a new download.  
+- ✅ Uses the safe task manager.  
+- ✅ Supports both Bilibili and YouTube re-downloads.
 
-### 创建了测试脚本
-1. `scripts/check_incomplete_projects.py` - 检查未完成项目
-2. `scripts/fix_incomplete_projects.py` - 修复项目问题
-3. `scripts/test_retry_api.py` - 测试重试API
-4. `scripts/test_bilibili_redownload.py` - 测试B站重新下载
+## Testing
 
-### 测试结果
-- ✅ 项目1重试功能正常
-- ✅ 项目2自动重新下载功能正常
-- ✅ 流水线变量作用域问题已修复
-- ✅ 重复任务清理功能正常
+### Test scripts
 
-## 改进效果
+1. `scripts/check_incomplete_projects.py` – Scan for incomplete projects.  
+2. `scripts/fix_incomplete_projects.py` – Apply fixes to those projects.  
+3. `scripts/test_retry_api.py` – Verify retry endpoint behavior.  
+4. `scripts/test_bilibili_redownload.py` – Verify Bilibili re-download.
 
-**修复前的问题：**
-- 项目重试失败
-- 流水线处理异常
-- 重复任务冲突
-- 无法自动重新下载
+### Test outcomes
 
-**修复后的效果：**
-- 项目重试功能正常
-- 流水线处理稳定
-- 任务管理清晰
-- 自动重新下载功能完善
+- ✅ Project 1 retry works as expected.  
+- ✅ Project 2 auto re-download works as expected.  
+- ✅ Pipeline variable-scope issue fixed.  
+- ✅ Duplicate-task cleanup works correctly.
 
-## 技术要点
+## Impact
 
-1. **变量作用域管理**: 确保所有变量在使用前都被正确初始化
-2. **任务去重**: 清理重复任务，避免冲突
-3. **自动重新下载**: 智能检测缺失文件并自动重新下载
-4. **异常处理**: 使用安全的任务管理器防止未捕获异常
-5. **API改进**: 重试API现在支持自动重新下载功能
+**Before fixes:**
 
-## 后续建议
+- Retry failed for some projects.  
+- Pipeline crashed or errored for specific states.  
+- Duplicate tasks created conflicts.  
+- No automatic re-download for missing video files.
 
-1. 监控项目处理进度，确保修复效果
-2. 定期清理重复任务，避免积累
-3. 完善错误日志，便于问题排查
-4. 考虑添加任务队列管理功能
+**After fixes:**
+
+- Retry works reliably.  
+- Pipeline runs stably even for edge cases.  
+- Task management is cleaner.  
+- Automatic re-download is fully wired into the retry flow.
+
+## Technical takeaways
+
+1. **Variable scope**: Always initialize variables before use in all branches.  
+2. **Task de-duplication**: Remove duplicate records to avoid conflicting state.  
+3. **Auto re-download**: Detect missing files and recover via re-download.  
+4. **Exception handling**: Use a safe task manager to avoid unhandled exceptions.  
+5. **API behavior**: Retry API now includes file-existence checks and re-download support.
+
+## Recommendations
+
+1. Monitor project processing for a period to confirm stability.  
+2. Periodically clean duplicate tasks in the database.  
+3. Continue improving error logs for easier debugging.  
+4. Consider adding a dedicated task-queue management/monitoring UI.

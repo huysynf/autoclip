@@ -1,17 +1,17 @@
-# 国际化检查报告
+# Internationalization Check Report
 
-## 检查时间
-2025年 9月16日 星期二 01时26分49秒 CST
+## Check time
+2025-09-16 Tue 01:26:49 CST
 
-## 检查结果
-- 总检查项: 19
-- 通过检查: 19
-- 通过率: 100%
+## Results
+- Total checks: 19  
+- Passed: 19  
+- Pass rate: 100%
 
-## 文件状态
-- ✅ README.md
-- ✅ README-EN.md
-- ✅ .github/README.md
+## File status
+- ✅ `README.md`  
+- ✅ `README-EN.md`  
+- ✅ `.github/README.md`
 
-## 建议
-- 所有检查通过，文档状态良好
+## Recommendation
+- All checks passed; documentation i18n status is good.
