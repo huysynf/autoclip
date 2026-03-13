@@ -1,8 +1,4 @@
-# AutoClip - AI Video Intelligent Clipping System
-
-![AutoClip Logo](https://img.shields.io/badge/AutoClip-AI%20Video%20Processing-blue?style=for-the-badge&logo=video)
-
-## AI-powered intelligent video clipping system
+# AutoClip - AutoClip: AI-Powered Video Highlight Tool
 
 Supporting YouTube/Bilibili video download, automatic clipping, and smart collection
 generation
@@ -318,11 +314,11 @@ PROJECT_DIR=./data/projects
 
 1. Click "Bilibili Account Management" on the settings page
 2. Choose login method:
-   - **Cookie Import** (recommended): Export cookies from browser
-   - **Account Password**: Directly input account and password
-   - **QR Code Login**: Scan QR code to login
+    - **Cookie Import** (recommended): Export cookies from browser
+    - **Account Password**: Directly input account and password
+    - **QR Code Login**: Scan QR code to login
 3. After successful addition, the system will automatically manage account health
-  status
+   status
 
 ## 📁 Project Structure
 
@@ -527,38 +523,38 @@ celery -A backend.core.celery_app flower --port=5555
 ### Production Environment Configuration
 
 1. **Database Optimization**
-   - Use PostgreSQL instead of SQLite
-   - Configure connection pooling
-   - Enable query caching
+    - Use PostgreSQL instead of SQLite
+    - Configure connection pooling
+    - Enable query caching
 
 2. **Redis Optimization**
-   - Configure memory limits
-   - Enable persistence
-   - Set expiration policies
+    - Configure memory limits
+    - Enable persistence
+    - Set expiration policies
 
 3. **Celery Optimization**
-   - Adjust concurrency
-   - Configure task routing
-   - Enable result backend
+    - Adjust concurrency
+    - Configure task routing
+    - Enable result backend
 
 ## 🔒 Security Configuration
 
 ### Production Environment Security
 
 1. **Environment Variables**
-   - Use strong passwords
-   - Regularly rotate keys
-   - Limit API access
+    - Use strong passwords
+    - Regularly rotate keys
+    - Limit API access
 
 2. **Network Security**
-   - Configure firewall
-   - Use HTTPS
-   - Limit CORS
+    - Configure firewall
+    - Use HTTPS
+    - Limit CORS
 
 3. **Data Security**
-   - Regular backups
-   - Encrypt sensitive data
-   - Access control
+    - Regular backups
+    - Encrypt sensitive data
+    - Access control
 
 ## 🚀 Deployment Guide
 
@@ -655,30 +651,30 @@ documentation improvements, issue reports, or feature suggestions.
 1. **Fork** the project to your GitHub account
 2. Clone your Fork to local:
 
-   ```bash
-   git clone https://github.com/zhouxiaoka/autoclip.git
-   cd autoclip
-   ```
+    ```bash
+    git clone https://github.com/zhouxiaoka/autoclip.git
+    cd autoclip
+    ```
 
 3. Create feature branch:
 
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
+    ```bash
+    git checkout -b feature/amazing-feature
+    ```
 
 4. Develop and test
 5. Commit changes:
 
-   ```bash
-   git add .
-   git commit -m 'feat: add amazing feature'
-   ```
+    ```bash
+    git add .
+    git commit -m 'feat: add amazing feature'
+    ```
 
 6. Push branch:
 
-   ```bash
-   git push origin feature/amazing-feature
-   ```
+    ```bash
+    git push origin feature/amazing-feature
+    ```
 
 7. Create **Pull Request** on GitHub
 
@@ -689,7 +685,7 @@ documentation improvements, issue reports, or feature suggestions.
 - Backend: Follow PEP 8 Python code standards
 - Frontend: Use TypeScript, follow ESLint rules
 - Commit messages: Use conventional commit format (feat, fix, docs, style, refactor,
-  test, chore)
+   test, chore)
 
 #### Development Process
 
