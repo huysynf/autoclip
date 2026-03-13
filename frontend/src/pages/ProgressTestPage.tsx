@@ -17,12 +17,12 @@ export const ProgressTestPage: React.FC = () => {
   const [testStatus, setTestStatus] = useState('pending')
   const [downloadProgress, setDownloadProgress] = useState(0)
 
-  // 模拟StartDownload
+  // SimulateStartDownload
   const handleStartDownload = () => {
     setTestStatus('downloading')
     setDownloadProgress(0)
     
-    // 模拟DownloadProgress
+    // SimulateDownloadProgress
     const interval = setInterval(() => {
       setDownloadProgress(prev => {
         if (prev >= 100) {
@@ -38,21 +38,21 @@ export const ProgressTestPage: React.FC = () => {
     }, 500)
   }
 
-  // 模拟Start Processing
+  // SimulateStart Processing
   const handleStartProcessing = () => {
     setTestStatus('processing')
     startPolling([testProjectId], 2000)
-    message.info('Start Processing，请View后端Log')
+    message.info('Start Processing, please view the backend Log')
   }
 
-  // 模拟Completed
+  // SimulationCompleted
   const handleComplete = () => {
     setTestStatus('completed')
     stopPolling()
     message.success('Done')
   }
 
-  // 模拟Failed
+  // SimulateFailed
   const handleFail = () => {
     setTestStatus('failed')
     stopPolling()
@@ -65,14 +65,14 @@ export const ProgressTestPage: React.FC = () => {
     setDownloadProgress(0)
     stopPolling()
     clearAllProgress()
-    message.info('已Reset')
+    message.info('Reset')
   }
 
   return (
     <div style={{ padding: '24px', maxWidth: '800px', margin: '0 auto' }}>
-      <Title level={2}>Progress系统Test</Title>
+      <Title level={2}>ProgressSystemTest</Title>
       
-      <Card title="Test控制面板" style={{ marginBottom: '24px' }}>
+      <Card title="Test control panel" style={{ marginBottom: '24px' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
           <Row gutter={16}>
             <Col span={12}>
@@ -80,7 +80,7 @@ export const ProgressTestPage: React.FC = () => {
               <Input
                 value={testProjectId}
                 onChange={(e) => setTestProjectId(e.target.value)}
-                placeholder="输入projectsID"
+                placeholder="Enter projectsID"
                 style={{ marginTop: '8px' }}
               />
             </Col>
@@ -162,35 +162,35 @@ export const ProgressTestPage: React.FC = () => {
         </Space>
       </Card>
 
-      <Card title="Status显示Test">
+      <Card title="Status shows Test">
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Text strong>统一Status栏:</Text>
+          <Text strong>Unify the Status column:</Text>
           <UnifiedStatusBar
             projectId={testProjectId}
             status={testStatus}
             downloadProgress={downloadProgress}
             onStatusChange={(newStatus) => {
-              console.log('Status变化:', newStatus)
+              console.log('Status changes:', newStatus)
             }}
             onDownloadProgressUpdate={(progress) => {
               console.log('DownloadProgressUpdate:', progress)
             }}
           />
 
-          <Text strong>详细Progress显示:</Text>
+          <Text strong>Detailed Progress display:</Text>
           <SimpleProgressDisplay
             projectId={testProjectId}
             status={testStatus}
             showDetails={true}
           />
 
-          <Text strong>说明:</Text>
+          <Text strong>Illustrate:</Text>
           <ul style={{ fontSize: '12px', color: '#666' }}>
-            <li>点击"StartDownload"模拟Download过程，Progress会Auto增长</li>
-            <li>DownloadCompleted后会Auto切换到"Processing"Status</li>
-            <li>ProcessingStatus会轮询后端APIGet Progress</li>
-            <li>可以Manual点击"Completed"或"Failed"来Test终态</li>
-            <li>点击"Reset"Clear AllStatus</li>
+            <li>Check YesNo and there is remaining Content after Delete</li>
+            <li>After DownloadCompleted, it will automatically switch to "Processing" Status.</li>
+            <li>ProcessingStatus will poll the backend API Get Progress</li>
+            <li>You can manually click "Completed" or "Failed" to test the final state.</li>
+            <li>Click "Reset"Clear AllStatus</li>
           </ul>
         </Space>
       </Card>

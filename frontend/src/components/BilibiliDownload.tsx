@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Button, message, Progress, Input, Card, Typography, Space, Spin, Select } from 'antd'
 import { DownloadOutlined } from '@ant-design/icons'
-import { projectApi, bilibiliApi, VideoCategory, BilibiliDownload tasks } from '../services/api'
+import { projectApi, bilibiliApi, VideoCategory, BilibiliDownloadTask } from '../services/api'
 import { useProjectStore } from '../store/useProjectStore'
 
 const { Text } = Typography
@@ -10,7 +10,7 @@ interface BilibiliDownloadProps {
   onDownloadSuccess?: (projectId: string) => void
 }
 
-// Use 从APIImport的BilibiliDownload tasksType
+// Use BilibiliDownloadTaskType from APIImport
 
 const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }) => {
   const [url, setUrl] = useState('')
@@ -20,7 +20,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
   const [categories, setCategories] = useState<VideoCategory[]>([])
   const [loadingCategories, setLoadingCategories] = useState(false)
   const [downloading, setDownloading] = useState(false)
-  const [current tasks, setCurrent tasks] = useState<BilibiliDownload tasks | null>(null)
+  const [currentTask, setCurrentTask] = useState<BilibiliDownloadTask | null>(null)
   const [pollingInterval, setPollingInterval] = useState<number | null>(null)
   const [videoInfo, setVideoInfo] = useState<any>(null)
   const [parsing, setParsing] = useState(false)
@@ -28,7 +28,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
   
   const { addProject } = useProjectStore()
 
-  // 加载Video CategoryConfiguration
+  // Load Video CategoryConfiguration
   useEffect(() => {
     const loadCategories = async () => {
       setLoadingCategories(true)
@@ -51,7 +51,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
     loadCategories()
   }, [])
 
-  // 清理轮询
+  // Cleanup polling
   useEffect(() => {
     return () => {
       if (pollingInterval) {
@@ -132,7 +132,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
       setVideoInfo(parsedVideoInfo)
       setError('') // Clear error on successful parse
       
-      // Auto填充projectsName
+      // Autopopulate projectsName
       if (!projectName && parsedVideoInfo.title) {
         setProjectName(parsedVideoInfo.title)
       }
@@ -151,11 +151,11 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
       try {
         let task
         if (videoType === 'bilibili') {
-          task = await bilibiliApi.get tasksStatus(taskId)
+          task = await bilibiliApi.getTaskStatus(taskId)
         } else {
-          task = await bilibiliApi.getYouTube tasksStatus(taskId)
+          task = await bilibiliApi.getYouTubeTaskStatus(taskId)
         }
-        setCurrent tasks(task)
+        setCurrentTask(task)
         
         if (task.status === 'completed') {
           clearInterval(interval)
@@ -177,7 +177,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
           resetForm()
         }
       } catch (error) {
-        console.error('轮询 tasksStatusFailed:', error)
+        console.error('Poll TaskStatusFailed:', error)
       }
     }, 2000)
     
@@ -214,19 +214,19 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
 
       let response
       if (videoType === 'bilibili') {
-        response = await bilibiliApi.createDownload tasks(requestBody)
+        response = await bilibiliApi.createDownloadTask(requestBody)
       } else {
-        response = await bilibiliApi.createYouTubeDownload tasks(requestBody)
+        response = await bilibiliApi.createYouTubeDownloadTask(requestBody)
       }
       
-      // 检查响应YesNoContainsprojectsID（新的优化后的响应Format）
+      // Check response YesNoContainsprojectsID (new optimized response Format)
       if (response.project_id) {
-        // 新Format：projects已Create，立即Reset表单
-        setCurrent tasks(null)
+        // New Format: projects has been Created, Reset the form immediately
+        setCurrentTask(null)
         setDownloading(false)
         resetForm()
         
-        // 显示统一的SuccessPrompt
+        // Display unified SuccessPrompt
         const platformName = videoType === 'bilibili' ? 'Bilibili' : 'YouTube'
         message.success(`${platformName} project created successfully. Downloading in background — you can continue adding other projects.`)
         
@@ -234,8 +234,8 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
           onDownloadSuccess(response.project_id)
         }
       } else {
-        // 旧Format：Resume轮询 tasksStatus
-        setCurrent tasks(response)
+        // Old Format: Resume poll TaskStatus
+        setCurrentTask(response)
         startPolling(response.id, videoType)
       }
       
@@ -249,10 +249,10 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
   const resetForm = () => {
     setUrl('')
     setProjectName('')
-    setCurrent tasks(null)
+    setCurrentTask(null)
     setVideoInfo(null)
     setError('')
-    // 保持Category和浏览器Select，方便UserResumeAddprojects
+    // Keep Category and Browser Select to facilitate UserResumeAddprojects
     // setSelectedCategory(categories[0].value)
     // setSelectedBrowser('')
   }
@@ -263,7 +263,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
       setPollingInterval(null)
     }
     setDownloading(false)
-    setCurrent tasks(null)
+    setCurrentTask(null)
     message.info('Stopped monitoring download task')
   }
 
@@ -271,10 +271,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
     <div style={{
       width: '100%',
       margin: '0 auto'
-    }}>
-
-      {/* 输入表单 */}
-      <div style={{ marginBottom: '16px' }}>
+    }}>{/* Input form */}<div style={{ marginBottom: '16px' }}>
         <Space direction="vertical" style={{ width: '100%' }} size={16}>
           <div>
             <Input.TextArea
@@ -282,7 +279,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
               value={url}
               onChange={(e) => {
                 setUrl(e.target.value)
-                // 清除之前的解析结果和ErrorInfo
+                // Clear previous parsing results and ErrorInfo
                 if (videoInfo) {
                   setVideoInfo(null)
                   setProjectName('')
@@ -292,7 +289,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
                 }
               }}
               onBlur={() => {
-                // 失去焦点时Auto解析
+                // Auto resolve when focus is lost
                 if (url.trim() && !videoInfo && validateVideoUrl(url.trim())) {
                   parseVideoInfo();
                 }
@@ -334,7 +331,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
              )}
           </div>
           
-          {/* 显示解析Success的Video Info */}
+          {/* Display Video Info that parses Success */}
           {videoInfo && (
             <div style={{
               background: 'rgba(102, 126, 234, 0.1)',
@@ -355,7 +352,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
             </div>
           )}
           
-          {/* 只有解析Success后才显示projectsName和Category */}
+          {/* ProjectsName and Category are only displayed after parsing Success */}
           {videoInfo && (
             <>
               <div>
@@ -468,7 +465,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
         </Space>
       </div>
 
-      {/* Operation buttons - 只有解析Success后才显示 */}
+      {/* Operation buttons - only displayed after parsing Success */}
       {videoInfo && (
         <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'center', gap: '12px' }}>
           <Button
@@ -514,7 +511,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
       )}
 
       {/* DownloadProgress */}
-      {current tasks && (
+      {currentTask && (
         <Card
           style={{
             background: 'rgba(38, 38, 38, 0.8)',
@@ -531,21 +528,21 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
             <Text style={{ color: '#ffffff', fontWeight: 600, fontSize: '18px' }}>Import Progress</Text>
           </div>
           
-          {current tasks.video_info && (
+          {currentTask.video_info && (
             <div style={{ marginBottom: '16px' }}>
-              <Text style={{ color: '#4facfe', fontWeight: 600, fontSize: '16px' }}>{current tasks.video_info.title}</Text>
+              <Text style={{ color: '#4facfe', fontWeight: 600, fontSize: '16px' }}>{currentTask.video_info.title}</Text>
             </div>
           )}
           
           <div style={{ marginBottom: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-              <Text style={{ color: '#cccccc', fontSize: '14px' }}>Status: {current tasks.status}</Text>
-              <Text style={{ color: '#cccccc', fontSize: '14px' }}>{Math.round(current tasks.progress)}%</Text>
+              <Text style={{ color: '#cccccc', fontSize: '14px' }}>Status: {currentTask.status}</Text>
+              <Text style={{ color: '#cccccc', fontSize: '14px' }}>{Math.round(currentTask.progress)}%</Text>
             </div>
             
             <Progress
-              percent={Math.round(current tasks.progress)}
-              status={current tasks.status === 'failed' ? 'exception' : 'active'}
+              percent={Math.round(currentTask.progress)}
+              status={currentTask.status === 'failed' ? 'exception' : 'active'}
               strokeColor={{
                 '0%': '#4facfe',
                 '100%': '#00f2fe'
@@ -556,7 +553,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
             />
           </div>
           
-          {current tasks.error_message && (
+          {currentTask.error_message && (
             <div style={{ 
               marginTop: '16px',
               padding: '12px',
@@ -564,7 +561,7 @@ const BilibiliDownload: React.FC<BilibiliDownloadProps> = ({ onDownloadSuccess }
               border: '1px solid rgba(255, 77, 79, 0.3)',
               borderRadius: '8px'
             }}>
-              <Text style={{ color: '#ff4d4f', fontSize: '14px' }}>Error: {current tasks.error_message}</Text>
+              <Text style={{ color: '#ff4d4f', fontSize: '14px' }}>Error: {currentTask.error_message}</Text>
             </div>
           )}
         </Card>

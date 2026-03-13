@@ -60,7 +60,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     message.info('Bilibili upload coming soon!', 3);
     return;
     
-    // 原有代码Disabled
+    // Original codeDisabled
     try {
       await uploadApi.retryUpload(recordId);
       message.success('Retry task submitted');
@@ -76,7 +76,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     message.info('Bilibili upload coming soon!', 3);
     return;
     
-    // 原有代码Disabled
+    // Original codeDisabled
     try {
       await uploadApi.cancelUpload(recordId);
       message.success(' tasks cancelled');
@@ -92,7 +92,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     message.info('Bilibili upload coming soon!', 3);
     return;
     
-    // 原有代码Disabled
+    // Original codeDisabled
     try {
       await uploadApi.deleteUpload(recordId);
       message.success(' tasks deleted');
@@ -128,13 +128,13 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     );
   };
 
-  // Get 分区Name
+  // GetPartitionName
   const getPartitionName = (partitionId: number) => {
     const partition = BILIBILI_PARTITIONS.find(p => p.id === partitionId);
     return partition ? partition.name : `Category ${partitionId}`;
   };
 
-  // Format化FileSize
+  // FormatFileSize
   const formatFileSize = (bytes?: number) => {
     if (!bytes) return '-';
     const sizes = ['B', 'KB', 'MB', 'GB'];
@@ -142,7 +142,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
   };
 
-  // Format化Duration
+  // Format Duration
   const formatDuration = (seconds?: number) => {
     if (!seconds) return '-';
     const hours = Math.floor(seconds / 3600);
@@ -327,7 +327,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
 
   useEffect(() => {
     fetchRecords();
-    // 每30secondsAutoRefresh
+    // AutoRefresh every 30 seconds
     const interval = setInterval(fetchRecords, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -363,14 +363,14 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           .dark-table .ant-pagination .ant-pagination-item-active a {
             color: #ffffff !important;
           }
-          /* 确保All文字都Yes白色 */
+          /* Make sure All text is white */
           .dark-table .ant-typography,
           .dark-table .ant-typography-caption,
           .dark-table .ant-typography-text,
           .dark-table .ant-typography-paragraph {
             color: #ffffff !important;
           }
-          /* 确保LinkButton文字可见 */
+          /* Make sure the LinkButton text is visible */
           .dark-table .ant-btn-link {
             color: #4facfe !important;
           }
@@ -383,11 +383,11 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           .dark-table .ant-btn-link.ant-btn-dangerous:hover {
             color: #ff7875 !important;
           }
-          /* 确保IconColor正确 */
+          /* Make sure the IconColor is correct */
           .dark-table .anticon {
             color: inherit !important;
           }
-          /* 确保Tags文字可见 */
+          /* Make sure Tags text is visible */
           .dark-table .ant-tag {
             color: #ffffff !important;
           }
@@ -403,11 +403,11 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           .dark-table .ant-tag-orange {
             color: #faad14 !important;
           }
-          /* 确保Progress条文字可见 */
+          /* Make sure the Progress bar text is visible */
           .dark-table .ant-progress-text {
             color: #ffffff !important;
           }
-          /* 确保分页器All元素可见 */
+          /* Make sure the paginator All elements are visible */
           .dark-table .ant-pagination-prev,
           .dark-table .ant-pagination-next {
             color: #ffffff !important;
@@ -422,7 +422,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           .dark-table .ant-pagination-options .ant-select-selection-item {
             color: #ffffff !important;
           }
-          /* 模态框样式 */
+          /* Modal box style */
           .dark-modal .ant-modal-content {
             background: #1f1f1f !important;
             border: 1px solid #303030 !important;
@@ -502,7 +502,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           </Col>
         </Row>
 
-        {/*  tasks List */}
+        {/*  Task List */}
         <Table
           columns={columns}
           dataSource={records}
@@ -518,10 +518,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           style={{ background: '#1f1f1f' }}
           className="dark-table"
         />
-      </Card>
-
-      {/* Details模态框 */}
-      <Modal
+      </Card>{/* Details modal box */}<Modal
         title="Upload  tasks Details"
         open={detailModalVisible}
         onCancel={() => setDetailModalVisible(false)}

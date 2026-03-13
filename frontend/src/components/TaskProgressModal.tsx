@@ -67,7 +67,7 @@ const  tasksProgressModal: React.FC< tasksProgressModalProps> = ({
           error_message: statusData.error_message
         })
         
-        // 如果Done，Notifications父Component
+        // If Done, Notifications parent Component
         if (statusData.status === 'completed') {
           onComplete?.(projectId)
         }
@@ -76,10 +76,10 @@ const  tasksProgressModal: React.FC< tasksProgressModalProps> = ({
       }
     }
 
-    // 立即检查一次Status
+    // Check Status now
     checkStatus()
     
-    // 如果 tasks还在In Progress，定期检查Status
+    // If theTask are still in progress, check the Status regularly.
     const interval = setInterval(checkStatus, 2000)
     
     return () => clearInterval(interval)
@@ -91,13 +91,13 @@ const  tasksProgressModal: React.FC< tasksProgressModalProps> = ({
     setLoading(true)
     try {
       if (status?.current_step !== undefined) {
-        // 从CurrentStepRetry
+        // FromCurrentStepRetry
         await projectApi.restartStep(projectId, status.current_step)
       } else {
-        // 完全Retry
+        // Complete Retry
         await projectApi.retryProcessing(projectId)
       }
-      // 重新StartStatus检查
+      // RestartStartStatus check
       setStatus(null)
     } catch (error) {
       console.error('Retry error:', error)
@@ -163,9 +163,7 @@ const  tasksProgressModal: React.FC< tasksProgressModalProps> = ({
             icon={<ReloadOutlined />}
             loading={loading}
             onClick={handleRetry}
-          >
-            从CurrentStepRetry
-          </Button>
+          >FromCurrentStepRetry</Button>
         ] : [])
       ]}
       width={600}
@@ -177,21 +175,17 @@ const  tasksProgressModal: React.FC< tasksProgressModalProps> = ({
         {!status ? (
           <div style={{ textAlign: 'center', padding: '40px 0' }}>
             <Spin size="large" />
-            <div style={{ marginTop: '16px', color: '#666' }}>
-              正在Get  tasksStatus...
-            </div>
+            <div style={{ marginTop: '16px', color: '#666' }}>Getting TaskStatus...</div>
           </div>
         ) : (
-          <Space direction="vertical" size="large" style={{ width: '100%' }}>
-            {/* 整体Progress */}
-            <div>
+          <Space direction="vertical" size="large" style={{ width: '100%' }}>{/* Overall Progress */}<div>
               <div style={{ 
                 display: 'flex', 
                 justifyContent: 'space-between', 
                 alignItems: 'center',
                 marginBottom: '8px'
               }}>
-                <Text strong>整体Progress</Text>
+                <Text strong>Overall Progress</Text>
                 <Text type="secondary">
                   {status.current_step}/{status.total_steps} Step
                 </Text>
@@ -259,7 +253,7 @@ const  tasksProgressModal: React.FC< tasksProgressModalProps> = ({
             {status.status === 'completed' && (
               <Alert
                 message="Done"
-                description="Video已SuccessProcessing，您可以View生成的clips和Collection。"
+                description="The Video has been SuccessProcessed and you can View the generated clips and Collection."
                 type="success"
                 showIcon
               />

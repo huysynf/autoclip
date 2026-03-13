@@ -3,18 +3,7 @@
  */
 
 import React, { useState, useEffect } from 'react'
-import { 
-  Card, 
-  Typography, 
-  Space, 
-  Button, 
-  Row, 
-  Col, 
-  Divider, 
-  message,
-  Input,
-  Select
-} from 'antd'
+import { Layout, Table, Card, Space, Divider, Typography, Button, Tag, Row, Col, Input, message, Select } from 'antd';
 import { 
   PlayCircleOutlined, 
   StopOutlined, 
@@ -28,7 +17,7 @@ import { useSimpleProgressStore } from '../stores/useSimpleProgressStore'
 const { Title, Text, Paragraph } = Typography
 const { Option } = Select
 
-// 模拟projectsData
+// Mock projectsData
 const mockProjects = [
   {
     id: 'demo-project-1',
@@ -73,7 +62,7 @@ export const SimpleProgressDemo: React.FC = () => {
   const [pollingInterval, setPollingInterval] = useState(2000)
   const [newProjectId, setNewProjectId] = useState('')
 
-  // 模拟Start Processingprojects
+  // SimulationStart Processingprojects
   const handleStartProcessing = (projectId: string) => {
     setProjects(prev => prev.map(p => 
       p.id === projectId ? { ...p, status: 'processing' } : p
@@ -81,18 +70,18 @@ export const SimpleProgressDemo: React.FC = () => {
     message.success(`Processing started: ${projectId}`)
   }
 
-  // 模拟ViewDetails
+  // Mock ViewDetails
   const handleViewDetails = (projectId: string) => {
     message.info(`View project details: ${projectId}`)
   }
 
-  // 模拟Deleteprojects
+  // SimulateDeleteprojects
   const handleDelete = (projectId: string) => {
     setProjects(prev => prev.filter(p => p.id !== projectId))
     message.success(`Deleted project: ${projectId}`)
   }
 
-  // 模拟Retryprojects
+  // SimulateRetryprojects
   const handleRetry = (projectId: string) => {
     setProjects(prev => prev.map(p => 
       p.id === projectId ? { ...p, status: 'processing' } : p
@@ -100,7 +89,7 @@ export const SimpleProgressDemo: React.FC = () => {
     message.success(`Retrying project: ${projectId}`)
   }
 
-  // Add新projects
+  // Add new projects
   const handleAddProject = () => {
     if (!newProjectId.trim()) {
       message.warning('Please enter a project ID')
@@ -122,7 +111,7 @@ export const SimpleProgressDemo: React.FC = () => {
     message.success(`Added project: ${newProjectId}`)
   }
 
-  // Start Polling选Medium的projects
+  // Start Polling and select Medium projects
   const handleStartPolling = () => {
     if (selectedProjectIds.length === 0) {
       message.warning('Please select projects to poll')
@@ -155,10 +144,7 @@ export const SimpleProgressDemo: React.FC = () => {
         The system uses 6 fixed stages, each with a fixed weight, polling the API for the latest progress.
       </Paragraph>
 
-      <Divider />
-
-      {/* 控制面板 */}
-      <Card title="Control Panel" style={{ marginBottom: '24px' }}>
+      <Divider />{/* control Panel */}<Card title="Control Panel" style={{ marginBottom: '24px' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
           <Row gutter={16}>
             <Col span={8}>
@@ -260,7 +246,7 @@ export const SimpleProgressDemo: React.FC = () => {
         </Space>
       </Card>
 
-      {/* 批量Progress显示 */}
+      {/* Batch Progress display */}
       {selectedProjectIds.length > 0 && (
         <Card title="Batch Progress View" style={{ marginBottom: '24px' }}>
           <BatchProgressBar
@@ -275,7 +261,7 @@ export const SimpleProgressDemo: React.FC = () => {
         </Card>
       )}
 
-      {/* projects卡片List */}
+      {/* Projects card list */}
       <Card title="Project List">
         <Row gutter={[16, 16]}>
           {projects.map(project => (

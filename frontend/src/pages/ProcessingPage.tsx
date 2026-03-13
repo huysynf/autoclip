@@ -38,7 +38,7 @@ const ProcessingPage: React.FC = () => {
     if (!id) return
     
     loadProject()
-    const interval = setInterval(checkStatus, 2000) // 每2seconds检查一次Status
+    const interval = setInterval(checkStatus, 2000) // Check Status every 2 seconds
     
     return () => clearInterval(interval)
   }, [id])
@@ -50,13 +50,13 @@ const ProcessingPage: React.FC = () => {
       const project = await projectApi.getProject(id)
       setCurrentProject(project)
       
-      // 如果projectsCompleted，直接跳转到Details页
+      // If projectsCompleted, jump directly to the Details page
       if (project.status === 'completed') {
         navigate(`/project/${id}`)
         return
       }
       
-      // 如果projectsStatusYesPending，Start Processing
+      // If projectsStatusYesPending, Start Processing
       if (project.status === 'pending') {
         await startProcessing()
       }
@@ -87,7 +87,7 @@ const ProcessingPage: React.FC = () => {
       const statusData = await projectApi.getProcessingStatus(id)
       setStatus(statusData)
       
-      // 如果Done，跳转到projectsDetails页
+      // If Done, jump to the projectsDetails page
       if (statusData.status === 'completed') {
         message.success('🎉 Video processing done! Redirecting to results...')
         setTimeout(() => {
@@ -95,19 +95,19 @@ const ProcessingPage: React.FC = () => {
         }, 2000)
       }
       
-      // 如果Failed，显示详细ErrorInfo
+      // If Failed, display detailed ErrorInfo
       if (statusData.status === 'error') {
         const errorMsg = statusData.error_message || 'An unknown error occurred during processing'
         message.error(`Failed: ${errorMsg}`)
         
-        // 提供Retry选项
+        // Provide Retry option
         message.info('You can go back home and re-upload, or contact support', 5)
       }
       
     } catch (error: any) {
       console.error('Check status error:', error)
       
-      // 根据ErrorType提供不同的Processing建议
+      // Provide different Processing suggestions based on ErrorType
       if (error.response?.status === 404) {
         message.error('Project not found or has been deleted')
         setTimeout(() => navigate('/'), 2000)
@@ -122,7 +122,7 @@ const ProcessingPage: React.FC = () => {
   const getStepStatus = (stepIndex: number) => {
     if (!status) return 'wait'
     
-    if (status.status === 'error') {
+    if ((status.status as any) === 'error') {
       return stepIndex < status.current_step ? 'finish' : 'error'
     }
     
@@ -194,7 +194,7 @@ const ProcessingPage: React.FC = () => {
           />
         )}
 
-        {status && status.status === 'processing' && (
+        {status && (status.status as any) === 'processing' && (
           <Card title="Processing Progress">
             <Space direction="vertical" size="large" style={{ width: '100%' }}>
               <div>
@@ -204,7 +204,7 @@ const ProcessingPage: React.FC = () => {
                 </div>
                 <Progress 
                   percent={status.progress} 
-                  status={status.status === 'completed' ? 'success' : status.status === 'processing' ? 'active' : 'normal'}
+                  status={(status.status as any) === 'completed' ? 'success' : (status.status as any) === 'processing' ? 'active' : 'normal'}
                   strokeColor={{
                     '0%': '#108ee9',
                     '100%': '#87d068',
@@ -220,7 +220,7 @@ const ProcessingPage: React.FC = () => {
               <Steps 
                 direction="vertical" 
                 current={status.current_step}
-                status={status.status === 'error' ? 'error' : status.status === 'processing' ? 'process' : 'wait'}
+                status={(status.status as any) === 'error' ? 'error' : (status.status as any) === 'processing' ? 'process' : 'wait'}
               >
                 {steps.map((step, index) => (
                   <Step

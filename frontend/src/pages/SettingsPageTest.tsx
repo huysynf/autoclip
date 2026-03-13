@@ -18,8 +18,8 @@ const SettingsPageTest: React.FC = () => {
         
         <Card title="API Configuration" className="settings-card">
           <Alert
-            message="Configuration说明"
-            description="请Configuration通义千问API密钥以EnableAIAutoClip功能。您可以在阿里云控制台Get API密钥。"
+            message="Configuration description"
+            description="Please configure the Tongyi Qianwen API key to EnableAIAutoClip function. You can get the API key in the Alibaba Cloud console."
             type="info"
             showIcon
             className="settings-alert"
@@ -57,9 +57,7 @@ const SettingsPageTest: React.FC = () => {
                 type="default"
                 icon={<ApiOutlined />}
                 className="test-button"
-              >
-                Test连接
-              </Button>
+              >Test connection</Button>
             </Form.Item>
 
             <Divider className="settings-divider" />
@@ -78,7 +76,7 @@ const SettingsPageTest: React.FC = () => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label="文本分块Size"
+                  label="Text block size"
                   name="chunk_size"
                   className="form-item"
                 >
@@ -95,7 +93,7 @@ const SettingsPageTest: React.FC = () => {
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
-                  label="LowestScore阈值"
+                  label="LowestScore threshold"
                   name="min_score_threshold"
                   className="form-item"
                 >
@@ -111,7 +109,7 @@ const SettingsPageTest: React.FC = () => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label="每CollectionMaxClip数"
+                  label="Number of MaxClips per Collection"
                   name="max_clips_per_collection"
                   className="form-item"
                 >
@@ -143,11 +141,8 @@ const SettingsPageTest: React.FC = () => {
           <Space direction="vertical" size="large" className="instructions-space">
             <div className="instruction-item">
               <Title level={5} className="instruction-title">
-                <InfoCircleOutlined /> 1. Get API密钥
-              </Title>
-              <Paragraph className="instruction-text">
-                访问阿里云控制台 → 人工智能 → 通义千问 → API密钥Manage，Create新的API密钥
-              </Paragraph>
+                <InfoCircleOutlined />1. Get API key</Title>
+              <Paragraph className="instruction-text">Visit Alibaba Cloud Console → Artificial Intelligence → Tongyi Qianwen → API Key Manage, Create a new API key</Paragraph>
             </div>
             
             <div className="instruction-item">
@@ -155,19 +150,15 @@ const SettingsPageTest: React.FC = () => {
                 <InfoCircleOutlined /> 2. Configuration Parameters
               </Title>
               <Paragraph className="instruction-text">
-                • <Text strong>文本分块Size</Text>：影响ProcessingSpeed和精度，建议5000chars<br />
-                • <Text strong>Score阈值</Text>：只有High于此分数的clips才会被保留<br />
-                • <Text strong>CollectionClip数</Text>：控制每themed collectionsContains的clipsCount
-              </Paragraph>
+                • <Text strong>Text block size</Text>: Affects ProcessingSpeed ​​and accuracy, 5000chars is recommended<br />
+                • <Text strong>Score threshold</Text>: Only clips with a score higher than this will be retained.<br />
+                • <Text strong>Number of CollectionClips</Text>: Control the clipsCount of each themed collectionsContains</Paragraph>
             </div>
             
             <div className="instruction-item">
               <Title level={5} className="instruction-title">
-                <InfoCircleOutlined /> 3. Test连接
-              </Title>
-              <Paragraph className="instruction-text">
-                Save前建议先TestAPI密钥YesNoValid，确保服务Normal运行
-              </Paragraph>
+                <InfoCircleOutlined />3. Test connection</Title>
+              <Paragraph className="instruction-text">It is recommended to Test the API key YesNoValid before saving to ensure that the service is running Normally.</Paragraph>
             </div>
           </Space>
         </Card>

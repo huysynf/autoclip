@@ -47,9 +47,9 @@ const SettingsPage: React.FC = () => {
       name: 'SiliconFlow',
       icon: <RobotOutlined />,
       color: '#722ed1',
-      description: 'SiliconFlowModel服务',
+      description: 'Error occurred while generating thumbnails:',
       apiKeyField: 'siliconflow_api_key',
-      placeholder: '请输入SiliconFlowAPI密钥'
+      placeholder: 'Please enter SiliconFlowAPI key'
     }
   }
 
@@ -70,7 +70,7 @@ const SettingsPage: React.FC = () => {
       setCurrentProvider(provider)
       setSelectedProvider(settings.llm_provider || 'dashscope')
       
-      // Settings表单初始值
+      // Settings form initial value
       form.setFieldsValue(settings)
     } catch (error) {
       console.error('Failed to load data:', error)
@@ -83,7 +83,7 @@ const SettingsPage: React.FC = () => {
       setLoading(true)
       await settingsApi.updateSettings(values)
       message.success('ConfigurationSaveSuccess！')
-      await loadData() // 重新Load Data
+      await loadData() // Reload Data
     } catch (error: any) {
       message.error('SaveFailed: ' + (error.message || 'Unknown error'))
     } finally {
@@ -91,7 +91,7 @@ const SettingsPage: React.FC = () => {
     }
   }
 
-  // TestAPI密钥
+  // TestAPI key
   const handleTestApiKey = async () => {
     const apiKey = form.getFieldValue(providerConfig[selectedProvider as keyof typeof providerConfig].apiKeyField)
     const modelName = form.getFieldValue('model_name')
@@ -110,9 +110,9 @@ const SettingsPage: React.FC = () => {
       setLoading(true)
       const result = await settingsApi.testApiKey(selectedProvider, apiKey, modelName)
       if (result.success) {
-        message.success('API密钥TestSuccess！')
+        message.success('API KeyTestSuccess!')
       } else {
-        message.error('API密钥TestFailed: ' + (result.error || 'Unknown error'))
+        message.error('API KeyTestFailed:' + (result.error || 'Unknown error'))
       }
     } catch (error: any) {
       message.error('TestFailed: ' + (error.message || 'Unknown error'))
@@ -131,8 +131,7 @@ const SettingsPage: React.FC = () => {
     <Content className="settings-page">
       <div className="settings-container">
         <Title level={2} className="settings-title">
-          <SettingOutlined /> 系统Settings
-        </Title>
+          <SettingOutlined />System Settings</Title>
         
         <Tabs defaultActiveKey="api" className="settings-tabs">
           <TabPane tab="AI Model Configuration" key="api">
@@ -158,7 +157,7 @@ const SettingsPage: React.FC = () => {
                   max_clips_per_collection: 5
                 }}
               >
-                {/* Current提供商Status */}
+                {/* CurrentproviderStatus */}
                 {currentProvider.available && (
                   <Alert
                     message={`Currently using: ${currentProvider.display_name} - ${currentProvider.model}`}
@@ -168,33 +167,30 @@ const SettingsPage: React.FC = () => {
                   />
                 )}
 
-                {/* 提供商Select */}
+                {/* ProviderSelect */}
                 <Form.Item
                   label="AI Model Provider"
                   name="llm_provider"
                   className="form-item"
-                  rules={[{ required: true, message: '请AI Model Provider' }]}
+                  rules={[{ required: true, message: 'Please AI Model Provider' }]}
                 >
                   <Select
                     value={selectedProvider}
                     onChange={handleProviderChange}
                     className="settings-input"
-                    placeholder="请AI Model Provider"
+                    placeholder="Please AI Model Provider"
                   >
                     {Object.entries(providerConfig).map(([key, config]) => (
                       <Select.Option key={key} value={key}>
                         <Space>
                           <span style={{ color: config.color }}>{config.icon}</span>
                           <span>{config.name}</span>
-                          <Tag color={config.color} size="small">{config.description}</Tag>
+                          <Tag color={config.color}>{config.description}</Tag>
                         </Space>
                       </Select.Option>
                     ))}
                   </Select>
-                </Form.Item>
-
-                {/* 动态API密钥输入 */}
-                <Form.Item
+                </Form.Item>{/* Dynamic API key input */}<Form.Item
                   label={`${providerConfig[selectedProvider as keyof typeof providerConfig].name} API Key`}
                   name={providerConfig[selectedProvider as keyof typeof providerConfig].apiKeyField}
                   className="form-item"
@@ -215,21 +211,21 @@ const SettingsPage: React.FC = () => {
                   label="Model"
                   name="model_name"
                   className="form-item"
-                  rules={[{ required: true, message: '请Model' }]}
+                  rules={[{ required: true, message: 'Please Model' }]}
                 >
                   <Select
                     className="settings-input"
-                    placeholder="请Model"
+                    placeholder="Please Model"
                     showSearch
                     filterOption={(input, option) =>
-                      (option?.children as string)?.toLowerCase().includes(input.toLowerCase())
+                      (option?.children as unknown as string)?.toLowerCase().includes(input.toLowerCase())
                     }
                   >
                     {availableModels[selectedProvider]?.map((model: any) => (
                       <Select.Option key={model.name} value={model.name}>
                         <Space>
                           <span>{model.display_name}</span>
-                          <Tag size="small">Max{model.max_tokens} tokens</Tag>
+                          <Tag>Max{model.max_tokens} tokens</Tag>
                         </Space>
                       </Select.Option>
                     ))}
@@ -244,9 +240,7 @@ const SettingsPage: React.FC = () => {
                       className="test-button"
                       onClick={handleTestApiKey}
                       loading={loading}
-                    >
-                      Test连接
-                    </Button>
+                    >Test connection</Button>
                   </Space>
                 </Form.Item>
 
@@ -266,7 +260,7 @@ const SettingsPage: React.FC = () => {
                   </Col>
                   <Col span={12}>
                     <Form.Item
-                      label="文本分块Size"
+                      label="Text block size"
                       name="chunk_size"
                       className="form-item"
                     >
@@ -283,7 +277,7 @@ const SettingsPage: React.FC = () => {
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
-                      label="LowestScore阈值"
+                      label="LowestScore threshold"
                       name="min_score_threshold"
                       className="form-item"
                     >
@@ -299,7 +293,7 @@ const SettingsPage: React.FC = () => {
                   </Col>
                   <Col span={12}>
                     <Form.Item
-                      label="每CollectionMaxClip数"
+                      label="Number of MaxClips per Collection"
                       name="max_clips_per_collection"
                       className="form-item"
                     >
@@ -334,9 +328,7 @@ const SettingsPage: React.FC = () => {
                   <Title level={5} className="instruction-title">
                     <InfoCircleOutlined /> 1. AI Model Provider
                   </Title>
-                  <Paragraph className="instruction-text">
-                    系统支持多AIModel提供商：
-                    <br />• <Text strong>Alibaba Qwen</Text>：Get API key from Alibaba Cloud console
+                  <Paragraph className="instruction-text">The system supports multiple AIModel providers:<br />• <Text strong>Alibaba Qwen</Text>：Get API key from Alibaba Cloud console
                     <br />• <Text strong>OpenAI</Text>：Get API key from platform.openai.com
                     <br />• <Text strong>Google Gemini</Text>：Get API key from ai.google.dev
                     <br />• <Text strong>SiliconFlow</Text>：Get API key from docs.siliconflow.cn
@@ -348,19 +340,15 @@ const SettingsPage: React.FC = () => {
                     <InfoCircleOutlined /> 2. Configuration Parameters
                   </Title>
                   <Paragraph className="instruction-text">
-                    • <Text strong>文本分块Size</Text>：影响ProcessingSpeed和精度，建议5000chars<br />
-                    • <Text strong>Score阈值</Text>：只有High于此分数的clips才会被保留<br />
-                    • <Text strong>CollectionClip数</Text>：控制每themed collectionsContains的clipsCount
-                  </Paragraph>
+                    • <Text strong>Text block size</Text>: Affects ProcessingSpeed ​​and accuracy, 5000chars is recommended<br />
+                    • <Text strong>Score threshold</Text>: Only clips with a score higher than this will be retained.<br />
+                    • <Text strong>Number of CollectionClips</Text>: Control the clipsCount of each themed collectionsContains</Paragraph>
                 </div>
                 
                 <div className="instruction-item">
                   <Title level={5} className="instruction-title">
-                    <InfoCircleOutlined /> 3. Test连接
-                  </Title>
-                  <Paragraph className="instruction-text">
-                    Save前建议先TestAPI密钥YesNoValid，确保服务Normal运行
-                  </Paragraph>
+                    <InfoCircleOutlined />3. Test connection</Title>
+                  <Paragraph className="instruction-text">It is recommended to Test the API key YesNoValid before saving to ensure that the service is running Normally.</Paragraph>
                 </div>
               </Space>
             </Card>
@@ -412,9 +400,7 @@ const SettingsPage: React.FC = () => {
                     }}>
                       <Text strong style={{ color: '#1890ff' }}>Multi-account Support</Text>
                       <br />
-                      <Text type="secondary" style={{ color: '#b0b0b0' }}>
-                        支持Add多Bilibili Account，方便Manage和切换
-                      </Text>
+                      <Text type="secondary" style={{ color: '#b0b0b0' }}>Supports Add multiple Bilibili Accounts for easy management and switching</Text>
                     </div>
                     <div style={{ 
                       padding: '16px', 
@@ -436,9 +422,7 @@ const SettingsPage: React.FC = () => {
                     }}>
                       <Text strong style={{ color: '#faad14' }}>Quick Upload</Text>
                       <br />
-                      <Text type="secondary" style={{ color: '#b0b0b0' }}>
-                        在ClipDetails页直接Select AccountUpload，Action简单
-                      </Text>
+                      <Text type="secondary" style={{ color: '#b0b0b0' }}>Select AccountUpload directly on the ClipDetails page, and the action is simple</Text>
                     </div>
                     <div style={{ 
                       padding: '16px', 
@@ -448,19 +432,14 @@ const SettingsPage: React.FC = () => {
                     }}>
                       <Text strong style={{ color: '#722ed1' }}>Batch Management</Text>
                       <br />
-                      <Text type="secondary" style={{ color: '#b0b0b0' }}>
-                        支持Batch upload多Clip，提High效率
-                      </Text>
+                      <Text type="secondary" style={{ color: '#b0b0b0' }}>Support Batch upload multiple Clips to improve efficiency</Text>
                     </div>
                   </div>
                 </div>
               </div>
             </Card>
           </TabPane>
-        </Tabs>
-
-        {/* Bilibili Management弹窗 */}
-        <BilibiliManager
+        </Tabs>{/* Bilibili Management pop-up window */}<BilibiliManager
           visible={showBilibiliManager}
           onClose={() => setShowBilibiliManager(false)}
           onUploadSuccess={() => {

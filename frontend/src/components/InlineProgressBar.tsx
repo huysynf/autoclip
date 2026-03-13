@@ -34,6 +34,20 @@ export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
   status = 'processing',
   onProgressUpdate
 }) => {
+
+
+  const getStepName = (stepId: number): string => {
+    switch (stepId) {
+      case 1: return 'Downloading audio';
+      case 2: return 'Transcribing audio';
+      case 3: return 'Analyzing contents';
+      case 4: return 'Extracting highlights';
+      case 5: return 'Generating titles';
+      case 6: return 'Generating summaries';
+      default: return 'Processing...';
+    }
+  };
+
   const [progressData, setProgressData] = useState<ProgressData>({
     progress: currentStep > 0 ? Math.round((currentStep / totalSteps) * 100) : 0,
     currentStep: currentStep,
@@ -81,11 +95,7 @@ export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
     onProgressUpdate?.(newProgress, stepName);
   };
 
-  // Get step name by step ID
-  const getStepName = (stepId: number): string => {
-    const step = PIPELINE_STEPS.find(s => s.id === stepId);
-    return step ? step.name : 'Processing...';
-  };
+
 
   // Watch props changes, update progress data
   useEffect(() => {
@@ -237,18 +247,7 @@ export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
       </div>
       
       {/* Add CSS animation */}
-      <style jsx>{`
-        @keyframes progressBarPulse {
-          0%, 100% {
-            opacity: 1;
-            transform: scaleY(1);
-          }
-          50% {
-            opacity: 0.8;
-            transform: scaleY(1.1);
-          }
-        }
-      `}</style>
+      
     </div>
   );
 };

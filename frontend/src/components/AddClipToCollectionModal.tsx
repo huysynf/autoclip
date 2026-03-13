@@ -25,12 +25,12 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
   const [selectedClipIds, setSelectedClipIds] = useState<string[]>([])
   const [searchText, setSearchText] = useState('')
 
-  // Filter出不在CurrentCollectionMedium的Clip
+  // Filter appears in the Clip of CurrentCollectionMedium
   const availableClips = useMemo(() => {
     return clips.filter(clip => !existingClipIds.includes(clip.id))
   }, [clips, existingClipIds])
 
-  // 根据Search文本FilterClip
+  // FilterClip based on Search text
   const filteredClips = useMemo(() => {
     if (!searchText.trim()) {
       return availableClips
@@ -91,7 +91,7 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
 
   return (
     <Modal
-      title="AddClip到Collection"
+      title="AddClip to Collection"
       open={visible}
       onCancel={handleCancel}
       width={800}
@@ -110,11 +110,9 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
         </Button>
       ]}
     >
-      <div className="add-clip-modal-content">
-        {/* Search和Action栏 */}
-        <div className="search-section">
+      <div className="add-clip-modal-content">{/* Search and Action column */}<div className="search-section">
           <Search
-            placeholder="SearchClipTitle、Content或推荐理由..."
+            placeholder="SearchClipTitle, Content or recommendation reason..."
             prefix={<SearchOutlined />}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -124,17 +122,13 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
           
           <div className="action-bar">
             <Space>
-              <Text type="secondary">
-                可Add {filteredClips.length} Clip
-              </Text>
+              <Text type="secondary">Add {filteredClips.length} Clip</Text>
               {filteredClips.length > 0 && (
                 <Button 
                   type="link" 
                   size="small"
                   onClick={handleSelectAll}
-                >
-                  {selectedClipIds.length === filteredClips.length ? 'Cancel全选' : '全选'}
-                </Button>
+                >{selectedClipIds.length === filteredClips.length ? 'Cancel select all' : 'Select all'}</Button>
               )}
             </Space>
           </div>
@@ -177,9 +171,7 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
                                 color: 'white',
                                 border: 'none'
                               }}
-                            >
-                              分数: {(clip.final_score * 100).toFixed(0)}
-                            </Tag>
+                            >Score: {(clip.final_score * 100).toFixed(0)}</Tag>
                           </Space>
                         </div>
                         
@@ -211,8 +203,8 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
                 image={<PlayCircleOutlined style={{ fontSize: '48px', color: '#d9d9d9' }} />}
                 description={
                   availableClips.length === 0 
-                    ? "AllClip都已在CollectionMedium" 
-                    : "没有找到匹配的Clip"
+                    ? "AllClips are in CollectionMedium" 
+                    : "No matching clip found"
                 }
               />
             </div>

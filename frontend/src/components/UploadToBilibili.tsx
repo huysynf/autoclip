@@ -9,10 +9,10 @@ interface UploadToBilibiliProps {
 }
 
 const UploadToBilibili: React.FC<UploadToBilibiliProps> = ({ partitionId }) => {
-  // Get 分区Name
+  // GetPartitionName
   const getPartitionName = (id: number) => {
     const partition = BILIBILI_PARTITIONS.find(p => p.id === id)
-    return partition ? partition.name : 'Unknown分区'
+    return partition ? partition.name : 'Unknown partition'
   }
 
   return (
@@ -21,7 +21,7 @@ const UploadToBilibili: React.FC<UploadToBilibiliProps> = ({ partitionId }) => {
         <Space>
           <span>Bilibili partition info</span>
           {partitionId && (
-            <Tag color="blue">Current分区: {getPartitionName(partitionId)}</Tag>
+            <Tag color="blue">Current partition: {getPartitionName(partitionId)}</Tag>
           )}
         </Space>
       }
@@ -29,12 +29,10 @@ const UploadToBilibili: React.FC<UploadToBilibiliProps> = ({ partitionId }) => {
       style={{ marginBottom: '16px' }}
     >
       <div>
-        <Text type="secondary">
-          支持的分区Type：动画、游戏、音乐、知识、娱乐、影视、科技数码等
-        </Text>
+        <Text type="secondary">Supported partition types: animation, games, music, knowledge, entertainment, film and television, technology and digital, etc.</Text>
         <div style={{ marginTop: '12px' }}>
-          <Text strong>分区ID: </Text>
-          <Text code>{partitionId || '未Settings'}</Text>
+          <Text strong>Partition ID:</Text>
+          <Text code>{partitionId || 'Not Settings'}</Text>
         </div>
       </div>
     </Card>

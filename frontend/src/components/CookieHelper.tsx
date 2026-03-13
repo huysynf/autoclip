@@ -17,185 +17,142 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
   const steps = [
     {
       title: 'Log in to Bilibili',
-      description: '在浏览器MediumLoginBilibili Account',
+      description: 'MediumLoginBilibili Account in the browser',
       content: (
         <div>
           <Alert
-            message="第一步：Log in to Bilibili"
-            description="请确保您已经在浏览器MediumSuccessLogin了Bilibili Account"
+            message="Step 1: Log in to Bilibili"
+            description="Please make sure you have logged in to Bilibili Account in your browser MediumSuccessLogin"
             type="info"
             showIcon
             style={{ marginBottom: 16 }}
           />
           <Card size="small">
-            <Paragraph>
-              1. Open browser，访问 <Text code>https://www.bilibili.com</Text>
+            <Paragraph>1. Open browser, visit<Text code>https://www.bilibili.com</Text>
             </Paragraph>
-            <Paragraph>
-              2. 点击右上角的"Login"Button
-            </Paragraph>
-            <Paragraph>
-              3. Use 您的Bilibili AccountLogin
-            </Paragraph>
-            <Paragraph>
-              4. ConfirmLogged in successfully后，您应该能看到您的Username显示在右上角
-            </Paragraph>
+            <Paragraph>2. Click the "Login" Button in the upper right corner</Paragraph>
+            <Paragraph>3. Use your Bilibili AccountLogin</Paragraph>
+            <Paragraph>4. After ConfirmLogged in successfully, you should see your Username displayed in the upper right corner</Paragraph>
           </Card>
         </div>
       )
     },
     {
       title: 'Open developer tools',
-      description: '按F12Open browserOn发者工具',
+      description: 'Press F12Open browserOn Developer Tools',
       content: (
         <div>
           <Alert
-            message="第二步：Open developer tools"
-            description="Use 快捷键Open browser的On发者工具"
+            message="Step 2: Open developer tools"
+            description="Use shortcut key Open browser's On-developer tool"
             type="info"
             showIcon
             style={{ marginBottom: 16 }}
           />
           <Card size="small">
             <Paragraph>
-              <Text strong>Windows/Linux:</Text> 按 <Text code>F12</Text> 键
-            </Paragraph>
+              <Text strong>Windows/Linux:</Text>According to<Text code>F12</Text>Key</Paragraph>
             <Paragraph>
-              <Text strong>Mac:</Text> 按 <Text code>Command + Option + I</Text>
+              <Text strong>Mac:</Text>According to<Text code>Command + Option + I</Text>
             </Paragraph>
-            <Paragraph>
-              或者右键点击PageEmpty白处，Select"检查"或"Inspect"
-            </Paragraph>
+            <Paragraph>Or right-click the white space of PageEmpty and select "Inspect" or "Inspect"</Paragraph>
             <Divider />
-            <Paragraph type="secondary">
-              On发者工具会在Page底部或右侧打On，Contains多Tags页
-            </Paragraph>
+            <Paragraph type="secondary">The developer tool will turn On on the bottom or right side of the Page, Contains multiple Tags page</Paragraph>
           </Card>
         </div>
       )
     },
     {
-      title: '切换到NetworkTags',
-      description: '找到Network（Network）Tags页',
+      title: 'Switch to NetworkTags',
+      description: 'Find the Network (Network) Tags page',
       content: (
         <div>
           <Alert
-            message="第三步：切换到NetworkTags"
-            description="在On发者工具Medium找到NetworkTags页"
+            message="Step 3: Switch to NetworkTags"
+            description="Find the NetworkTags page on Developer Tools Medium"
             type="info"
             showIcon
             style={{ marginBottom: 16 }}
           />
           <Card size="small">
-            <Paragraph>
-              1. 在On发者工具顶部找到Tags页
+            <Paragraph>{/* AddClip modal box */}</Paragraph>
+            <Paragraph>2. Click<Text code>Network</Text> Tags
             </Paragraph>
-            <Paragraph>
-              2. 点击 <Text code>Network</Text> Tags
-            </Paragraph>
-            <Paragraph>
-              3. 确保Network面板YesEmpty的（如果有Content，点击清除Button）
-            </Paragraph>
+            <Paragraph>Heartbeat pong response received</Paragraph>
             <Divider />
-            <Paragraph type="secondary">
-              NetworkTags页用于监控网页的Network请求，包括CookieInfo
-            </Paragraph>
+            <Paragraph type="secondary">The NetworkTags page is used to monitor Network requests of web pages, including CookieInfo</Paragraph>
           </Card>
         </div>
       )
     },
     {
       title: 'Refresh Page',
-      description: 'RefreshB站Page以捕获请求',
+      description: 'RefreshB station Page to capture the request',
       content: (
         <div>
           <Alert
-            message="第四步：Refresh Page"
-            description="RefreshB站Page以捕获Network请求"
+            message="Step 4: Refresh Page"
+            description="RefreshB station Page to capture Network requests"
             type="info"
             showIcon
             style={{ marginBottom: 16 }}
           />
           <Card size="small">
-            <Paragraph>
-              1. 确保NetworkTags页已打On
-            </Paragraph>
-            <Paragraph>
-              2. 按 <Text code>F5</Text> 或点击浏览器的RefreshButton
-            </Paragraph>
-            <Paragraph>
-              3. 观察Network面板Medium出现的请求List
-            </Paragraph>
+            <Paragraph>1. Make sure the NetworkTags page is turned On</Paragraph>
+            <Paragraph>2. Press<Text code>F5</Text>Or click the browser's RefreshButton</Paragraph>
+            <Paragraph>3. Observe the request list that appears in the Network panel Medium</Paragraph>
             <Divider />
-            <Paragraph type="secondary">
-              Refresh后，Network面板会显示Page加载过程Medium的AllNetwork请求
-            </Paragraph>
+            <Paragraph type="secondary">After Refresh, the Network panel will display the AllNetwork request of Medium during the Page loading process.</Paragraph>
           </Card>
         </div>
       )
     },
     {
-      title: '找到Cookie',
-      description: '在请求头Medium找到CookieInfo',
+      title: 'Find Cookie',
+      description: 'Find CookieInfo in the request header Medium',
       content: (
         <div>
           <Alert
-            message="第五步：找到CookieInfo"
-            description="在任意请求Medium找到Cookie字段"
+            message="Step 5: Find CookieInfo"
+            description="Find the Cookie field in any request Medium"
             type="info"
             showIcon
             style={{ marginBottom: 16 }}
           />
           <Card size="small">
-            <Paragraph>
-              1. 在Network面板Medium找到任意一请求（通常Select第一）
+            <Paragraph>1. Find any request in the Network panel Medium (usually Select first)</Paragraph>
+            <Paragraph>2. Click on the request and find it in Medium on the right panel<Text code>Headers</Text> Tags
             </Paragraph>
-            <Paragraph>
-              2. 点击该请求，在右侧面板Medium找到 <Text code>Headers</Text> Tags
-            </Paragraph>
-            <Paragraph>
-              3. 在 <Text code>Request Headers</Text> 部分找到 <Text code>Cookie</Text> 字段
-            </Paragraph>
-            <Paragraph>
-              4. Cookie字段的值就Yes您需要的完整Cookiechars串
-            </Paragraph>
+            <Paragraph>3. in<Text code>Request Headers</Text>Generate TitleFailed:<Text code>Cookie</Text>Field</Paragraph>
+            <Paragraph>4. The value of the Cookie field is Yes and the complete Cookiechars string you need.</Paragraph>
             <Divider />
-            <Paragraph type="secondary">
-              Cookiechars串通常很长，Contains多键值对，用分号分隔
-            </Paragraph>
+            <Paragraph type="secondary">Cookiechars strings are usually very long. Contains multiple key-value pairs, separated by semicolons.</Paragraph>
           </Card>
         </div>
       )
     },
     {
       title: 'CopyCookie',
-      description: 'Copy完整的Cookiechars串',
+      description: 'Copy the complete Cookiechars string',
       content: (
         <div>
           <Alert
-            message="第六步：CopyCookie"
-            description="Copy完整的Cookiechars串到剪贴板"
+            message="Step 6: CopyCookie"
+            description="Copy the complete string of Cookiechars to the clipboard"
             type="success"
             showIcon
             style={{ marginBottom: 16 }}
           />
           <Card size="small">
-            <Paragraph>
-              1. 右键点击Cookie字段的值
-            </Paragraph>
-            <Paragraph>
-              2. Select"Copy值"或"Copy value"
-            </Paragraph>
-            <Paragraph>
-              3. 或者双击选Medium整Cookie值，然后按 <Text code>Ctrl+C</Text> Copy
+            <Paragraph>1. Right-click the value of the Cookie field</Paragraph>
+            <Paragraph>2. Select "Copy value" or "Copy value"</Paragraph>
+            <Paragraph>3. Or double-click to select Medium to adjust the cookie value, and then press<Text code>Ctrl+C</Text> Copy
             </Paragraph>
             <Divider />
-            <Paragraph type="secondary">
-              Copy的Cookiechars串可以直接粘贴到AutoClip的CookieInputMedium
-            </Paragraph>
+            <Paragraph type="secondary">Copy's Cookiechars string can be pasted directly into AutoClip's CookieInputMedium</Paragraph>
             <Alert
-              message="重要Prompt"
-              description="CookieContains您的LoginInfo，请妥善保管，不要分享给他人"
+              message="ImportantPrompt"
+              description="CookieContains your LoginInfo, please keep it safe and do not share it with others"
               type="warning"
               showIcon
             />
@@ -218,7 +175,7 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
       title={
         <Space>
           <QuestionCircleOutlined />
-          <span>CookieGet 指南</span>
+          <span>CookieGet Guide</span>
         </Space>
       }
       open={visible}
@@ -231,16 +188,14 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
           key="copy"
           icon={copied ? <CheckOutlined /> : <CopyOutlined />}
           onClick={handleCopy}
-        >
-          {copied ? '已Copy' : 'Copy示例'}
-        </Button>
+        >{copied ? 'Copy' : 'Copy example'}</Button>
       ]}
       width={700}
     >
       <div style={{ marginBottom: 16 }}>
         <Alert
-          message="CookieImportYes最安全的Login方式"
-          description="相比扫码Login，CookieImport不会触发B站的风控机制，Yes最推荐的Login方式。"
+          message="CookieImportYes the safest way to log in"
+          description="Compared with scanning the QR code to log in, CookieImport will not trigger the risk control mechanism of site B. Yes is the most recommended login method."
           type="success"
           showIcon
         />
@@ -258,13 +213,11 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
 
       <Divider />
 
-      <Card size="small" title="CookieFormat示例">
+      <Card size="small" title="CookieFormat example">
         <Paragraph code style={{ fontSize: '12px', wordBreak: 'break-all' }}>
           SESSDATA=your_sessdata_here; bili_jct=your_bili_jct_here; DedeUserID=your_dedeuserid_here; buvid3=your_buvid3_here
         </Paragraph>
-        <Paragraph type="secondary" style={{ fontSize: '12px' }}>
-          注意：实际的Cookie值会比这示例长很多，ContainsMore的字段
-        </Paragraph>
+        <Paragraph type="secondary" style={{ fontSize: '12px' }}>Note: The actual cookie value will be much longer than this example, the ContainsMore field</Paragraph>
       </Card>
     </Modal>
   )

@@ -50,19 +50,19 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
     }
   }, [projectId, autoStart, pollingInterval, startPolling, stopPolling])
 
-  // Notifications父ComponentProgressUpdate
+  // NotificationsParentComponentProgressUpdate
   useEffect(() => {
     if (progress && onProgressUpdate) {
       onProgressUpdate(progress)
     }
   }, [progress, onProgressUpdate])
 
-  // 如果没有ProgressData，显示等待Status
+  // If there is no ProgressData, display Waiting Status
   if (!progress) {
     return (
       <Card size="small" style={{ margin: '8px 0' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Text type="secondary">等待Start Processing...</Text>
+          <Text type="secondary">Waiting for Start Processing...</Text>
           <Progress 
             percent={0} 
             status="active" 
@@ -80,7 +80,7 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
   const completed = isCompleted(stage)
   const failed = isFailed(message)
 
-  // OKProgress条Status
+  // Recommend
   let progressStatus: 'normal' | 'active' | 'success' | 'exception' = 'normal'
   if (failed) {
     progressStatus = 'exception'
@@ -92,19 +92,14 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
 
   return (
     <Card size="small" style={{ margin: '8px 0' }}>
-      <Space direction="vertical" style={{ width: '100%' }}>
-        {/* StageTags和Progress */}
-        <Space align="center" style={{ width: '100%', justifyContent: 'space-between' }}>
+      <Space direction="vertical" style={{ width: '100%' }}>{/* StageTags and Progress */}<Space align="center" style={{ width: '100%', justifyContent: 'space-between' }}>
           <Tag color={stageColor} style={{ margin: 0 }}>
             {stageDisplayName}
           </Tag>
           <Text strong style={{ color: stageColor }}>
             {percent}%
           </Text>
-        </Space>
-
-        {/* Progress条 */}
-        <Progress
+        </Space>{/* Progress bar */}<Progress
           percent={percent}
           status={progressStatus}
           strokeColor={stageColor}
@@ -112,14 +107,14 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
           size="small"
         />
 
-        {/* 详细Info */}
+        {/* DetailedInfo */}
         {showDetails && message && (
           <Text type="secondary" style={{ fontSize: '12px' }}>
             {message}
           </Text>
         )}
 
-        {/* Time戳 */}
+        {/* Timestamp */}
         {showDetails && ts > 0 && (
           <Text type="secondary" style={{ fontSize: '11px' }}>
             UpdateTime: {new Date(ts * 1000).toLocaleTimeString()}
@@ -130,7 +125,7 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
   )
 }
 
-// 批量Progress显示Component
+// Batch Progress display Component
 interface BatchProgressBarProps {
   projectIds: string[]
   autoStart?: boolean
@@ -166,7 +161,7 @@ export const BatchProgressBar: React.FC<BatchProgressBarProps> = ({
     }
   }, [projectIds, autoStart, pollingInterval, startPolling, stopPolling])
 
-  // Notifications父ComponentProgressUpdate
+  // NotificationsParentComponentProgressUpdate
   useEffect(() => {
     if (onProgressUpdate) {
       projectIds.forEach(projectId => {
@@ -184,7 +179,7 @@ export const BatchProgressBar: React.FC<BatchProgressBarProps> = ({
         <SimpleProgressBar
           key={projectId}
           projectId={projectId}
-          autoStart={false} // 批量模式下不AutoStart
+          autoStart={false} // No AutoStart in batch mode
           showDetails={showDetails}
           onProgressUpdate={(progress) => onProgressUpdate?.(projectId, progress)}
         />

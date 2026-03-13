@@ -36,7 +36,7 @@ const  tasksProgress: React.FC< tasksProgressProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   // Get  tasksProgress
-  const fetch tasksProgress = async () => {
+  const fetchTaskProgress = async () => {
     if (!projectId) return;
     
     try {
@@ -50,17 +50,17 @@ const  tasksProgress: React.FC< tasksProgressProps> = ({
       
       const data = await response.json();
       if (data.tasks && data.tasks.length > 0) {
-        // 找到Current  tasks或第一Running的 tasks
-        const current tasks = taskId 
+        // Details pop-up window
+        const currentTask = taskId 
           ? data.tasks.find((t:  tasksProgressData) => t.id === taskId)
           : data.tasks.find((t:  tasksProgressData) => t.status === 'running') || data.tasks[0];
         
-        setProgressData(current tasks);
+        setProgressData(currentTask);
         
-        // Notifications父ComponentProgressUpdate
+        // NotificationsParentComponentProgressUpdate
         if (onProgressUpdate) {
-          const progress = current tasks.realtime_progress || current tasks.progress;
-          const step = current tasks.realtime_step || current tasks.current_step;
+          const progress = currentTask.realtime_progress || currentTask.progress;
+          const step = currentTask.realtime_step || currentTask.current_step;
           onProgressUpdate(progress, step);
         }
       }
@@ -71,19 +71,19 @@ const  tasksProgress: React.FC< tasksProgressProps> = ({
     }
   };
 
-  // 定期UpdateProgress
+  // PeriodicUpdateProgress
   useEffect(() => {
     if (status === 'processing') {
       // Fetch immediately
-      fetch tasksProgress();
+      fetchTaskProgress();
       
-      // 每5secondsUpdate一次
-      const interval = setInterval(fetch tasksProgress, 5000);
+      // Update every 5 seconds
+      const interval = setInterval(fetchTaskProgress, 5000);
       return () => clearInterval(interval);
     }
   }, [projectId, taskId, status]);
 
-  // Get StatusIcon和Color
+  // Get StatusIcon and Color
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'running':
@@ -119,7 +119,7 @@ const  tasksProgress: React.FC< tasksProgressProps> = ({
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <Spin size="large" />
           <div style={{ marginTop: 16 }}>
-            <Text>正在Get  tasksProgress...</Text>
+            <Text>GettingTaskProgress...</Text>
           </div>
         </div>
       </Card>
@@ -154,7 +154,7 @@ const  tasksProgress: React.FC< tasksProgressProps> = ({
         <Space>
           {statusConfig.icon}
           <Title level={5} style={{ margin: 0 }}>
-            {progressData.name || 'Video Processing tasks'}
+            {progressData.name || 'Video ProcessingTask'}
           </Title>
           <Tag color={statusConfig.color}>
             {statusConfig.text}
@@ -180,7 +180,7 @@ const  tasksProgress: React.FC< tasksProgressProps> = ({
 
       {progressData.step_details && (
         <div style={{ marginBottom: 8 }}>
-          <Text strong>详细Info: </Text>
+          <Text strong>Detailed Info:</Text>
           <Text type="secondary">{progressData.step_details}</Text>
         </div>
       )}
@@ -207,7 +207,7 @@ const  tasksProgress: React.FC< tasksProgressProps> = ({
 
       {status === 'processing' && (
         <div style={{ marginTop: 16, textAlign: 'center' }}>
-          <Text type="secondary">Progress每5secondsAutoUpdate</Text>
+          <Text type="secondary">ProgressAutoUpdate every 5 seconds</Text>
         </div>
       )}
     </Card>

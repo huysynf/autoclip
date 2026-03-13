@@ -21,7 +21,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
   onGenerateVideo,
   onUpdate
 }) => {
-  // 按照collection.clip_ids的顺序排列clips
+  // Arrange clips in order of collection.clip_ids
   const collectionClips = collection.clip_ids.map(clipId => clips.find(clip => clip.id === clipId)).filter(Boolean) as Clip[]
   
   const totalDuration = collectionClips.reduce((total, clip) => {
@@ -90,10 +90,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
             className="video-overlay"
           >
             <PlayCircleOutlined style={{ fontSize: '40px', color: 'white' }} />
-          </div>
-          
-          {/* 右上角CollectionTypeTags */}
-          <div 
+          </div>{/* CollectionTypeTags in the upper right corner */}<div 
             style={{
               position: 'absolute',
               top: '12px',
@@ -110,12 +107,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
               alignItems: 'center',
               gap: '4px'
             }}
-          >
-            {collection.collection_type === 'ai_recommended' ? 'AI推荐' : 'ManualCreate'}
-          </div>
-          
-          {/* 左下角clipsCount */}
-          <div 
+          >{collection.collection_type === 'ai_recommended' ? 'AI recommended' : 'ManualCreate'}</div>{/* Lower left corner clipsCount */}<div 
             style={{
               position: 'absolute',
               bottom: '12px',
@@ -132,10 +124,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
             }}
           >
             {collectionClips.length} clips
-          </div>
-          
-          {/* 右下角总Duration */}
-          <div 
+          </div>{/* Total Duration in the lower right corner */}<div 
             style={{
               position: 'absolute',
               bottom: '12px',
@@ -162,16 +151,12 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
         display: 'flex', 
         flexDirection: 'column',
         justifyContent: 'space-between'
-      }}>
-        {/* Content区域 - 固定High度 */}
-        <div style={{ 
+      }}>{/* Content area - fixed High */}<div style={{ 
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          minHeight: 0 // 允许flex子项收缩
-        }}>
-          {/* Title区域 - 固定High度 */}
-          <div style={{ 
+          minHeight: 0 // Allow flex items to shrink
+        }}>{/* Title area - fixed High */}<div style={{ 
             height: '44px',
             marginBottom: '8px',
             display: 'flex',
@@ -199,17 +184,14 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
                 textOverflow: 'ellipsis'
               }}
             />
-          </div>
-          
-          {/* CollectionDescription - 固定High度 */}
-          <div style={{ 
+          </div>{/* CollectionDescription - Fixed High */}<div style={{ 
             height: '58px',
             marginBottom: '12px',
             display: 'flex',
             alignItems: 'flex-start'
           }}>
             <Tooltip 
-              title={collection.collection_summary || '暂NoneDescription'} 
+              title={collection.collection_summary || 'TemporaryNoneDescription'} 
               placement="top" 
               overlayStyle={{ maxWidth: '300px' }}
               mouseEnterDelay={0.5}
@@ -228,15 +210,10 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
                   textOverflow: 'ellipsis',
                   width: '100%'
                 }}
-              >
-                {collection.collection_summary || '暂NoneDescription'}
-              </div>
+              >{collection.collection_summary || 'NoneDescription'}</div>
             </Tooltip>
           </div>
-        </div>
-        
-        {/* Operation buttons - 固定在底部 */}
-        <div style={{ 
+        </div>{/* Operation buttons - fixed at the bottom */}<div style={{ 
           display: 'flex', 
           gap: '8px',
           height: '28px',
@@ -257,9 +234,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
               padding: '0 12px',
               background: 'rgba(79, 172, 254, 0.1)'
             }}
-          >
-            播放
-          </Button>
+          >Request interceptor</Button>
           {onGenerateVideo && (
             <Button 
               type="text" 

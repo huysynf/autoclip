@@ -1,50 +1,50 @@
 import React, { useState, useEffect } from 'react'
 import { Card, Table, Tag, Progress, Space, Typography, Button, Modal, message, Row, Col, Statistic } from 'antd'
 import { ReloadOutlined, EyeOutlined, ExclamationCircleOutlined, CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined } from '@ant-design/icons'
-import { use tasksStatus } from '../hooks/use tasksStatus'
-import {  tasksStatus as  tasksStatusType } from '../hooks/use tasksStatus'
+import { useTaskStatus } from '../hooks/useTaskStatus'
+import { TaskStatus as TaskStatusType } from '../hooks/useTaskStatus'
 
 const { Title, Text } = Typography
 const { confirm } = Modal
 
-interface Project tasksManagerProps {
+interface ProjectTaskManagerProps {
   projectId: string
   projectName?: string
 }
 
-export const Project tasksManager: React.FC<Project tasksManagerProps> = ({ 
+export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({ 
   projectId, 
   projectName 
 }) => {
-  const { getAll taskss, loading } = use tasksStatus()
-  const [selected tasks, setSelected tasks] = useState< tasksStatusType | null>(null)
-  const [taskDetailVisible, set tasksDetailVisible] = useState(false)
+  const { tasks } = useTaskStatus(); const loading = false; const getAllTasks = () => Array.from(tasks.values());
+  const [selectedTask, setSelectedTask] = useState< TaskStatusType | null>(null)
+  const [taskDetailVisible, setTaskDetailVisible] = useState(false)
 
-  // Get Currentprojects的 tasks
-  const project taskss = getAll taskss().filter(task => task.project_id === projectId)
-  const active taskss = project taskss.filter(task => 
+  // Get CurrentprojectsTask
+  const projectTasks = getAllTasks().filter(task => task.project_id === projectId)
+  const activeTasks = projectTasks.filter(task => 
     task.status === 'running' || task.status === 'pending'
   )
-  const completed taskss = project taskss.filter(task => task.status === 'completed')
-  const failed taskss = project taskss.filter(task => task.status === 'failed')
+  const completedTasks = projectTasks.filter(task => task.status === 'completed')
+  const failedTasks = projectTasks.filter(task => task.status === 'failed')
 
-  // Refresh tasks List
+  // Refresh Task List
   const handleRefresh = () => {
-    message.success(' tasks List已Refresh')
+    message.success('Tasks List has been refreshed')
   }
 
-  // View tasksDetails
-  const handleView tasks = (task:  tasksStatusType) => {
-    setSelected tasks(task)
-    set tasksDetailVisible(true)
+  // View TaskDetails
+  const handleViewTask = (task: TaskStatusType) => {
+    setSelectedTask(task)
+    setTaskDetailVisible(true)
   }
 
-  // Delete tasks
-  const handleDelete tasks = (taskId: string) => {
+  // DeleteTask
+  const handleDeleteTask = (taskId: string) => {
     confirm({
       title: 'ConfirmDelete',
       icon: <ExclamationCircleOutlined />,
-      content: 'OK要Delete这 tasks?Delete后None法恢复。',
+      content: 'OK, do you want to delete theseTask? None can be restored after deleting.',
       okText: 'Delete',
       okType: 'danger',
       cancelText: 'Cancel',
@@ -92,7 +92,7 @@ export const Project tasksManager: React.FC<Project tasksManagerProps> = ({
       title: ' tasksName',
       dataIndex: 'name',
       key: 'name',
-      render: (text: string, record:  tasksStatusType) => (
+      render: (text: string, record: TaskStatusType) => (
         <Space>
           {getStatusIcon(record.status)}
           <Text strong>{text}</Text>
@@ -116,7 +116,7 @@ export const Project tasksManager: React.FC<Project tasksManagerProps> = ({
       title: 'Progress',
       dataIndex: 'progress',
       key: 'progress',
-      render: (progress: number, record:  tasksStatusType) => (
+      render: (progress: number, record: TaskStatusType) => (
         <Progress 
           percent={Math.round(progress)} 
           size="small"
@@ -144,21 +144,21 @@ export const Project tasksManager: React.FC<Project tasksManagerProps> = ({
       title: 'Actions',
       key: 'actions',
       width: 120,
-      render: (_: any, record:  tasksStatusType) => (
+      render: (_: any, record: TaskStatusType) => (
         <Space size="small">
           <Button
             type="text"
             size="small"
             icon={<EyeOutlined />}
-            onClick={() => handleView tasks(record)}
+            onClick={() => handleViewTask(record)}
             title="ViewDetails"
           />
           <Button
             type="text"
             size="small"
             icon={<ExclamationCircleOutlined />}
-            onClick={() => handleDelete tasks(record.id)}
-            title="Delete tasks"
+            onClick={() => handleDeleteTask(record.id)}
+            title="DeleteTask"
             danger
           />
         </Space>
@@ -166,11 +166,11 @@ export const Project tasksManager: React.FC<Project tasksManagerProps> = ({
     }
   ]
 
-  if (project taskss.length === 0) {
+  if (projectTasks.length === 0) {
     return (
       <Card title=" tasks Management" size="small">
         <div style={{ textAlign: 'center', padding: '20px' }}>
-          <Text type="secondary">该projectsNo tasksRecords</Text>
+          <Text type="secondary">The projectsNoTaskRecords</Text>
         </div>
       </Card>
     )
@@ -198,15 +198,15 @@ export const Project tasksManager: React.FC<Project tasksManagerProps> = ({
       <Row gutter={16} style={{ marginBottom: '16px' }}>
         <Col span={6}>
           <Statistic
-            title="总 tasks数"
-            value={project taskss.length}
+            title="Total number ofTask"
+            value={projectTasks.length}
             prefix={<ClockCircleOutlined />}
           />
         </Col>
         <Col span={6}>
           <Statistic
-            title="活跃 tasks"
-            value={active taskss.length}
+            title="ActiveTask"
+            value={activeTasks.length}
             valueStyle={{ color: '#1890ff' }}
             prefix={<ClockCircleOutlined />}
           />
@@ -214,30 +214,30 @@ export const Project tasksManager: React.FC<Project tasksManagerProps> = ({
         <Col span={6}>
           <Statistic
             title="Completed"
-            value={completed taskss.length}
+            value={completedTasks.length}
             valueStyle={{ color: '#52c41a' }}
             prefix={<CheckCircleOutlined />}
           />
         </Col>
         <Col span={6}>
           <Statistic
-            title="Failed tasks"
-            value={failed taskss.length}
+            title="FailedTask"
+            value={failedTasks.length}
             valueStyle={{ color: '#ff4d4f' }}
             prefix={<CloseCircleOutlined />}
           />
         </Col>
       </Row>
 
-      {/* 活跃 tasks */}
-      {active taskss.length > 0 && (
+      {/* ActiveTask */}
+      {activeTasks.length > 0 && (
         <Card 
           size="small" 
           style={{ marginBottom: '16px' }}
-          title={`活跃 tasks (${active taskss.length})`}
+          title={`ActiveTask (${activeTasks.length})`}
         >
           <Space wrap>
-            {active taskss.map(task => (
+            {activeTasks.map(task => (
               <div key={task.id} style={{ marginBottom: '8px' }}>
                 <Text>{task.message || task.id}</Text>
                 <Progress percent={task.progress} size="small" />
@@ -247,42 +247,39 @@ export const Project tasksManager: React.FC<Project tasksManagerProps> = ({
         </Card>
       )}
 
-      {/*  tasks List */}
+      {/*  Task List */}
       <Table
         columns={columns}
-        dataSource={project taskss}
+        dataSource={projectTasks}
         rowKey="id"
         pagination={{
           pageSize: 5,
           showSizeChanger: false,
           showTotal: (total, range) => 
-            `第 ${range[0]}-${range[1]} 条，Total ${total} 条`
+            `Item ${range[0]}-${range[1]}, Total ${total}`
         }}
         size="small"
         loading={loading}
-      />
-
-      {/*  tasksDetails弹窗 */}
-      <Modal
-        title=" tasksDetails"
+      />{/* TaskDetails pop-up window */}<Modal
+        title=" TaskDetails"
         open={taskDetailVisible}
-        onCancel={() => set tasksDetailVisible(false)}
+        onCancel={() => setTaskDetailVisible(false)}
         footer={[
-          <Button key="close" onClick={() => set tasksDetailVisible(false)}>
+          <Button key="close" onClick={() => setTaskDetailVisible(false)}>
             Close
           </Button>
         ]}
         width={800}
       >
-        {selected tasks && (
+        {selectedTask && (
           <div>
-            <Text> tasksID: {selected tasks.id}</Text>
+            <Text> tasksID: {selectedTask.id}</Text>
             <br />
-            <Text>Status: {selected tasks.status}</Text>
+            <Text>Status: {selectedTask.status}</Text>
             <br />
-            <Text>Progress: {selected tasks.progress}%</Text>
+            <Text>Progress: {selectedTask.progress}%</Text>
             <br />
-            <Text>Message: {selected tasks.message}</Text>
+            <Text>Message: {selectedTask.message}</Text>
           </div>
         )}
       </Modal>

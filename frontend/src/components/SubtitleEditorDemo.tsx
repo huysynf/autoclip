@@ -9,38 +9,44 @@ const { Title, Text } = Typography
 const SubtitleEditorDemo: React.FC = () => {
   const [isEditorOpen, setIsEditorOpen] = useState(false)
 
-  // 模拟SubtitleData
+  // Mock SubtitleData
   const mockSubtitles: SubtitleSegment[] = [
     {
       id: '1',
       startTime: 0,
       endTime: 11,
       words: [
-        { id: '1-1', text: '欢迎', startTime: 0, endTime: 2 },
-        { id: '1-2', text: '大家', startTime: 2, endTime: 4 },
+        { id: '1-1', text: 'Welcome', startTime: 0, endTime: 2 },
+        { id: '1-2', text: 'Everyone', startTime: 2, endTime: 4 },
         { id: '1-3', text: 'Use ', startTime: 4, endTime: 6 },
-        { id: '1-4', text: '字影', startTime: 6, endTime: 8 },
+        { id: '1-4', text: 'Word shadow', startTime: 6, endTime: 8 },
         { id: '1-5', text: '。', startTime: 8, endTime: 11 }
-      ]
+      ],
+      text: '',
+      index: 0
     },
     {
       id: '2',
       startTime: 11,
       endTime: 13,
       words: [
-        { id: '2-1', text: '字影', startTime: 11, endTime: 12 },
+        { id: '2-1', text: 'Word shadow', startTime: 11, endTime: 12 },
         { id: '2-2', text: 'Yes', startTime: 12, endTime: 12.5 },
-        { id: '2-3', text: '一款', startTime: 12.5, endTime: 13 }
-      ]
+        { id: '2-3', text: 'One', startTime: 12.5, endTime: 13 }
+      ],
+      text: '',
+      index: 0
     },
     {
       id: '3',
       startTime: 13,
       endTime: 14,
       words: [
-        { id: '3-1', text: '极致', startTime: 13, endTime: 13.5 },
-        { id: '3-2', text: '简单的', startTime: 13.5, endTime: 14 }
-      ]
+        { id: '3-1', text: 'Extreme', startTime: 13, endTime: 13.5 },
+        { id: '3-2', text: 'Simple', startTime: 13.5, endTime: 14 }
+      ],
+      text: '',
+      index: 0
     },
     {
       id: '4',
@@ -49,78 +55,76 @@ const SubtitleEditorDemo: React.FC = () => {
       words: [
         { id: '4-1', text: 'Video', startTime: 14, endTime: 15 },
         { id: '4-2', text: 'Edit', startTime: 15, endTime: 16 },
-        { id: '4-3', text: '产品', startTime: 16, endTime: 17 },
+        { id: '4-3', text: 'Product', startTime: 16, endTime: 17 },
         { id: '4-4', text: '。', startTime: 17, endTime: 17 }
-      ]
+      ],
+      text: '',
+      index: 0
     },
     {
       id: '5',
       startTime: 17,
       endTime: 18,
       words: [
-        { id: '5-1', text: '字影', startTime: 17, endTime: 17.5 },
-        { id: '5-2', text: '最', startTime: 17.5, endTime: 17.8 },
-        { id: '5-3', text: '主要', startTime: 17.8, endTime: 18 }
-      ]
+        { id: '5-1', text: 'Word shadow', startTime: 17, endTime: 17.5 },
+        { id: '5-2', text: 'Most', startTime: 17.5, endTime: 17.8 },
+        { id: '5-3', text: 'Main', startTime: 17.8, endTime: 18 }
+      ],
+      text: '',
+      index: 0
     },
     {
       id: '6',
       startTime: 18,
       endTime: 23,
       words: [
-        { id: '6-1', text: '的', startTime: 18, endTime: 18.2 },
-        { id: '6-2', text: '创新', startTime: 18.2, endTime: 19 },
+        { id: '6-1', text: 'Of', startTime: 18, endTime: 18.2 },
+        { id: '6-2', text: 'Innovation', startTime: 18.2, endTime: 19 },
         { id: '6-3', text: 'Yes', startTime: 19, endTime: 19.5 },
-        { id: '6-4', text: '通过', startTime: 19.5, endTime: 20 },
-        { id: '6-5', text: '文字', startTime: 20, endTime: 21 },
-        { id: '6-6', text: '来', startTime: 21, endTime: 21.5 },
+        { id: '6-4', text: 'Pass', startTime: 19.5, endTime: 20 },
+        { id: '6-5', text: 'Word', startTime: 20, endTime: 21 },
+        { id: '6-6', text: 'Come', startTime: 21, endTime: 21.5 },
         { id: '6-7', text: 'Edit', startTime: 21.5, endTime: 22.5 },
         { id: '6-8', text: 'Video', startTime: 22.5, endTime: 23 },
         { id: '6-9', text: '，', startTime: 23, endTime: 23 }
-      ]
+      ],
+      text: '',
+      index: 0
     }
   ]
 
   const handleSave = (operations: VideoEditOperation[]) => {
-    console.log('Save的EditAction:', operations)
+    console.log('SaveEditAction:', operations)
     setIsEditorOpen(false)
   }
 
   return (
     <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
       <Card style={{ marginBottom: '24px' }}>
-        <Title level={2} style={{ color: '#ffffff', marginBottom: '16px' }}>
-          SubtitleEdit器演示
-        </Title>
-        <Text style={{ color: '#cccccc', fontSize: '16px', display: 'block', marginBottom: '24px' }}>
-          这Yes一重新设计的SubtitleEdit器，参考了现代VideoEdit软件的Layout和交互设计。
-        </Text>
+        <Title level={2} style={{ color: '#ffffff', marginBottom: '16px' }}>SubtitleEditer demo</Title>
+        <Text style={{ color: '#cccccc', fontSize: '16px', display: 'block', marginBottom: '24px' }}>This Yes is a redesigned SubtitleEdit that refers to the layout and interaction design of modern VideoEdit software.</Text>
         
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
           <div>
-            <Text style={{ color: '#ffffff', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
-              主要功能特性：
-            </Text>
+            <Text style={{ color: '#ffffff', fontSize: '14px', display: 'block', marginBottom: '8px' }}>Update the projects array at the same time to ensure that StoreMedium’s Data is synchronized</Text>
             <ul style={{ color: '#cccccc', fontSize: '14px', lineHeight: '1.6' }}>
-              <li>三栏Layout：左侧Subtitle List、Medium间样式Select、右侧Video播放器</li>
-              <li>右键菜单：支持Deleteclips、Off联素材、Reset、隐藏Subtitle、High亮等Action</li>
-              <li>Real-timePreview：点击Subtitle段可跳转到对应Time点</li>
-              <li>样式模板：提供多种Subtitle样式Select</li>
-              <li>EditHistory：支持撤销/重做Action</li>
-              <li>现代化UI：深色Theme，流畅的动画效果</li>
+              <li>Three-column Layout: Subtitle List on the left, Medium style Select, and Video player on the right</li>
+              <li>Right-click menu: Supports actions such as Deleteclips, Off link material, Reset, Hide Subtitle, High, etc.</li>
+              <li>Real-timePreview: Click on the Subtitle segment to jump to the corresponding Time point</li>
+              <li>Style template: Provides multiple Subtitle styles Select</li>
+              <li>EditHistory: supports undo/redo Action</li>
+              <li>Modern UI: dark theme, smooth animation effect</li>
             </ul>
           </div>
 
           <div>
-            <Text style={{ color: '#ffffff', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
-              Action说明：
-            </Text>
+            <Text style={{ color: '#ffffff', fontSize: '14px', display: 'block', marginBottom: '8px' }}>Action description:</Text>
             <ul style={{ color: '#cccccc', fontSize: '14px', lineHeight: '1.6' }}>
-              <li>点击Subtitle段可跳转到Video对应Time点</li>
-              <li>点击单词Optional择/CancelSelect（Ctrl/Cmd+点击可多选）</li>
-              <li>右键点击Subtitle段可打On上下文菜单</li>
-              <li>Use Edit工具进行Delete、撤销、重做等Action</li>
-              <li>Select样式模板可Preview不同效果</li>
+              <li>Click the Subtitle segment to jump to the corresponding Time point of the Video</li>
+              <li>Click on the word Optional/CancelSelect (Ctrl/Cmd+click for multiple selections)</li>
+              <li>Right-click on the Subtitle segment to open the On context menu</li>
+              <li>Use the Edit tool to perform actions such as Delete, Undo, and Redo.</li>
+              <li>Select style template can Preview different effects</li>
             </ul>
           </div>
 
@@ -136,9 +140,7 @@ const SubtitleEditorDemo: React.FC = () => {
               fontSize: '16px',
               fontWeight: '600'
             }}
-          >
-            打OnSubtitleEdit器
-          </Button>
+          >Open OnSubtitleEditer</Button>
         </Space>
       </Card>
 

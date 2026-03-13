@@ -40,7 +40,7 @@ const EditableCollectionTitle: React.FC<EditableCollectionTitleProps> = ({
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus()
-      // TextAreaComponent没有select方法，Use setSelectionRange代替
+      // TextAreaComponent has no select method, Use setSelectionRange instead
       if (inputRef.current.setSelectionRange) {
         inputRef.current.setSelectionRange(0, inputRef.current.value.length)
       }
@@ -61,12 +61,12 @@ const EditableCollectionTitle: React.FC<EditableCollectionTitleProps> = ({
     const trimmedValue = editValue.trim()
 
     if (!trimmedValue) {
-      message.error('Title不能为Empty')
+      message.error('Title cannot be Empty')
       return
     }
 
     if (trimmedValue.length > maxLength) {
-      message.error(`Title长度不能超过${maxLength}chars`)
+      message.error(`Title length cannot exceed ${maxLength}chars`)
       return
     }
 
@@ -90,20 +90,20 @@ const EditableCollectionTitle: React.FC<EditableCollectionTitleProps> = ({
   }
 
   const handleGenerateTitle = async () => {
-    console.log('Start生成CollectionTitle，collectionId:', collectionId)
+    console.log('Start generates CollectionTitle, collectionId:', collectionId)
     setGenerating(true)
     try {
       const result = await projectApi.generateCollectionTitle(collectionId)
-      console.log('生成CollectionTitle结果:', result)
+      console.log('Generate CollectionTitle results:', result)
       if (result.success && result.generated_title) {
         setEditValue(result.generated_title)
-        message.success('Title生成Success，您可以ResumeEdit或点击Save')
+        message.success('Title generates Success, you can ResumeEdit or click Save')
       } else {
         message.error('TitleGeneration failed')
       }
     } catch (error: any) {
-      console.error('生成TitleFailed:', error)
-      message.error(error.userMessage || error.message || '生成TitleFailed')
+      console.error('Generate TitleFailed:', error)
+      message.error(error.userMessage || error.message || 'GenerateTitleFailed')
     } finally {
       setGenerating(false)
     }
@@ -135,7 +135,7 @@ const EditableCollectionTitle: React.FC<EditableCollectionTitleProps> = ({
             onChange={(e) => setEditValue(e.target.value)}
             onKeyDown={handleKeyPress}
             maxLength={maxLength}
-            placeholder="请输入CollectionTitle"
+            placeholder="Please enter CollectionTitle"
             autoSize={{ minRows: 3, maxRows: 8 }}
             style={{ 
               resize: 'none',
@@ -171,9 +171,7 @@ const EditableCollectionTitle: React.FC<EditableCollectionTitleProps> = ({
               loading={generating}
               onClick={handleGenerateTitle}
               disabled={loading}
-            >
-              AI生成Title
-            </Button>
+            >Ignore WebSocket messages of UnknownType:</Button>
             <Button
               type="primary"
               icon={<CheckOutlined />}
@@ -198,7 +196,7 @@ const EditableCollectionTitle: React.FC<EditableCollectionTitleProps> = ({
       }}
       className={className}
       onClick={handleStartEdit}
-      title="点击EditCollectionTitle"
+      title="Click EditCollectionTitle"
     >
       <span style={{ 
         wordBreak: 'break-word',

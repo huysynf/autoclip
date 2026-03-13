@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
-import {  tasksUpdateMessage, ProjectUpdateMessage } from './useWebSocket';
+import {  TaskUpdateMessage, ProjectUpdateMessage } from './useWebSocket';
 
-export interface  tasksStatus {
+export interface TaskStatus {
   id: string;
   status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
   progress: number;
   message?: string;
   error?: string;
   updatedAt: string;
-  project_id?: string; // AddprojectsID字段
+  project_id?: string; // AddprojectsID field
 }
 
 export interface ProjectStatus {
@@ -19,28 +19,28 @@ export interface ProjectStatus {
   updatedAt: string;
 }
 
-export const use tasksStatus = () => {
-  console.log('🔧 use tasksStatus Hook已Initializing');
+export const useTaskStatus = () => {
+  console.log('🔧 useTaskStatus Hook Initializing');
   
-  const [tasks, set taskss] = useState<Map<string,  tasksStatus>>(new Map());
+  const [tasks, setTasks] = useState<Map<string, TaskStatus>>(new Map());
   const [projects, setProjects] = useState<Map<string, ProjectStatus>>(new Map());
   const [loading, setLoading] = useState(false);
 
-  const update tasks = useCallback((taskUpdate:  tasksUpdateMessage) => {
-    set taskss(prev => {
-      const new taskss = new Map(prev);
-      const existing = new taskss.get(taskUpdate.task_id);
+  const updateTask = useCallback((taskUpdate:  TaskUpdateMessage) => {
+    setTasks(prev => {
+      const newTasks = new Map(prev);
+      const existing = newTasks.get(taskUpdate.task_id);
       
-      new taskss.set(taskUpdate.task_id, {
+      newTasks.set(taskUpdate.task_id, {
         id: taskUpdate.task_id,
-        status: taskUpdate.status as  tasksStatus['status'],
+        status: taskUpdate.status as TaskStatus['status'],
         progress: taskUpdate.progress || (existing?.progress || 0),
         message: taskUpdate.message,
         error: taskUpdate.error,
         updatedAt: taskUpdate.timestamp
       });
       
-      return new taskss;
+      return newTasks;
     });
   }, []);
 
@@ -61,7 +61,7 @@ export const use tasksStatus = () => {
     });
   }, []);
 
-  const get tasks = useCallback((taskId: string):  tasksStatus | undefined => {
+  const getTask = useCallback((taskId: string): TaskStatus | undefined => {
     return tasks.get(taskId);
   }, [tasks]);
 
@@ -69,7 +69,7 @@ export const use tasksStatus = () => {
     return projects.get(projectId);
   }, [projects]);
 
-  const getAll taskss = useCallback(():  tasksStatus[] => {
+  const getAllTasks = useCallback((): TaskStatus[] => {
     return Array.from(tasks.values());
   }, [tasks]);
 
@@ -77,7 +77,7 @@ export const use tasksStatus = () => {
     return Array.from(projects.values());
   }, [projects]);
 
-  const getActive taskss = useCallback(():  tasksStatus[] => {
+  const getActiveTasks = useCallback((): TaskStatus[] => {
     return Array.from(tasks.values()).filter(
       task => task.status === 'pending' || task.status === 'running'
     );
@@ -89,11 +89,11 @@ export const use tasksStatus = () => {
     );
   }, [projects]);
 
-  const clear tasks = useCallback((taskId: string) => {
-    set taskss(prev => {
-      const new taskss = new Map(prev);
-      new taskss.delete(taskId);
-      return new taskss;
+  const clearTask = useCallback((taskId: string) => {
+    setTasks(prev => {
+      const newTasks = new Map(prev);
+      newTasks.delete(taskId);
+      return newTasks;
     });
   }, []);
 
@@ -106,61 +106,61 @@ export const use tasksStatus = () => {
   }, []);
 
   const clearAll = useCallback(() => {
-    set taskss(new Map());
+    setTasks(new Map());
     setProjects(new Map());
   }, []);
 
-  const loadProject taskss = useCallback(async (projectId: string) => {
-    console.log('📤 Start加载projects tasks:', projectId);
+  const loadProjectTasks = useCallback(async (projectId: string) => {
+    console.log('📤 Start loading projectsTask:', projectId);
     setLoading(true);
     try {
       const response = await fetch(`http://localhost:8000/api/v1/tasks/project/${projectId}`);
-      console.log('📡 API响应Status:', response.status);
+      console.log('📡 API response Status:', response.status);
       
       if (response.ok) {
         const data = await response.json();
-        const project taskss = data.data.tasks || [];
-        console.log('📋 Get 到 tasksCount:', project taskss.length);
+        const projectTasks = data.data.tasks || [];
+        console.log('📋 Get toTaskCount:', projectTasks.length);
         
-        set taskss(prev => {
-          const new taskss = new Map(prev);
-          project taskss.forEach((task: any) => {
-            console.log('📝 Add tasks:', task.task_id, task.status, task.progress);
-            new taskss.set(task.task_id, {
+        setTasks(prev => {
+          const newTasks = new Map(prev);
+          projectTasks.forEach((task: any) => {
+            console.log('📝 AddTask:', task.task_id, task.status, task.progress);
+            newTasks.set(task.task_id, {
               id: task.task_id,
-              status: task.status as  tasksStatus['status'],
+              status: task.status as TaskStatus['status'],
               progress: task.progress || 0,
               message: task.name,
               updatedAt: task.updated_at,
               project_id: task.project_id || projectId
             });
           });
-          return new taskss;
+          return newTasks;
         });
       } else {
-        console.error('❌ API调用Failed:', response.status, response.statusText);
+        console.error('❌ API call Failed:', response.status, response.statusText);
       }
     } catch (error) {
-      console.error('❌ 加载projects tasksFailed:', error);
+      console.error('❌ Loading projectsTaskFailed:', error);
     } finally {
       setLoading(false);
-      console.log('✅  tasks加载Completed');
+      console.log('Assume that the total validity period of the cookie is 30 days');
     }
-  }, []); // Empty依赖数组，避免None限循环
+  }, []); // Empty relies on arrays to avoid None bounded loops
 
   return {
-    tasks: getAll taskss(),
+    tasks: getAllTasks(),
     projects: getAllProjects(),
-    active taskss: getActive taskss(),
+    activeTasks: getActiveTasks(),
     activeProjects: getActiveProjects(),
     loading,
-    get tasks,
+    getTask,
     getProject,
-    update tasks,
+    updateTask,
     updateProject,
-    clear tasks,
+    clearTask,
     clearProject,
     clearAll,
-    loadProject taskss
+    loadProjectTasks
   };
 }; 

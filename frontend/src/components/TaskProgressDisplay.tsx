@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Progress, Card, Typography, Tag, Space, Button, message } from 'antd';
 import { PlayCircleOutlined, PauseCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { use tasksProgress,  tasksProgressState } from '../hooks/use tasksProgress';
+import { useTaskProgress, TaskProgressState } from '../hooks/useTaskProgress';
 
 const { Text, Title } = Typography;
 
-interface  tasksProgressDisplayProps {
+interface TaskProgressDisplayProps {
   userId: string;
   taskId: string;
-  on tasksComplete?: (state:  tasksProgressState) => void;
-  on tasksFailed?: (state:  tasksProgressState) => void;
+  onTaskComplete?: (state: TaskProgressState) => void;
+  onTaskFailed?: (state: TaskProgressState) => void;
 }
 
-export const  tasksProgressDisplay: React.FC< tasksProgressDisplayProps> = ({
+export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
   userId,
   taskId,
-  on tasksComplete,
-  on tasksFailed
+  onTaskComplete,
+  onTaskFailed
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
@@ -25,21 +25,21 @@ export const  tasksProgressDisplay: React.FC< tasksProgressDisplayProps> = ({
     isConnected,
     isSubscribed,
     performFinalStateCheck
-  } = use tasksProgress({
+  } = useTaskProgress({
     userId,
     taskId,
     onProgressUpdate: (state) => {
       console.log(' tasksProgressUpdate:', state);
     },
-    on tasksComplete: (state) => {
+    onTaskComplete: (state) => {
       console.log(' tasksCompleted:', state);
       message.success(' tasksDone！');
-      on tasksComplete?.(state);
+      onTaskComplete?.(state);
     },
-    on tasksFailed: (state) => {
+    onTaskFailed: (state) => {
       console.log(' tasksFailed:', state);
       message.error(` tasksFailed: ${state.message}`);
-      on tasksFailed?.(state);
+      onTaskFailed?.(state);
     }
   });
 
@@ -90,12 +90,8 @@ export const  tasksProgressDisplay: React.FC< tasksProgressDisplayProps> = ({
       <Card size="small" style={{ marginBottom: 16 }}>
         <Space>
           <Text type="secondary"> tasks {taskId}</Text>
-          <Tag color={isConnected ? 'success' : 'error'}>
-            {isConnected ? 'Connected' : '未连接'}
-          </Tag>
-          <Tag color={isSubscribed ? 'success' : 'default'}>
-            {isSubscribed ? '已订阅' : '未订阅'}
-          </Tag>
+          <Tag color={isConnected ? 'success' : 'error'}>{isConnected ? 'Connected' : 'Not connected'}</Tag>
+          <Tag color={isSubscribed ? 'success' : 'default'}>{isSubscribed ? 'Subscribed' : 'Unsubscribed'}</Tag>
         </Space>
       </Card>
     );
@@ -122,7 +118,7 @@ export const  tasksProgressDisplay: React.FC< tasksProgressDisplayProps> = ({
             size="small" 
             icon={<ReloadOutlined />}
             onClick={performFinalStateCheck}
-            title="终态校准"
+            title="Final state calibration"
           />
           <Button 
             size="small" 
@@ -134,9 +130,7 @@ export const  tasksProgressDisplay: React.FC< tasksProgressDisplayProps> = ({
         </Space>
       }
     >
-      <Space direction="vertical" style={{ width: '100%' }}>
-        {/* Progress条 */}
-        <div>
+      <Space direction="vertical" style={{ width: '100%' }}>{/* Progress bar */}<div>
           <Progress 
             percent={taskState.progress}
             status={taskState.status === 'FAIL' ? 'exception' : 
@@ -154,7 +148,7 @@ export const  tasksProgressDisplay: React.FC< tasksProgressDisplayProps> = ({
         {/* CurrentMessage */}
         <Text>{taskState.message}</Text>
 
-        {/* Expand的详细Info */}
+        {/* Detailed Info of Expand */}
         {isExpanded && (
           <div style={{ 
             padding: '12px', 
@@ -167,27 +161,23 @@ export const  tasksProgressDisplay: React.FC< tasksProgressDisplayProps> = ({
                 <Text strong> tasksID:</Text> {taskState.task_id}
               </div>
               <div>
-                <Text strong>序列号:</Text> {taskState.seq}
+                <Text strong>Click on the NetworkTags page</Text> {taskState.seq}
               </div>
               <div>
-                <Text strong>Time戳:</Text> {new Date(taskState.ts * 1000).toLocaleString()}
+                <Text strong>Timestamp:</Text> {new Date(taskState.ts * 1000).toLocaleString()}
               </div>
               <div>
-                <Text strong>最后Update:</Text> {new Date(taskState.last_updated).toLocaleString()}
+                <Text strong>Last Update:</Text> {new Date(taskState.last_updated).toLocaleString()}
               </div>
               {taskState.meta && (
                 <div>
-                  <Text strong>元Data:</Text> {JSON.stringify(taskState.meta, null, 2)}
+                  <Text strong>MetaData:</Text> {JSON.stringify(taskState.meta, null, 2)}
                 </div>
               )}
               <div>
-                <Text strong>连接Status:</Text> 
-                <Tag color={isConnected ? 'success' : 'error'} style={{ marginLeft: 8 }}>
-                  {isConnected ? 'Connected' : '未连接'}
-                </Tag>
-                <Tag color={isSubscribed ? 'success' : 'default'} style={{ marginLeft: 4 }}>
-                  {isSubscribed ? '已订阅' : '未订阅'}
-                </Tag>
+                <Text strong>Connection Status:</Text> 
+                <Tag color={isConnected ? 'success' : 'error'} style={{ marginLeft: 8 }}>{isConnected ? 'Connected' : 'Not connected'}</Tag>
+                <Tag color={isSubscribed ? 'success' : 'default'} style={{ marginLeft: 4 }}>{isSubscribed ? 'Subscribed' : 'Unsubscribed'}</Tag>
               </div>
             </Space>
           </div>

@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { useWebSocket,  tasksProgressUpdateMessage } from './useWebSocket';
 import { projectApi } from '../services/api';
 
-export interface  tasksProgressState {
+export interface TaskProgressState {
   task_id: string;
   progress: number;
   step: number;
@@ -16,18 +16,18 @@ export interface  tasksProgressState {
   last_updated: number;
 }
 
-export interface Use tasksProgressOptions {
+export interface UseTaskProgressOptions {
   userId: string;
   taskId: string;
-  onProgressUpdate?: (state:  tasksProgressState) => void;
-  on tasksComplete?: (state:  tasksProgressState) => void;
-  on tasksFailed?: (state:  tasksProgressState) => void;
+  onProgressUpdate?: (state: TaskProgressState) => void;
+  onTaskComplete?: (state: TaskProgressState) => void;
+  onTaskFailed?: (state: TaskProgressState) => void;
 }
 
-export const use tasksProgress = (options: Use tasksProgressOptions) => {
-  const { userId, taskId, onProgressUpdate, on tasksComplete, on tasksFailed } = options;
+export const useTaskProgress = (options: UseTaskProgressOptions) => {
+  const { userId, taskId, onProgressUpdate, onTaskComplete, onTaskFailed } = options;
   
-  const [taskState, set tasksState] = useState< tasksProgressState | null>(null);
+  const [taskState, setTaskState] = useState< TaskProgressState | null>(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [lastSeq, setLastSeq] = useState(0);
   const [lastTs, setLastTs] = useState(0);
@@ -38,14 +38,14 @@ export const use tasksProgress = (options: Use tasksProgressOptions) => {
     if (message.type === 'task_progress_update' && message.task_id === taskId) {
       const progressMessage = message as  tasksProgressUpdateMessage;
       
-      // Message去重和Sort检查
+      // Message deduplication and Sort check
       if (progressMessage.seq <= lastSeq && progressMessage.ts <= lastTs) {
-        console.log(`忽略过期Message: seq=${progressMessage.seq}, ts=${progressMessage.ts}`);
+        console.log(`Ignore expired Message: seq=${progressMessage.seq}, ts=${progressMessage.ts}`);
         return;
       }
       
       // UpdateStatus
-      const newState:  tasksProgressState = {
+      const newState: TaskProgressState = {
         task_id: progressMessage.task_id,
         progress: progressMessage.progress,
         step: progressMessage.step,
@@ -59,31 +59,31 @@ export const use tasksProgress = (options: Use tasksProgressOptions) => {
         last_updated: Date.now()
       };
       
-      set tasksState(newState);
+      setTaskState(newState);
       setLastSeq(progressMessage.seq);
       setLastTs(progressMessage.ts);
       
-      // 触发回调
+      // Trigger callback
       onProgressUpdate?.(newState);
       
-      // 检查终态
-      if (progressMessage.status === 'DONE') {
-        on tasksComplete?.(newState);
-        // Delay进行终态校准
+      // Check final state
+      if (progressMessage.status === 'completed') {
+        onTaskComplete?.(newState);
+        // Delay for final state calibration
         setTimeout(() => performFinalStateCheck(), 1000);
-      } else if (progressMessage.status === 'FAIL') {
-        on tasksFailed?.(newState);
-        // Delay进行终态校准
+      } else if (progressMessage.status === 'failed') {
+        onTaskFailed?.(newState);
+        // Delay for final state calibration
         setTimeout(() => performFinalStateCheck(), 1000);
       }
     }
-  }, [taskId, lastSeq, lastTs, onProgressUpdate, on tasksComplete, on tasksFailed]);
+  }, [taskId, lastSeq, lastTs, onProgressUpdate, onTaskComplete, onTaskFailed]);
 
-  // WebSocket连接
+  // WebSocket connection
   const { 
     isConnected, 
-    subscribeTo tasks, 
-    unsubscribeFrom tasks,
+    subscribeToTask, 
+    unsubscribeFromTask,
     connect,
     disconnect 
   } = useWebSocket({
@@ -91,17 +91,17 @@ export const use tasksProgress = (options: Use tasksProgressOptions) => {
     onMessage: handleWebSocketMessage
   });
 
-  // 终态校准：从HTTP APIGet 最新Status
+  // Final state calibration: Get the latest Status from HTTP API
   const performFinalStateCheck = useCallback(async () => {
     if (finalStateChecked.current) return;
     finalStateChecked.current = true;
     
     try {
-      console.log(`执行终态校准: ${taskId}`);
-      const response = await projectApi.get tasksProgress(taskId);
+      console.log(`Perform final state calibration: ${taskId}`);
+      const response = await (projectApi as any).getTaskProgress(taskId) // as any;
       
       if (response.data) {
-        const apiState:  tasksProgressState = {
+        const apiState: TaskProgressState = {
           task_id: taskId,
           progress: response.data.progress || 0,
           step: response.data.current_step || 0,
@@ -114,37 +114,37 @@ export const use tasksProgress = (options: Use tasksProgressOptions) => {
           last_updated: Date.now()
         };
         
-        set tasksState(apiState);
-        console.log('终态校准Completed:', apiState);
+        setTaskState(apiState);
+        console.log('Final state calibrationCompleted:', apiState);
       }
     } catch (error) {
-      console.error('终态校准Failed:', error);
+      console.error('Final state calibration Failed:', error);
     }
   }, [taskId, lastSeq]);
 
-  // 订阅 tasksProgress
+  // Subscribe toTaskProgress
   const subscribe = useCallback(() => {
     if (isConnected && !isSubscribed) {
-      const success = subscribeTo tasks(taskId);
+      const success = subscribeToTask(taskId);
       if (success) {
         setIsSubscribed(true);
-        console.log(`已订阅 tasksProgress: ${taskId}`);
+        console.log(`Subscribed toTaskProgress: ${taskId}`);
       }
     }
-  }, [isConnected, isSubscribed, subscribeTo tasks, taskId]);
+  }, [isConnected, isSubscribed, subscribeToTask, taskId]);
 
-  // Cancel订阅 tasksProgress
+  // CancelSubscriptionTaskProgress
   const unsubscribe = useCallback(() => {
     if (isConnected && isSubscribed) {
-      const success = unsubscribeFrom tasks(taskId);
+      const success = unsubscribeFromTask(taskId);
       if (success) {
         setIsSubscribed(false);
-        console.log(`已Cancel订阅 tasksProgress: ${taskId}`);
+        console.log(`Cancel subscriptionTaskProgress: ${taskId}`);
       }
     }
-  }, [isConnected, isSubscribed, unsubscribeFrom tasks, taskId]);
+  }, [isConnected, isSubscribed, unsubscribeFromTask, taskId]);
 
-  // Auto订阅/Cancel订阅
+  // Auto subscription/Cancel subscription
   useEffect(() => {
     if (isConnected) {
       subscribe();
@@ -159,7 +159,7 @@ export const use tasksProgress = (options: Use tasksProgressOptions) => {
     };
   }, [isConnected, subscribe, unsubscribe, isSubscribed]);
 
-  // Component卸载时清理
+  // Clean up when Component is uninstalled
   useEffect(() => {
     return () => {
       if (isSubscribed) {

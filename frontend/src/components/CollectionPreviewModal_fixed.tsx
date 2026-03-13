@@ -46,7 +46,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
   const playerRef = useRef<ReactPlayer>(null)
   const { setDragging } = useProjectStore()
 
-  // 按照collection.clip_ids的顺序排列clips
+  // Arrange clips in order of collection.clip_ids
   const collectionClips = collection ? 
     collection.clip_ids.map(clipId => clips.find(clip => clip.id === clipId)).filter(Boolean) as Clip[] : []
   const currentClip = collectionClips[currentClipIndex]
@@ -94,24 +94,24 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
   }
 
   const handleDragStart = () => {
-    console.log('拖拽Start')
+    console.log('DragStart')
     setDragging(true)
   }
 
   const handleDragEnd = async (result: DropResult) => {
-    console.log('拖拽End:', result)
+    console.log('DragEnd:', result)
     
-    // None论如何都要清除拖拽Status
+    // NoneClear the drag Status no matter what
     setDragging(false)
     
     if (!result.destination || !collection) {
-      console.log('拖拽Cancel或NoneTarget位置')
+      console.log('Drag the Cancel or NoneTarget position')
       return
     }
 
-    // 检查YesNo真的有位置变化
+    // Check YesNo There is really a position change
     if (result.source.index === result.destination.index) {
-      console.log('位置未变化，SkipUpdate')
+      console.log('The location has not changed, SkipUpdate')
       return
     }
 
@@ -119,17 +119,17 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
     const [reorderedItem] = newClipIds.splice(result.source.index, 1)
     newClipIds.splice(result.destination.index, 0, reorderedItem)
 
-    console.log('原始顺序:', collection.clip_ids)
-    console.log('新顺序:', newClipIds)
+    console.log('Original order:', collection.clip_ids)
+    console.log('New order:', newClipIds)
     
-    // 显示加载Status
-    const hideLoading = message.loading('正在UpdateClip顺序...', 0)
+    // Show loading status
+    const hideLoading = message.loading('UpdatingClip sequence...', 0)
     setIsUpdating(true)
     
     try {
       await onReorderClips(collection.id, newClipIds)
       
-      // UpdateCurrent播放Index
+      // UpdateCurrentPlayIndex
       const currentClipId = collectionClips[currentClipIndex]?.id
       if (currentClipId) {
         const newIndex = newClipIds.indexOf(currentClipId)
@@ -137,11 +137,11 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
       }
       
       hideLoading()
-      message.success('Clip顺序UpdateSuccess')
+      message.success('Clip orderUpdateSuccess')
     } catch (error) {
       console.error('Failed to reorder clips:', error)
       hideLoading()
-      message.error('Clip顺序修改Failed')
+      message.error('Clip order modification Failed')
     } finally {
       setIsUpdating(false)
     }
@@ -150,13 +150,13 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
   const handleRemoveClip = async (clipId: string) => {
     if (!collection) return
     
-    const hideLoading = message.loading('正在RemoveClip...', 0)
+    const hideLoading = message.loading('RemoveClip...', 0)
     setIsUpdating(true)
     
     try {
       await onRemoveClip(collection.id, clipId)
       
-      // 调整Current播放Index
+      // Adjust Current Playback Index
       const removedIndex = collection.clip_ids.indexOf(clipId)
       if (removedIndex <= currentClipIndex && currentClipIndex > 0) {
         setCurrentClipIndex(currentClipIndex - 1)
@@ -209,9 +209,9 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
     try {
       setGeneratingVideo(true)
       await projectApi.generateCollectionVideo(projectId, collection.id)
-      message.success('Start生成CollectionVideo，请稍后ViewDownload')
+      message.success('Start to generate CollectionVideo, please ViewDownload later.')
     } catch (error) {
-      message.error('生成CollectionVideoFailed')
+      message.error('GenerateCollectionVideoFailed')
     } finally {
       setGeneratingVideo(false)
     }
@@ -220,14 +220,14 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
   const handleAddClips = async (selectedClipIds: string[]) => {
     if (!collection || !onAddClip) return
     
-    const hideLoading = message.loading('正在AddClip...', 0)
+    const hideLoading = message.loading('AddClip...', 0)
     setIsUpdating(true)
     
     try {
       await onAddClip(collection.id, selectedClipIds)
       setShowAddClipModal(false)
       hideLoading()
-      message.success(`SuccessAdd ${selectedClipIds.length} Clip到Collection`)
+      message.success(`SuccessAdd ${selectedClipIds.length} Clip to Collection`)
     } catch (error) {
       console.error('Failed to add clips:', error)
       hideLoading()
@@ -265,9 +265,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
       destroyOnClose={false}
       getContainer={false}
     >
-      <div className="collection-preview-container">
-        {/* 头部Title栏 */}
-        <div className="preview-header">
+      <div className="collection-preview-container">{/* Header Title column */}<div className="preview-header">
           <div className="header-left">
             <Title level={4} style={{ margin: 0, color: 'white', display: 'inline-block', marginRight: '12px' }}>
               {collection.collection_title}
@@ -290,13 +288,11 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                 type="primary" 
                 loading={generatingVideo}
                 onClick={handleGenerateVideo}
-              >
-                生成CollectionVideo
-              </Button>
+              >Generate CollectionVideo</Button>
               {onDelete && (
                 <Popconfirm
                   title="DeleteCollection"
-                  description="OK要Delete这Collection?This action cannot be undone."
+                  description="OK Delete this Collection? This action cannot be undone."
                   onConfirm={() => onDelete(collection.id)}
                   okText="OK"
                   cancelText="Cancel"
@@ -318,13 +314,8 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
               />
             </Space>
           </div>
-        </div>
-
-        {/* 主体Content */}
-        <div className="preview-content">
-          <Row style={{ height: '100%' }}>
-            {/* 左侧Video播放器 */}
-            <Col span={16} className="video-section">
+        </div>{/* Main Content */}<div className="preview-content">
+          <Row style={{ height: '100%' }}>{/* Video player on the left */}<Col span={16} className="video-section">
               <div className="video-player-wrapper">
                 <div className="video-container">
                   {currentClip ? (
@@ -342,12 +333,12 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                   ) : (
                     <div className="empty-video">
                       <PlayCircleOutlined style={{ fontSize: '64px', color: '#d9d9d9' }} />
-                      <Text style={{ color: '#999', marginTop: 16 }}>暂NoneVideoContent</Text>
+                      <Text style={{ color: '#999', marginTop: 16 }}>TemporaryNoneVideoContent</Text>
                     </div>
                   )}
                 </div>
                 
-                {/* Video Info栏 - 移到Video下方 */}
+                {/* Video Info bar - moved below Video */}
                 {currentClip && (
                   <div className="video-info-bar">
                     <div className="video-info-content">
@@ -357,7 +348,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                         </div>
                         <div className="video-meta">
                           <Tag color="blue">{formatDuration(currentClip)}</Tag>
-                          <Tag color="green">分数: {(currentClip.final_score * 100).toFixed(0)}</Tag>
+                          <Tag color="green">Score: {(currentClip.final_score * 100).toFixed(0)}</Tag>
                           <Text style={{ color: '#999', marginLeft: 8 }}>
                             {currentClipIndex + 1} / {collectionClips.length}
                           </Text>
@@ -370,7 +361,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                           icon={<LeftOutlined />}
                           disabled={currentClipIndex === 0}
                           onClick={handlePlayPrevious}
-                          title="上一Clip"
+                          title="PreviousClip"
                           className="control-btn"
                         />
                         <Button 
@@ -378,7 +369,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                           icon={<RightOutlined />}
                           disabled={currentClipIndex === collectionClips.length - 1}
                           onClick={handlePlayNext}
-                          title="下一Clip"
+                          title="NextClip"
                           className="control-btn"
                         />
                       </div>
@@ -386,15 +377,12 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                   </div>
                 )}
               </div>
-            </Col>
-
-            {/* 右侧ClipList */}
-            <Col span={8} className="playlist-section">
+            </Col>Use the correct field name<Col span={8} className="playlist-section">
               <div className="playlist-container">
                 <div className="playlist-header">
                   <div>
-                    <Title level={5} style={{ margin: 0 }}>播放List</Title>
-                    <Text type="secondary">拖拽调整顺序</Text>
+                    <Title level={5} style={{ margin: 0 }}>PlayList</Title>
+                    <Text type="secondary">Drag and drop to adjust order</Text>
                   </div>
                   {onAddClip && (
                     <Button 
@@ -448,9 +436,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                                     {clip.title || clip.generated_title}
                                   </div>
                                   <div className="clip-meta">
-                                    <Text type="secondary" style={{ fontSize: '12px' }}>
-                                      {formatDuration(clip)} • 分数: {(clip.final_score * 100).toFixed(0)}
-                                    </Text>
+                                    <Text type="secondary" style={{ fontSize: '12px' }}>{formatDuration(clip)} • Score: {(clip.final_score * 100).toFixed(0)}</Text>
                                   </div>
                                   {clip.recommend_reason && (
                                     <div className="clip-reason">
@@ -476,7 +462,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                                     />
                                   </Tooltip>
                                   <Popconfirm
-                                    title="OK要从CollectionMediumRemove这Clip?"
+                                    title="OKRemove this Clip from CollectionMedium?"
                                     onConfirm={(e) => {
                                       e?.stopPropagation()
                                       handleRemoveClip(clip.id)
@@ -508,10 +494,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
             </Col>
           </Row>
         </div>
-      </div>
-      
-      {/* AddClip模态框 */}
-      <AddClipToCollectionModal
+      </div>{/* AddClip modal box */}<AddClipToCollectionModal
         visible={showAddClipModal}
         clips={clips}
         existingClipIds={collection?.clip_ids || []}

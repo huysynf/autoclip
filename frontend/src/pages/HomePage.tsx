@@ -15,7 +15,7 @@ import BilibiliDownload from '../components/BilibiliDownload'
 import { projectApi } from '../services/api'
 import { Project, useProjectStore } from '../store/useProjectStore'
 import { useProjectPolling } from '../hooks/useProjectPolling'
-// import { useWebSocket, WebSocketEventMessage } from '../hooks/useWebSocket'  // DisabledWebSocket系统
+// Import { useWebSocket, WebSocketEventMessage } from '../hooks/useWebSocket' // DisabledWebSocket system
 
 const { Content } = Layout
 const { Title, Text } = Typography
@@ -27,25 +27,25 @@ const HomePage: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [activeTab, setActiveTab] = useState<'upload' | 'bilibili'>('upload')
 
-  // WebSocket连接Disabled，Use 新的简化Progress系统
+  // WebSocket connection Disabled, Use new simplified Progress system
   // const handleWebSocketMessage = (message: WebSocketEventMessage) => {
-  //   console.log('HomePage收到WebSocket message:', message)
+  //   console.log('HomePage received WebSocket message:', message)
   //   
   //   switch (message.type) {
   //     case 'task_progress_update':
-  //       console.log('📊 收到 tasksProgressUpdate:', message)
-  //       // RefreshProject List以Get 最新Status
+  //       console.log('📊 ReceivedTaskProgressUpdate:', message)
+  // // RefreshProject List to Get the latest Status
   //       loadProjects()
   //       break
   //       
   //     case 'project_update':
-  //       console.log('📊 收到projectsUpdate:', message)
-  //       // RefreshProject List以Get 最新Status
+  //       console.log('📊 Receive projectsUpdate:', message)
+  // // RefreshProject List to Get the latest Status
   //       loadProjects()
   //       break
   //       
   //     default:
-  //       console.log('忽略UnknownType的WebSocket message:', (message as any).type)
+  //       console.log('Click the "Get Help" Button above to view the detailed CookieGet Step guide', (message as any).type)
   //   }
   // }
 
@@ -54,7 +54,7 @@ const HomePage: React.FC = () => {
   //   onMessage: handleWebSocketMessage
   // })
 
-  // Use projects轮询Hook
+  // Use projectsPollingHook
   const { refreshNow } = useProjectPolling({
     onProjectsUpdate: (updatedProjects) => {
       setProjects(updatedProjects || [])
@@ -70,29 +70,29 @@ const HomePage: React.FC = () => {
   const loadProjects = async () => {
     setLoading(true)
     try {
-      // 从后端APIGet 真实projectsData
+      // Get real projectsData from backend API
       const projects = await projectApi.getProjects()
       setProjects(projects || [])
     } catch (error) {
       message.error('Failed to load projects')
       console.error('Load projects error:', error)
-      // 如果API调用Failed，SettingsEmpty数组
+      // SettingsEmpty array if API call Failed
       setProjects([])
     } finally {
       setLoading(false)
     }
   }
 
-  // Use 集合差异对齐订阅projectsWebSocketTheme
-  // WebSocket订阅Disabled，Use 新的简化Progress系统
+  // Use collection difference alignment subscription projectsWebSocketTheme
+  // Please enter a nickname
   // useEffect(() => {
   //   if (isConnected && projects.length > 0) {
   //     const desiredChannels = projects.map(project => `project_${project.id}`)
-  //     console.log('同步订阅projects频道:', desiredChannels)
+  //     console.log('Synchronously subscribe to the projects channel:', desiredChannels)
   //     syncSubscriptions(desiredChannels)
   //   } else if (isConnected && projects.length === 0) {
-  //     // 如果没有projects，清EmptyAll订阅
-  //     console.log('清EmptyAllprojects订阅')
+  // // If there are no projects, clear the EmptyAll subscription
+  //     console.log('Clear EmptyAllprojects subscription')
   //     syncSubscriptions([])
   //   }
   // }, [isConnected, projects, syncSubscriptions])
@@ -110,14 +110,14 @@ const HomePage: React.FC = () => {
 
   const handleRetryProject = async (projectId: string) => {
     try {
-      // 查找projectsStatus
+      // Find projectsStatus
       const project = projects.find(p => p.id === projectId)
       if (!project) {
         message.error('Project not found')
         return
       }
       
-      // 统一Use retryProcessing API，它会AutoProcessingVideoFile不存在的情况
+      // Unified Use retryProcessing API, it will AutoProcessingVideoFile does not exist
       await projectApi.retryProcessing(projectId)
       message.success('Project retry started')
       
@@ -132,7 +132,7 @@ const HomePage: React.FC = () => {
     try {
       await projectApi.startProcessing(projectId)
       message.success('Project processing started, please wait a moment to check progress')
-      // 立即RefreshProject List以显示最新Status
+      // RefreshProject List now to show latest Status
       setTimeout(async () => {
         try {
           await refreshNow()
@@ -145,7 +145,7 @@ const HomePage: React.FC = () => {
       message.error(errorMessage)
       console.error('Start processing error:', error)
       
-      // 如果YesTimeoutError，PromptUserprojects可能仍在Processing
+      // PromptUserprojects may still be Processing if YesTimeoutError
       if ((error as { code?: string; message?: string })?.code === 'ECONNABORTED' || (error as { code?: string; message?: string })?.message?.includes('timeout')) {
         message.info('Request timed out, but the project may have started processing. Please check the project status.', 5)
         // DelayRefreshProject List
@@ -161,13 +161,13 @@ const HomePage: React.FC = () => {
   }
 
   const handleProjectCardClick = (project: Project) => {
-    // ImportMediumStatus的projects不能点击进入Details页
+    // Projects of ImportMediumStatus cannot be clicked to enter the Details page
     if (project.status === 'pending') {
       message.warning('Project is still importing, please check back later')
       return
     }
     
-    // 其他Status可以Normal进入Details页
+    // Other Status can be Normal to enter the Details page.
     navigate(`/project/${project.id}`)
   }
 
@@ -177,7 +177,7 @@ const HomePage: React.FC = () => {
       return matchesStatus
     })
     .sort((a, b) => {
-      // 按CreateTime倒序排列，最新的在前面
+      // Sort by CreateTime in descending order, latest first
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     })
 
@@ -187,9 +187,7 @@ const HomePage: React.FC = () => {
       background: '#0f0f0f'
     }}>
       <Content style={{ padding: '40px 24px', position: 'relative' }}>
-        <div style={{ maxWidth: '1600px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-          {/* FileUpload区域 */}
-          <div style={{ 
+        <div style={{ maxWidth: '1600px', margin: '0 auto', position: 'relative', zIndex: 1 }}>{/* FileUpload area */}<div style={{ 
             marginBottom: '48px',
             marginTop: '20px',
             display: 'flex',
@@ -204,9 +202,7 @@ const HomePage: React.FC = () => {
               border: '1px solid rgba(79, 172, 254, 0.2)',
               padding: '20px',
               boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)'
-            }}>
-              {/* Tags页切换 */}
-              <div style={{
+            }}>{/* Tags page switching */}<div style={{
                 display: 'flex',
                 marginBottom: '16px',
                 borderRadius: '8px',
@@ -247,30 +243,24 @@ const HomePage: React.FC = () => {
                  >
                    📁 File Import
                  </button>
-              </div>
-              
-              {/* Content区域 */}
-              <div>
+              </div>{/* Content area */}<div>
                 {activeTab === 'bilibili' && (
                   <BilibiliDownload onDownloadSuccess={async (projectId: string) => {
-                    // Done后RefreshProject List
+                    // RefreshProject List after Done
                     await loadProjects()
-                    // 不再显示重复的toastPrompt，BilibiliDownloadComponent已经显示了统一的Prompt
+                    // Duplicate toastPrompt is no longer displayed, BilibiliDownloadComponent already displays a unified Prompt
                   }} />
                 )}
                 {activeTab === 'upload' && (
                   <FileUpload onUploadSuccess={async (projectId: string) => {
-                    // Done后RefreshProject List
+                    // RefreshProject List after Done
                     await loadProjects()
                     message.success('Project created successfully, processing...')
                   }} />
                 )}
               </div>
             </div>
-          </div>
-
-          {/* projectsManage区域 */}
-          <div style={{
+          </div>{/* projectsManage area */}<div style={{
             background: 'rgba(26, 26, 46, 0.7)',
             backdropFilter: 'blur(20px)',
             borderRadius: '24px',
@@ -278,9 +268,7 @@ const HomePage: React.FC = () => {
             padding: '32px',
             marginBottom: '32px',
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.03)'
-          }}>
-            {/* Project ListTitle区域 */}
-            <div style={{ 
+          }}>{/* Project ListTitle area */}<div style={{ 
               display: 'flex', 
               justifyContent: 'space-between', 
               alignItems: 'center',
@@ -315,10 +303,7 @@ const HomePage: React.FC = () => {
                     {filteredProjects.length} Project{filteredProjects.length !== 1 ? 's' : ''}
                   </Text>
                 </div>
-              </div>
-              
-              {/* StatusFilter移到右侧 */}
-              <div style={{ 
+              </div>{/* StatusFilter moved to the right */}<div style={{ 
                 display: 'flex', 
                 alignItems: 'center'
               }}>

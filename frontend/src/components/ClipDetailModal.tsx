@@ -41,7 +41,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
 
   const formatTime = (timeStr: string) => {
     if (!timeStr) return '00:00:00'
-    // Remove小数点后的milliseconds部分，只保留时分seconds
+    // Remove the milliseconds part after the decimal point, keeping only the hours and minutes seconds
     return timeStr.replace(',', '.').substring(0, 8)
   }
 
@@ -53,12 +53,12 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
   }
 
   const getScoreColor = (score: number) => {
-    // 根据分数区间Settings不同的Color
-    if (score >= 0.9) return '#52c41a' // 绿色 - 优秀
-    if (score >= 0.8) return '#1890ff' // 蓝色 - 良好
-    if (score >= 0.7) return '#faad14' // 橙色 - 一般
-    if (score >= 0.6) return '#ff7a45' // 红橙色 - 较差
-    return '#ff4d4f' // 红色 - 差
+    // Different Colors according to the score interval Settings
+    if (score >= 0.9) return '#52c41a' // If projectsCompleted, load clips and collections
+    if (score >= 0.8) return '#1890ff' // Blue - good
+    if (score >= 0.7) return '#faad14' // Orange - Average
+    if (score >= 0.6) return '#ff7a45' // Red-orange - poor
+    return '#ff4d4f' // Red - Poor
   }
 
   const handleDownload = async () => {
@@ -77,7 +77,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
   }
 
   const handleOpenSubtitleEditor = async () => {
-    // 显示On发MediumPrompt
+    // ShowOnMediumPrompt
     message.info('Coming soon')
   }
 
@@ -90,17 +90,17 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
     if (!clip) return
     
     try {
-      // 提取要Delete的Subtitle段ID
+      // Extract the Subtitle segment ID to be deleted
       const deletedSegments = operations
         .filter(op => op.type === 'delete')
         .flatMap(op => op.segmentIds)
 
       if (deletedSegments.length === 0) {
-        console.log('没有DeleteAction')
+        console.log('NoDeleteAction')
         return
       }
 
-      // 执行VideoEdit
+      // Execute VideoEdit
       const result = await subtitleEditorApi.editClipBySubtitles(
         projectId,
         clip.id,
@@ -109,12 +109,12 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
 
       if (result.success) {
         console.log('VideoEditSuccess:', result)
-        // 这里可以AddSuccessPrompt
-        // 可以RefreshclipsList或UpdateUI
+        // Here you can AddSuccessPrompt
+        // Can RefreshclipsList or UpdateUI
       }
     } catch (error) {
       console.error('VideoEditFailed:', error)
-      // 这里可以AddErrorPrompt
+      // Here you can AddErrorPrompt
     }
   }
 
@@ -138,9 +138,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
           }
         }}
       >
-        <div style={{ padding: '24px' }}>
-          {/* 头部 */}
-          <div style={{ 
+        <div style={{ padding: '24px' }}>{/* Head */}<div style={{ 
             display: 'flex', 
             justifyContent: 'space-between', 
             alignItems: 'center',
@@ -157,9 +155,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
             />
           </div>
 
-          <Row gutter={24}>
-            {/* 左侧Video播放器 */}
-            <Col span={14}>
+          <Row gutter={24}>{/* Video player on the left */}<Col span={14}>
               <div style={{ 
                 background: '#000', 
                 borderRadius: '8px', 
@@ -193,9 +189,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
                         color: 'white',
                         border: 'none'
                       }}
-                    >
-                      Score: {(clip.final_score * 100).toFixed(0)}分
-                    </Tag>
+                    >Score: {(clip.final_score * 100).toFixed(0)} points</Tag>
                   )}
                   {clip.outline && (
                     <Tag color="purple">{clip.outline}</Tag>
@@ -204,15 +198,13 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
               </div>
 
               {/* Operation buttons */}
-              {console.log('Rendering operation buttons in ClipDetailModal')}
+              {null /* console.log('Rendering operation buttons in ClipDetailModal') */}
               <Space>
                 <Button 
                   type="primary" 
                   icon={<PlayCircleOutlined />}
                   onClick={() => setPlaying(!playing)}
-                >
-                  {playing ? 'Pause' : '播放'}
-                </Button>
+                >{playing ? 'Pause' : 'Playing'}</Button>
                 <Button 
                   type="default" 
                   icon={<DownloadOutlined />}
@@ -229,10 +221,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
                   SubtitleEdit
                 </Button>
               </Space>
-            </Col>
-
-            {/* 右侧详细Info */}
-            <Col span={10}>
+            </Col>{/* Detailed Info on the right */}<Col span={10}>
               <div style={{ color: '#ffffff' }}>
                 {/* Title */}
                 <div style={{ marginBottom: '16px' }}>
@@ -241,9 +230,9 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
                       title={clip.generated_title || clip.title || 'Untitled Clip'}
                       clipId={clip.id}
                       onTitleUpdate={(newTitle) => {
-                        // Updateclip的Title
-                        console.log('Title已Update:', newTitle)
-                        // 这里可以触发父Component的Update回调
+                        // Title of Updateclip
+                        console.log('TitleUpdated:', newTitle)
+                        // Here you can trigger the Update callback of the parent Component
                       }}
                       style={{ color: '#ffffff', fontSize: '18px', fontWeight: '600' }}
                     />
@@ -255,12 +244,10 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
 
                 <Divider style={{ borderColor: 'rgba(255,255,255,0.1)' }} />
 
-                {/* Content要点 */}
+                {/* ContentPoints */}
                 {clip.content && clip.content.length > 0 && (
                   <div style={{ marginBottom: '16px' }}>
-                    <Text strong style={{ color: '#ffffff', display: 'block', marginBottom: '8px' }}>
-                      Content要点:
-                    </Text>
+                    <Text strong style={{ color: '#ffffff', display: 'block', marginBottom: '8px' }}>Content points:</Text>
                     <div>
                       {clip.content.map((point, index) => (
                         <div key={index} style={{ 
@@ -278,7 +265,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
                   </div>
                 )}
 
-                {/* Time戳Info */}
+                {/* TimestampInfo */}
                 <div style={{ marginBottom: '16px' }}>
                   <Text strong style={{ color: '#ffffff', display: 'block', marginBottom: '8px' }}>
                     TimeInfo:
@@ -296,10 +283,10 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
         </div>
       </Modal>
 
-      {/* SubtitleEdit器 */}
+      {/* SubtitleEditer */}
       {showSubtitleEditor && (
         <>
-          {console.log('Rendering SubtitleEditor with:', { showSubtitleEditor, subtitleDataLength: subtitleData.length })}
+          {null /* console.log('Rendering SubtitleEditor with:', { showSubtitleEditor, subtitleDataLength: subtitleData.length }) */}
           <SubtitleEditor
             videoUrl={projectApi.getClipVideoUrl(projectId, clip.id, clip.title || clip.generated_title)}
             subtitles={subtitleData}

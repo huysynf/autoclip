@@ -15,14 +15,14 @@ export const useCollectionVideoDownload = () => {
     setIsGenerating(true)
     
     try {
-      // 直接按UserCurrent调整的顺序生成CollectionVideo
-      message.info('正在按您的顺序生成CollectionVideo...')
+      // Generate CollectionVideo directly in the order adjusted by UserCurrent
+      message.info('Generating CollectionVideo in your order...')
       
-      // 生成CollectionVideo（按User调整的顺序）
+      // Generate CollectionVideo (in order adjusted by User)
       await projectApi.generateCollectionVideo(projectId, collectionId)
       
-      // 等待1seconds让后端CompletedFile生成，然后Download
-      message.success('CollectionVideo生成Success，正在Download...')
+      // Wait 1 second for the backend CompletedFile to be generated, and then Download
+      message.success('CollectionVideo generates Success, Downloading...')
       
       setTimeout(async () => {
         try {
@@ -30,13 +30,13 @@ export const useCollectionVideoDownload = () => {
           message.success('CollectionVideoDownloadCompleted')
         } catch (downloadError) {
           console.error('DownloadFailed:', downloadError)
-          message.error('DownloadFailed，请稍后Retry')
+          message.error('DownloadFailed, please Retry later')
         }
       }, 1000)
       
     } catch (error) {
-      console.error('生成CollectionVideoFailed:', error)
-      message.error('生成CollectionVideoFailed')
+      console.error('Generate CollectionVideoFailed:', error)
+      message.error('GenerateCollectionVideoFailed')
     } finally {
       setIsGenerating(false)
     }

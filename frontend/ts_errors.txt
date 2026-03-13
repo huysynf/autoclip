@@ -1,0 +1,43 @@
+src/components/ClipDetailModal.tsx(179,15): error TS2322: Type 'void' is not assignable to type 'ReactNode'.
+src/components/InlineProgressBar.tsx(41,33): error TS2448: Block-scoped variable 'getStepName' used before its declaration.
+src/components/InlineProgressBar.tsx(240,14): error TS2322: Type '{ children: string; jsx: true; }' is not assignable to type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+  Property 'jsx' does not exist on type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+src/components/NotificationList.tsx(173,77): error TS2552: Cannot find name 'playing'. Did you mean 'onplaying'?
+src/components/ProjectCard.tsx(277,12): error TS2678: Type '"uploading"' is not comparable to type 'ProjectStatus'.
+src/components/ProjectStatusIndicator.tsx(34,12): error TS2304: Cannot find name 'config'.
+src/components/ProjectStatusIndicator.tsx(40,24): error TS2304: Cannot find name 'config'.
+src/components/ProjectStatusIndicator.tsx(40,50): error TS2304: Cannot find name 'config'.
+src/components/ProjectStatusIndicator.tsx(53,27): error TS2304: Cannot find name 'config'.
+src/components/ProjectStatusIndicator.tsx(54,28): error TS2304: Cannot find name 'config'.
+src/components/ProjectStatusIndicator.tsx(55,14): error TS2304: Cannot find name 'config'.
+src/components/ProjectStatusIndicator.tsx(61,10): error TS2304: Cannot find name 'config'.
+src/components/ProjectStatusIndicator.tsx(63,14): error TS2304: Cannot find name 'config'.
+src/components/ProjectTaskManager.tsx(19,11): error TS2339: Property 'getAllTasks' does not exist on type '{ tasks: TaskStatus[]; projects: ProjectStatus[]; activeTasks: TaskStatus[]; activeProjects: ProjectStatus[]; loading: boolean; getTask: (taskId: string) => TaskStatus; ... 6 more ...; loadProjectTasks: (projectId: string) => Promise<...>; }'.
+src/components/RealTimeStatus.tsx(10,32): error TS2307: Cannot find module './ tasksProgress' or its corresponding type declarations.
+src/components/RealTimeStatus.tsx(15,28): error TS2307: Cannot find module '../api/projectApi' or its corresponding type declarations.
+src/components/RealTimeStatus.tsx(266,19): error TS2339: Property 'tasksProgress' does not exist on type 'JSX.IntrinsicElements'.
+src/components/SubtitleEditorDemo.tsx(14,5): error TS2739: Type '{ id: string; startTime: number; endTime: number; words: { id: string; text: string; startTime: number; endTime: number; }[]; }' is missing the following properties from type 'SubtitleSegment': text, index
+src/components/SubtitleEditorDemo.tsx(26,5): error TS2739: Type '{ id: string; startTime: number; endTime: number; words: { id: string; text: string; startTime: number; endTime: number; }[]; }' is missing the following properties from type 'SubtitleSegment': text, index
+src/components/SubtitleEditorDemo.tsx(36,5): error TS2739: Type '{ id: string; startTime: number; endTime: number; words: { id: string; text: string; startTime: number; endTime: number; }[]; }' is missing the following properties from type 'SubtitleSegment': text, index
+src/components/SubtitleEditorDemo.tsx(45,5): error TS2739: Type '{ id: string; startTime: number; endTime: number; words: { id: string; text: string; startTime: number; endTime: number; }[]; }' is missing the following properties from type 'SubtitleSegment': text, index
+src/components/SubtitleEditorDemo.tsx(56,5): error TS2739: Type '{ id: string; startTime: number; endTime: number; words: { id: string; text: string; startTime: number; endTime: number; }[]; }' is missing the following properties from type 'SubtitleSegment': text, index
+src/components/SubtitleEditorDemo.tsx(66,5): error TS2739: Type '{ id: string; startTime: number; endTime: number; words: { id: string; text: string; startTime: number; endTime: number; }[]; }' is missing the following properties from type 'SubtitleSegment': text, index
+src/components/UploadQueueManager.tsx(169,7): error TS2304: Cannot find name 'constTask'.
+src/components/UploadTaskManager.tsx(79,16): error TS2345: Argument of type 'UploadRecord[]' is not assignable to parameter of type 'SetStateAction<UploadTask[]>'.
+  Type 'UploadRecord[]' is not assignable to type 'UploadTask[]'.
+    Type 'UploadRecord' is not assignable to type 'UploadTask'.
+      Types of property 'id' are incompatible.
+        Type 'string | number' is not assignable to type 'string'.
+          Type 'number' is not assignable to type 'string'.
+src/components/UploadTaskManager.tsx(80,24): error TS2345: Argument of type 'UploadRecord[]' is not assignable to parameter of type 'SetStateAction<UploadTask[]>'.
+  Type 'UploadRecord[]' is not assignable to type 'UploadTask[]'.
+    Type 'UploadRecord' is not assignable to type 'UploadTask'.
+      Types of property 'id' are incompatible.
+        Type 'string | number' is not assignable to type 'string'.
+          Type 'number' is not assignable to type 'string'.
+src/hooks/useTaskProgress.ts(70,11): error TS2367: This comparison appears to be unintentional because the types '"completed" | "failed" | "running"' and '"DONE"' have no overlap.
+src/hooks/useTaskProgress.ts(74,18): error TS2367: This comparison appears to be unintentional because the types '"completed" | "failed" | "running"' and '"FAIL"' have no overlap.
+src/hooks/useTaskProgress.ts(101,41): error TS2339: Property 'getTaskProgress' does not exist on type '{ getVideoCategories: () => Promise<VideoCategoriesResponse>; getProjects: () => Promise<Project[]>; getProject: (id: string) => Promise<...>; ... 27 more ...; generateThumbnail: (projectId: string) => Promise<...>; }'.
+src/hooks/useWebSocket.ts(189,15): error TS2367: This comparison appears to be unintentional because the types '"task_update" | "project_update" | "system_notification" | "error_notification" | "task_progress_update"' and '"pong"' have no overlap.
+src/pages/ProcessingPage.tsx(207,27): error TS2367: This comparison appears to be unintentional because the types '"processing"' and '"completed"' have no overlap.
+src/pages/ProcessingPage.tsx(223,25): error TS2367: This comparison appears to be unintentional because the types '"processing"' and '"error"' have no overlap.

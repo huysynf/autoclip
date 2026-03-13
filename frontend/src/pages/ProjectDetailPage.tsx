@@ -24,8 +24,8 @@ import CollectionCard from '../components/CollectionCard'
 import CollectionPreviewModal from '../components/CollectionPreviewModal'
 import CreateCollectionModal from '../components/CreateCollectionModal'
 import { useCollectionVideoDownload } from '../hooks/useCollectionVideoDownload'
-import { Project tasksManager } from '../components/Project tasksManager'
-// import { useWebSocket, WebSocketEventMessage } from '../hooks/useWebSocket'  // DisabledWebSocket系统
+import { ProjectTaskManager } from '../components/ProjectTaskManager'
+// Import { useWebSocket, WebSocketEventMessage } from '../hooks/useWebSocket' // DisabledWebSocket system
 
 const { Content } = Layout
 const { Title, Text } = Typography
@@ -53,14 +53,14 @@ const ProjectDetailPage: React.FC = () => {
   const [selectedCollection, setSelectedCollection] = useState<any>(null)
   const { generateAndDownloadCollectionVideo } = useCollectionVideoDownload()
 
-  // WebSocket连接Disabled，Use 新的简化Progress系统
+  // WebSocket connection Disabled, Use new simplified Progress system
   // const handleWebSocketMessage = (message: WebSocketEventMessage) => {
-  //   console.log('ProjectDetailPage收到WebSocket message:', message)
+  //   console.log('ProjectDetailPage received WebSocket message:', message)
   //   
   //   switch (message.type) {
   //     case 'task_progress_update':
-  //       console.log('📊 收到 tasksProgressUpdate:', message)
-  //       // 如果MessageYes针对Currentprojects的，RefreshprojectsStatus
+  //       console.log('📊 ReceivedTaskProgressUpdate:', message)
+  // // If MessageYes is for Currentprojects, RefreshprojectsStatus
   //       if (message.project_id === id) {
   //         loadProject()
   //         loadProcessingStatus()
@@ -68,8 +68,8 @@ const ProjectDetailPage: React.FC = () => {
   //       break
   //       
   //     case 'project_update':
-  //       console.log('📊 收到projectsUpdate:', message)
-  //       // 如果MessageYes针对Currentprojects的，RefreshprojectsStatus
+  //       console.log('📊 Receive projectsUpdate:', message)
+  // // If MessageYes is for Currentprojects, RefreshprojectsStatus
   //       if (message.project_id === id) {
   //         loadProject()
   //         loadProcessingStatus()
@@ -77,7 +77,7 @@ const ProjectDetailPage: React.FC = () => {
   //       break
   //       
   //     default:
-  //       console.log('忽略UnknownType的WebSocket message:', (message as any).type)
+  //       console.log('Click the "Get Help" Button above to view the detailed CookieGet Step guide', (message as any).type)
   //   }
   // }
 
@@ -86,22 +86,22 @@ const ProjectDetailPage: React.FC = () => {
   //   onMessage: handleWebSocketMessage
   // })
 
-  // WebSocket订阅Disabled，Use 新的简化Progress系统
+  // Please enter a nickname
   // useEffect(() => {
   //   if (isConnected && id) {
   //     const desiredChannels = [`project_${id}`]
-  //     console.log('ProjectDetailPage同步订阅频道:', desiredChannels)
+  //     console.log('ProjectDetailPage synchronizes subscription channels:', desiredChannels)
   //     syncSubscriptions(desiredChannels)
   //   } else if (isConnected && !id) {
-  //     // 如果没有projectsID，清Empty订阅
-  //     console.log('ProjectDetailPage清Empty订阅')
+  // // If there is no projectsID, clear the Empty subscription
+  //     console.log('ProjectDetailPage clears Empty subscription')
   //     syncSubscriptions([])
   //   }
   // }, [isConnected, id, syncSubscriptions])
 
   useEffect(() => {
     if (id) {
-      // 只有当storeMedium没有currentProject或者currentProject的id与Currentid不匹配时才重新加载
+      // Reload only when storeMedium does not have currentProject or the id of currentProject does not match Currentid
       if (!currentProject || currentProject.id !== id) {
         loadProject()
       }
@@ -114,7 +114,7 @@ const ProjectDetailPage: React.FC = () => {
     try {
       const project = await projectApi.getProject(id)
       
-      // 如果projectsCompleted，加载clips和collections
+      // If projectsCompleted, load clips and collections
       if (project.status === 'completed') {
         try {
           const [clips, collections] = await Promise.all([
@@ -134,7 +134,7 @@ const ProjectDetailPage: React.FC = () => {
           console.log('🎯 Final project with data:', projectWithData)
           setCurrentProject(projectWithData)
           
-          // 同时Updateprojects数组，确保StoreMedium的Data同步
+          // Update the projects array at the same time to ensure that StoreMedium’s Data is synchronized
           const { projects } = useProjectStore.getState()
           const updatedProjects = projects.map(p => 
             p.id === id ? projectWithData : p
@@ -142,7 +142,7 @@ const ProjectDetailPage: React.FC = () => {
           useProjectStore.setState({ projects: updatedProjects })
         } catch (error) {
           console.error('Failed to load clips/collections:', error)
-          // 即使clips/collectionsLoad Failed，也Settingsprojects基本Info
+          // Even if clips/collectionsLoad Failed, Settingsprojects Basic Info
           setCurrentProject(project)
         }
       } else {
@@ -206,7 +206,7 @@ const ProjectDetailPage: React.FC = () => {
     if (!id) return
     try {
       await removeClipFromCollection(id, collectionId, clipId)
-      message.success('Clip已从CollectionMediumRemove')
+      message.success('Clip has been removed from CollectionMediumRemove')
     } catch (error) {
       console.error('Failed to remove clip from collection:', error)
       message.error('RemoveClipFailed')
@@ -219,7 +219,7 @@ const ProjectDetailPage: React.FC = () => {
       await deleteCollection(id, collectionId)
       setShowCollectionDetail(false)
       setSelectedCollection(null)
-      message.success('Collection已Delete')
+      message.success('Collection has been deleted')
     } catch (error) {
       console.error('Failed to delete collection:', error)
       message.error('DeleteCollectionFailed')
@@ -230,10 +230,10 @@ const ProjectDetailPage: React.FC = () => {
     if (!id) return
     try {
       await reorderCollectionClips(id, collectionId, newClipIds)
-      message.success('Collection顺序已Update')
+      message.success('Collection order has been updated')
     } catch (error) {
       console.error('Failed to reorder collection clips:', error)
-      message.error('UpdateCollection顺序Failed')
+      message.error('UpdateCollection orderFailed')
     }
   }
 
@@ -255,7 +255,7 @@ const ProjectDetailPage: React.FC = () => {
     if (sortBy === 'score') {
       return clips.sort((a, b) => b.final_score - a.final_score)
     } else {
-      // 按TimeSort - 将Timechars串转换为seconds数进行比较
+      // By TimeSort - Convert Timechars string to number of seconds for comparison
       return clips.sort((a, b) => {
         const getTimeInSeconds = (timeStr: string) => {
           const parts = timeStr.split(':')
@@ -298,9 +298,7 @@ const ProjectDetailPage: React.FC = () => {
   }
 
   return (
-    <Content style={{ padding: '24px' }}>
-      {/* 简化的projects头部 */}
-      <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <Content style={{ padding: '24px' }}>{/* Simplified projects header */}<div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <Button 
             type="link" 
@@ -328,10 +326,10 @@ const ProjectDetailPage: React.FC = () => {
         </Space>
       </div>
 
-      {/* 主要Content */}
+      {/* Main content */}
       {currentProject.status === 'completed' ? (
         <div>
-          {/* AICollection横向滚动区域 */}
+          {/* AICollection horizontal scroll area */}
           {currentProject.collections && currentProject.collections.length > 0 && (
             <Card style={{ marginBottom: '24px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -370,7 +368,7 @@ const ProjectDetailPage: React.FC = () => {
               >
                 {currentProject.collections
                   .sort((a, b) => {
-                    // 按CreateTime倒序排列，最新的在前面
+                    // Sort by CreateTime in descending order, latest first
                     const timeA = a.created_at ? new Date(a.created_at).getTime() : 0
                     const timeB = b.created_at ? new Date(b.created_at).getTime() : 0
                     return timeB - timeA
@@ -401,7 +399,7 @@ const ProjectDetailPage: React.FC = () => {
             </Card>
           )}
           
-          {/* Video Clips区域 */}
+          {/* Video Clips area */}
           <Card 
             style={{
               borderRadius: '16px',
@@ -417,9 +415,7 @@ const ProjectDetailPage: React.FC = () => {
                 </Text>
               </div>
               
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                {/* Sort控件 - 暗黑Theme优化 */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>{/* Sort control - Dark Theme optimization */}<div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <Text style={{ fontSize: '13px', color: '#b0b0b0', fontWeight: 500 }}>Sort</Text>
                   <Radio.Group
                     value={sortBy}
@@ -513,7 +509,7 @@ const ProjectDetailPage: React.FC = () => {
                     videoUrl={projectApi.getClipVideoUrl(currentProject.id, clip.id, clip.title || clip.generated_title)}
                     onDownload={(clipId) => projectApi.downloadVideo(currentProject.id, clipId)}
                     onClipUpdate={(clipId: string, updates: Partial<Clip>) => {
-                      // Update本地Status
+                      // UpdateLocalStatus
                       if (currentProject) {
                         const updatedProject = {
                           ...currentProject,
@@ -548,7 +544,7 @@ const ProjectDetailPage: React.FC = () => {
       ) : (
         <div>
           {/*  tasks ManagementComponent */}
-          <Project tasksManager 
+          <ProjectTaskManager 
             projectId={currentProject.id} 
             projectName={currentProject.name}
           />
@@ -569,16 +565,13 @@ const ProjectDetailPage: React.FC = () => {
         </div>
       )}
 
-      {/* CreateCollection模态框 */}
+      {/* CreateCollection modal box */}
       <CreateCollectionModal
         visible={showCreateCollection}
         clips={currentProject.clips || []}
         onCancel={() => setShowCreateCollection(false)}
         onCreate={handleCreateCollection}
-      />
-      
-      {/* CollectionPreview模态框 */}
-      <CollectionPreviewModal
+      />{/* CollectionPreview modal box */}<CollectionPreviewModal
         visible={showCollectionDetail}
         collection={selectedCollection}
         clips={currentProject.clips || []}

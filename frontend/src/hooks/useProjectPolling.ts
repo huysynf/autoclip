@@ -3,9 +3,9 @@ import { projectApi } from '../services/api'
 import { Project, useProjectStore } from '../store/useProjectStore'
 
 interface UseProjectPollingOptions {
-  interval?: number // 轮询Interval，Default10seconds
+  interval?: number // Polling Interval,Default10seconds
   onProjectsUpdate?: (projects: Project[]) => void
-  enabled?: boolean // YesNoEnable轮询
+  enabled?: boolean // YesNoEnablePolling
 }
 
 export const useProjectPolling = ({
@@ -28,7 +28,7 @@ export const useProjectPolling = ({
         // Real-timeGet isDraggingStatus
         const currentIsDragging = useProjectStore.getState().isDragging
         
-        // 如果正在拖拽，Skip这次轮询
+        // If dragging is in progress, Skip polls this time
         if (currentIsDragging) {
           console.log('Skipping poll: dragging in progress')
           return
@@ -47,9 +47,9 @@ export const useProjectPolling = ({
         
         setLastUpdateTime(Date.now())
         
-        // 如果没有Processing的projects，可以适当减少轮询Frequency
+        // If there are no Processing projects, the polling frequency can be appropriately reduced.
         if (!hasProcessingProjects) {
-          // 可以在这里实现动态调整轮询Frequency的逻辑
+          // {/* Simplified projects header */}
         }
       } catch (error) {
         console.error('Polling error:', error)

@@ -14,19 +14,19 @@ export interface Notification {
 export const useNotifications = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const notifiedKeys = useRef<Set<string>>(new Set()); // 防重复Notifications
-  const lastNotificationTime = useRef<number>(0); // 节流控制
+  const notifiedKeys = useRef<Set<string>>(new Set()); // Anti-duplication Notifications
+  const lastNotificationTime = useRef<number>(0); // Throttle control
 
   const addNotification = useCallback((notification: Omit<Notification, 'id' | 'read'>, forceAdd = false) => {
     const now = Date.now();
     const key = `${notification.type}-${notification.title}-${notification.message}`;
     
-    // 防重复Notifications：如果相同Content的Notifications已经存在，则不Add
+    // Anti-duplicate Notifications: If Notifications with the same content already exist, do not add them
     if (!forceAdd && notifiedKeys.current.has(key)) {
       return;
     }
     
-    // 节流控制：相同Type的Notifications至少Interval3seconds
+    // Throttle control: Notifications of the same type must be at least Interval3seconds
     if (!forceAdd && now - lastNotificationTime.current < 3000) {
       return;
     }
@@ -37,10 +37,10 @@ export const useNotifications = () => {
       read: false
     };
 
-    setNotifications(prev => [newNotification, ...prev.slice(0, 49)]); // 最多保留50条
+    setNotifications(prev => [newNotification, ...prev.slice(0, 49)]); // Keep up to 50 items
     setUnreadCount(prev => prev + 1);
     
-    // Records已Notifications的key和Time
+    // Records and Notifications key and time
     notifiedKeys.current.add(key);
     lastNotificationTime.current = now;
   }, []);

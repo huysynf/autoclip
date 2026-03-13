@@ -36,7 +36,7 @@ const { RangePicker } = DatePicker
 const { Option } = Select
 const { Text } = Typography
 
-interface Upload tasks {
+interface UploadTask {
   id: string
   project_id: string
   account_id: string
@@ -54,15 +54,15 @@ interface Upload tasks {
   current_step?: string
 }
 
-interface Upload tasksManagerProps {
+interface UploadTaskManagerProps {
   projectId?: string
 }
 
-const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) => {
-  const [tasks, set taskss] = useState<Upload tasks[]>([])
+const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
+  const [tasks, setTasks] = useState<UploadTask[]>([])
   const [loading, setLoading] = useState(false)
-  const [filtered taskss, setFiltered taskss] = useState<Upload tasks[]>([])
-  const [selected tasks, setSelected tasks] = useState<Upload tasks | null>(null)
+  const [filteredTasks, setFilteredTasks] = useState<UploadTask[]>([])
+  const [selectedTask, setSelectedTask] = useState<UploadTask | null>(null)
   const [detailModalVisible, setDetailModalVisible] = useState(false)
   const [filters, setFilters] = useState({
     status: '',
@@ -71,22 +71,22 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
     keyword: ''
   })
 
-  // Get Upload tasks List
-  const fetch taskss = async () => {
+  // Get UploadTask List
+  const fetchTasks = async () => {
     try {
       setLoading(true)
       const records = await uploadApi.getUploadRecords(projectId)
-      set taskss(records)
-      setFiltered taskss(records)
+      setTasks(records as unknown as UploadTask[])
+      setFilteredTasks(records as unknown as UploadTask[])
     } catch (error: any) {
-      message.error('Get Upload tasksFailed: ' + (error.message || 'Unknown error'))
+      message.error('Get UploadTaskFailed: ' + (error.message || 'Unknown error'))
     } finally {
       setLoading(false)
     }
   }
 
   // RetryFailed的 tasks
-  const retry tasks = async (taskId: string) => {
+  const retryTask = async (taskId: string) => {
     message.info('Bilibili upload coming soon!', 3);
     return;
     
@@ -94,14 +94,14 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
     try {
       // 这里需要调用RetryAPI
       message.success(' tasksRetry已启动')
-      fetch taskss() // RefreshList
+      fetchTasks() // RefreshList
     } catch (error: any) {
-      message.error('Retry tasksFailed: ' + (error.message || 'Unknown error'))
+      message.error('RetryTaskFailed: ' + (error.message || 'Unknown error'))
     }
   }
 
   // CancelIn Progress的 tasks
-  const cancel tasks = async (taskId: string) => {
+  const cancelTask = async (taskId: string) => {
     message.info('Bilibili upload coming soon!', 3);
     return;
     
@@ -109,15 +109,15 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
     try {
       // 这里需要调用CancelAPI
       message.success(' tasks cancelled')
-      fetch taskss() // RefreshList
+      fetchTasks() // RefreshList
     } catch (error: any) {
-      message.error('Cancel tasksFailed: ' + (error.message || 'Unknown error'))
+      message.error('CancelTaskFailed: ' + (error.message || 'Unknown error'))
     }
   }
 
-  // View tasksDetails
-  const show tasksDetail = (task: Upload tasks) => {
-    setSelected tasks(task)
+  // View TaskDetails
+  const showTaskDetail = (task: UploadTask) => {
+    setSelectedTask(task)
     setDetailModalVisible(true)
   }
 
@@ -149,7 +149,7 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
       })
     }
 
-    setFiltered taskss(filtered)
+    setFilteredTasks(filtered)
   }
 
   // ResetFilter条件
@@ -160,7 +160,7 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
       dateRange: null,
       keyword: ''
     })
-    setFiltered taskss(tasks)
+    setFilteredTasks(tasks)
   }
 
   // Get status tagsColor
@@ -223,7 +223,7 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
   }
 
   useEffect(() => {
-    fetch taskss()
+    fetchTasks()
   }, [projectId])
 
   useEffect(() => {
@@ -234,7 +234,7 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
     {
       title: ' tasksInfo',
       key: 'task_info',
-      render: (record: Upload tasks) => (
+      render: (record: UploadTask) => (
         <div>
           <div style={{ fontWeight: 'bold' }}>{record.title}</div>
           <div style={{ fontSize: '12px', color: '#666' }}>
@@ -246,7 +246,7 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
     {
       title: 'ClipCount',
       key: 'clip_count',
-      render: (record: Upload tasks) => {
+      render: (record: UploadTask) => {
         const clipCount = record.clip_id.split(',').filter(id => id.trim()).length
         return <Tag>{clipCount} Clip</Tag>
       }
@@ -254,7 +254,7 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
     {
       title: 'Category',
       key: 'partition',
-      render: (record: Upload tasks) => {
+      render: (record: UploadTask) => {
         const partition = BILIBILI_PARTITIONS.find(p => p.id === record.partition_id)
         return partition ? partition.name : `分区${record.partition_id}`
       }
@@ -262,7 +262,7 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
     {
       title: 'Status',
       key: 'status',
-      render: (record: Upload tasks) => (
+      render: (record: UploadTask) => (
         <Tag color={getStatusColor(record.status)} icon={getStatusIcon(record.status)}>
           {getStatusText(record.status)}
         </Tag>
@@ -271,7 +271,7 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
     {
       title: 'Progress',
       key: 'progress',
-      render: (record: Upload tasks) => {
+      render: (record: UploadTask) => {
         if (record.status === 'processing' && record.progress !== undefined) {
           return <Progress percent={record.progress} size="small" />
         } else if (record.status === 'success') {
@@ -285,18 +285,18 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
     {
       title: 'CreateTime',
       key: 'created_at',
-      render: (record: Upload tasks) => dayjs(record.created_at).format('YYYY-MM-DD HH:mm')
+      render: (record: UploadTask) => dayjs(record.created_at).format('YYYY-MM-DD HH:mm')
     },
     {
       title: 'Actions',
       key: 'actions',
-      render: (record: Upload tasks) => (
+      render: (record: UploadTask) => (
         <Space>
           <Button
             type="link"
             size="small"
             icon={<EyeOutlined />}
-            onClick={() => show tasksDetail(record)}
+            onClick={() => showTaskDetail(record)}
           >
             Details
           </Button>
@@ -306,7 +306,7 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
               type="link"
               size="small"
               icon={<ReloadOutlined />}
-              onClick={() => retry tasks(record.id)}
+              onClick={() => retryTask(record.id)}
             >
               Retry
             </Button>
@@ -315,7 +315,7 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
           {record.status === 'processing' && (
             <Popconfirm
               title="OK要Cancel这 tasks?"
-              onConfirm={() => cancel tasks(record.id)}
+              onConfirm={() => cancelTask(record.id)}
               okText="OK"
               cancelText="Cancel"
             >
@@ -421,7 +421,7 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
               <Button onClick={resetFilters}>
                 Reset
               </Button>
-              <Button icon={<ReloadOutlined />} onClick={fetch taskss}>
+              <Button icon={<ReloadOutlined />} onClick={fetchTasks}>
                 Refresh
               </Button>
             </Space>
@@ -429,11 +429,11 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
         </Row>
       </Card>
 
-      {/*  tasks List */}
-      <Card title={`Upload tasks List (${filtered taskss.length})`}>
+      {/*  Task List */}
+      <Card title={`Upload Task List (${filteredTasks.length})`}>
         <Table
           columns={columns}
-          dataSource={filtered taskss}
+          dataSource={filteredTasks}
           rowKey="id"
           loading={loading}
           pagination={{
@@ -445,9 +445,9 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
         />
       </Card>
 
-      {/*  tasksDetails弹窗 */}
+      {/*  TaskDetails弹窗 */}
       <Modal
-        title=" tasksDetails"
+        title=" TaskDetails"
         open={detailModalVisible}
         onCancel={() => setDetailModalVisible(false)}
         footer={[
@@ -457,29 +457,29 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
         ]}
         width={800}
       >
-        {selected tasks && (
+        {selectedTask && (
           <div>
             <Row gutter={16}>
               <Col span={12}>
-                <div><strong> tasksID:</strong> {selected tasks.id}</div>
-                <div><strong>projectsID:</strong> {selected tasks.project_id}</div>
-                <div><strong>Title:</strong> {selected tasks.title}</div>
-                <div><strong>Description:</strong> {selected tasks.description}</div>
+                <div><strong> tasksID:</strong> {selectedTask.id}</div>
+                <div><strong>projectsID:</strong> {selectedTask.project_id}</div>
+                <div><strong>Title:</strong> {selectedTask.title}</div>
+                <div><strong>Description:</strong> {selectedTask.description}</div>
               </Col>
               <Col span={12}>
                 <div><strong>Status:</strong> 
-                  <Tag color={getStatusColor(selected tasks.status)} style={{ marginLeft: 8 }}>
-                    {getStatusText(selected tasks.status)}
+                  <Tag color={getStatusColor(selectedTask.status)} style={{ marginLeft: 8 }}>
+                    {getStatusText(selectedTask.status)}
                   </Tag>
                 </div>
                 <div><strong>分区:</strong> 
                   {(() => {
-                    const partition = BILIBILI_PARTITIONS.find(p => p.id === selected tasks.partition_id)
-                    return partition ? partition.name : `分区${selected tasks.partition_id}`
+                    const partition = BILIBILI_PARTITIONS.find(p => p.id === selectedTask.partition_id)
+                    return partition ? partition.name : `分区${selectedTask.partition_id}`
                   })()}
                 </div>
-                <div><strong>CreateTime:</strong> {dayjs(selected tasks.created_at).format('YYYY-MM-DD HH:mm:ss')}</div>
-                <div><strong>UpdateTime:</strong> {dayjs(selected tasks.updated_at).format('YYYY-MM-DD HH:mm:ss')}</div>
+                <div><strong>CreateTime:</strong> {dayjs(selectedTask.created_at).format('YYYY-MM-DD HH:mm:ss')}</div>
+                <div><strong>UpdateTime:</strong> {dayjs(selectedTask.updated_at).format('YYYY-MM-DD HH:mm:ss')}</div>
               </Col>
             </Row>
             
@@ -488,19 +488,19 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
             <div>
               <strong>ClipInfo:</strong>
               <div style={{ marginTop: 8 }}>
-                {selected tasks.clip_id.split(',').filter(id => id.trim()).map((clipId, index) => (
+                {selectedTask.clip_id.split(',').filter(id => id.trim()).map((clipId, index) => (
                   <Tag key={index} style={{ marginBottom: 4 }}>{clipId.trim()}</Tag>
                 ))}
               </div>
             </div>
             
-            {selected tasks.tags && (
+            {selectedTask.tags && (
               <>
                 <Divider />
                 <div>
                   <strong>Tags:</strong>
                   <div style={{ marginTop: 8 }}>
-                    {JSON.parse(selected tasks.tags).map((tag: string, index: number) => (
+                    {JSON.parse(selectedTask.tags).map((tag: string, index: number) => (
                       <Tag key={index} color="blue">{tag}</Tag>
                     ))}
                   </div>
@@ -508,22 +508,22 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
               </>
             )}
             
-            {selected tasks.bvid && (
+            {selectedTask.bvid && (
               <>
                 <Divider />
                 <div>
-                  <strong>BV Number:</strong> {selected tasks.bvid}
+                  <strong>BV Number:</strong> {selectedTask.bvid}
                 </div>
               </>
             )}
             
-            {selected tasks.error_message && (
+            {selectedTask.error_message && (
               <>
                 <Divider />
                 <div>
                   <strong>ErrorInfo:</strong>
                   <div style={{ marginTop: 8, color: '#ff4d4f', backgroundColor: '#fff2f0', padding: 8, borderRadius: 4 }}>
-                    {selected tasks.error_message}
+                    {selectedTask.error_message}
                   </div>
                 </div>
               </>
@@ -535,7 +535,7 @@ const Upload tasksManager: React.FC<Upload tasksManagerProps> = ({ projectId }) 
   )
 }
 
-export default Upload tasksManager
+export default UploadTaskManager
 
 
 

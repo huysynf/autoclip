@@ -58,11 +58,11 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
   
   const progress = getProgress(project.id)
 
-  // 根据projectsStatus决定YesNo显示Progress
+  // Determine YesNo according to projectsStatus Display Progress
   useEffect(() => {
     if (project.status === 'processing') {
       setShowProgress(true)
-      // Start Polling这projects的Progress
+      // Start Polling the Progress of these projects
       startPolling([project.id], 2000)
     } else {
       setShowProgress(false)
@@ -105,7 +105,7 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
     }
   }
 
-  // Get StatusIcon和Color
+  // Get StatusIcon and Color
   const getStatusConfig = (status: string, progress?: SimpleProgress) => {
     if (progress && isFailed(progress.message)) {
       return {
@@ -187,9 +187,7 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
         </Tooltip>
       ].filter(Boolean)}
     >
-      <Space direction="vertical" style={{ width: '100%' }}>
-        {/* projectsTitle和Status */}
-        <Space align="center" style={{ width: '100%', justifyContent: 'space-between' }}>
+      <Space direction="vertical" style={{ width: '100%' }}>{/* projectsTitle and Status */}<Space align="center" style={{ width: '100%', justifyContent: 'space-between' }}>
           <Title level={5} style={{ margin: 0, flex: 1 }}>
             {project.title}
           </Title>
@@ -216,14 +214,14 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
           </Tag>
         )}
 
-        {/* Progress条 */}
+        {/* Progress bar */}
         {showProgress && (
           <SimpleProgressBar
             projectId={project.id}
-            autoStart={false} // 已经在useEffectMediumProcessing
+            autoStart={false} // Already in useEffectMediumProcessing
             showDetails={true}
             onProgressUpdate={(progress) => {
-              // 如果Done，Update显示Status
+              // If Done, Update displays Status
               if (isCompleted(progress.stage)) {
                 setShowProgress(false)
                 message.success('Project processing complete!')

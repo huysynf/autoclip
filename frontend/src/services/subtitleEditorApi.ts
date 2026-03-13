@@ -162,10 +162,10 @@ class SubtitleEditorApi {
     deletedSegments: string[]
   ): Promise<{ valid: boolean; error?: string }> {
     try {
-      // 先Get SubtitleData来验证
+      // Temporarily Use simple StatusProcessing
       const subtitleData = await this.getClipSubtitles(projectId, clipId)
       
-      // 检查Delete的Subtitle段YesNo存在
+      // Check that Delete's Subtitle segment YesNo exists
       const existingIds = new Set(subtitleData.segments.map(seg => seg.id))
       const invalidIds = deletedSegments.filter(id => !existingIds.has(id))
       
@@ -176,7 +176,7 @@ class SubtitleEditorApi {
         }
       }
 
-      // 检查Delete后YesNo还有剩余Content
+      // Check YesNo and there is remaining Content after Delete
       const remainingSegments = subtitleData.segments.filter(
         seg => !deletedSegments.includes(seg.id)
       )

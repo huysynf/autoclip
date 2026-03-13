@@ -59,15 +59,15 @@ const UploadModal: React.FC<UploadModalProps> = ({
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState<UploadProgress>({
     status: 'pending',
-    message: '准备Upload...',
+    message: 'PrepareUpload...',
     progress: 0
   })
   const [uploadRecordId, setUploadRecordId] = useState<string>('')
   const [pollingInterval, setPollingInterval] = useState<ReturnType<typeof setInterval> | null>(null)
 
-  // 表单初始值
+  // Form initial value
   const initialValues = {
-    title: clipTitles.length === 1 ? clipTitles[0] : `${clipTitles[0]} 等${clipIds.length}Video`,
+    title: clipTitles.length === 1 ? clipTitles[0] : `${clipTitles[0]} etc.${clipIds.length}Video`,
     description: '',
     tags: [],
     partition_id: undefined,
@@ -78,16 +78,16 @@ const UploadModal: React.FC<UploadModalProps> = ({
   const [accounts, setAccounts] = useState<any[]>([])
   useEffect(() => {
     if (visible) {
-      // 调用APIGet Bilibili account list
+      // Call APIGet Bilibili account list
       uploadApi.getBilibiliAccounts()
         .then(data => {
           setAccounts(data)
         })
         .catch(error => {
           console.error('Get Bilibili account listFailed:', error)
-          // 如果API调用Failed，Use DefaultAccount
+          // If API call Failed, Use DefaultAccount
           setAccounts([
-            { id: '1', name: '主Account', username: 'main_account' }
+            { id: '1', name: 'Main Account', username: 'main_account' }
           ])
         })
     }
@@ -95,26 +95,26 @@ const UploadModal: React.FC<UploadModalProps> = ({
 
   // SubmitUpload
   const handleSubmit = async (values: any) => {
-    // 显示On发MediumPrompt
+    // ShowOnMediumPrompt
     message.info('Bilibili upload coming soon!', 3)
     return
     
-    // 原有代码Disabled
+    // Original codeDisabled
     if (!values.account_id) {
-      message.error('请SelectBilibili Account')
+      message.error('PleaseSelectBilibili Account')
       return
     }
 
     setUploading(true)
     setUploadProgress({
       status: 'pending',
-      message: '正在CreateUpload tasks...',
+      message: 'CreatingUploadTask...',
       progress: 10
     })
 
     try {
-      // CreateUpload tasks
-      const response = await uploadApi.createUpload tasks(projectId, {
+      // CreateUploadTask
+      const response = await uploadApi.createUploadTask(projectId, {
         clip_ids: clipIds,
         account_id: values.account_id,
         title: values.title,
@@ -126,19 +126,19 @@ const UploadModal: React.FC<UploadModalProps> = ({
       setUploadRecordId(response.record_id)
       setUploadProgress({
         status: 'processing',
-        message: `Upload tasks已Create，Processing ${response.clip_count} Video...`,
+        message: `UploadTask Created, Processing ${response.clip_count} Video...`,
         progress: 30
       })
 
       // Start PollingUploadStatus
       startPolling(response.record_id)
 
-      message.success('Upload tasksCreateSuccess！')
+      message.success('UploadTaskCreateSuccess！')
     } catch (error: any) {
-      console.error('CreateUpload tasksFailed:', error)
+      console.error('CreateUploadTaskFailed:', error)
       setUploadProgress({
         status: 'failed',
-        message: `CreateUpload tasksFailed: ${error.message || 'Unknown error'}`,
+        message: `CreateUploadTaskFailed: ${error.message || 'Unknown error'}`,
         progress: 0,
         error: error.message
       })
@@ -162,7 +162,7 @@ const UploadModal: React.FC<UploadModalProps> = ({
           setUploading(false)
           clearInterval(interval)
           
-          // DelayClose弹窗，让User看到SuccessStatus
+          // DelayClose pop-up window to let User see SuccessStatus
           setTimeout(() => {
             onSuccess?.()
             onCancel()
@@ -179,20 +179,20 @@ const UploadModal: React.FC<UploadModalProps> = ({
         } else if (status.status === 'processing') {
           setUploadProgress({
             status: 'processing',
-            message: '正在Upload到B站...',
+            message: 'Uploading to station B...',
             progress: 60
           })
         } else if (status.status === 'pending') {
           setUploadProgress({
             status: 'processing',
-            message: ' tasks排队Medium，Please wait...',
+            message: 'Tasks queue Medium, Please wait...',
             progress: 40
           })
         } else {
-          // 其他Status，逐步增加Progress
+          // Other Status, gradually increase Progress
           setUploadProgress(prev => ({
             ...prev,
-            message: ` tasksStatus: ${status.status}`,
+            message: ` TaskStatus: ${status.status}`,
             progress: Math.min(prev.progress + 5, 90)
           }))
         }
@@ -212,7 +212,7 @@ const UploadModal: React.FC<UploadModalProps> = ({
     setPollingInterval(interval)
   }
 
-  // 清理轮询
+  // Cleanup polling
   useEffect(() => {
     return () => {
       if (pollingInterval) {
@@ -221,7 +221,7 @@ const UploadModal: React.FC<UploadModalProps> = ({
     }
   }, [pollingInterval])
 
-  // 弹窗Close时清理Status
+  // Clean Status when pop-up window Close
   const handleCancel = () => {
     if (pollingInterval) {
       clearInterval(pollingInterval)
@@ -229,7 +229,7 @@ const UploadModal: React.FC<UploadModalProps> = ({
     setUploading(false)
     setUploadProgress({
       status: 'pending',
-      message: '准备Upload...',
+      message: 'PrepareUpload...',
       progress: 0
     })
     setUploadRecordId('')
@@ -237,7 +237,7 @@ const UploadModal: React.FC<UploadModalProps> = ({
     onCancel()
   }
 
-  // CancelUpload tasks
+  // CancelUploadTask
   const handleCancelUpload = async () => {
     if (!uploadRecordId) {
       handleCancel()
@@ -245,28 +245,28 @@ const UploadModal: React.FC<UploadModalProps> = ({
     }
 
     try {
-      // 调用CancelUploadAPI
-      await uploadApi.cancelUpload tasks(uploadRecordId)
+      // Call CancelUploadAPI
+      await uploadApi.cancelUploadTask(uploadRecordId)
       
-      // 清理Status
+      // Clean Status
       if (pollingInterval) {
         clearInterval(pollingInterval)
       }
       setUploading(false)
       setUploadProgress({
         status: 'pending',
-        message: '准备Upload...',
+        message: 'PrepareUpload...',
         progress: 0
       })
       setUploadRecordId('')
       form.resetFields()
       
-      // 显示CancelSuccessMessage
-      message.success('Upload tasks已Cancel')
+      // ShowCancelSuccessMessage
+      message.success('UploadTaskCancel')
       onCancel()
     } catch (error) {
       console.error('CancelUploadFailed:', error)
-      message.error('CancelUploadFailed，请Retry')
+      message.error('CancelUploadFailed, please Retry')
     }
   }
 
@@ -313,7 +313,7 @@ const UploadModal: React.FC<UploadModalProps> = ({
       closable={!uploading}
     >
       {!uploading ? (
-        // Upload表单
+        // Upload form
         <Form
           form={form}
           layout="vertical"
@@ -325,9 +325,9 @@ const UploadModal: React.FC<UploadModalProps> = ({
               <Form.Item
                 label="Bilibili Account"
                 name="account_id"
-                rules={[{ required: true, message: '请SelectBilibili Account' }]}
+                rules={[{ required: true, message: 'PleaseSelectBilibili Account' }]}
               >
-                <Select placeholder="Select要Use 的Bilibili Account">
+                <Select placeholder="Select Bilibili Account to Use">
                   {accounts.map(account => (
                     <Option key={account.id} value={account.id}>
                       {account.nickname || account.username} ({account.username})
@@ -340,7 +340,7 @@ const UploadModal: React.FC<UploadModalProps> = ({
               <Form.Item
                 label="Category"
                 name="partition_id"
-                rules={[{ required: true, message: '请SelectVideo Category' }]}
+                rules={[{ required: true, message: 'PleaseSelectVideo Category' }]}
               >
                 <Select placeholder="SelectVideo Category" showSearch>
                   {BILIBILI_PARTITIONS.map(partition => (
@@ -356,18 +356,18 @@ const UploadModal: React.FC<UploadModalProps> = ({
           <Form.Item
             label="Title"
             name="title"
-            rules={[{ required: true, message: '请输入VideoTitle' }]}
+            rules={[{ required: true, message: 'Please enter VideoTitle' }]}
           >
-            <Input placeholder="输入VideoTitle" maxLength={80} showCount />
+            <Input placeholder="Enter VideoTitle" maxLength={80} showCount />
           </Form.Item>
 
           <Form.Item
             label="Description"
             name="description"
-            rules={[{ required: true, message: '请输入VideoDescription' }]}
+            rules={[{ required: true, message: 'Please enter VideoDescription' }]}
           >
             <TextArea
-              placeholder="输入VideoDescription"
+              placeholder="Enter VideoDescription"
               rows={4}
               maxLength={250}
               showCount
@@ -377,11 +377,11 @@ const UploadModal: React.FC<UploadModalProps> = ({
           <Form.Item
             label="Tags"
             name="tags"
-            extra="最多Add10Tags，用逗号分隔"
+            extra="Add up to 10Tags, separated by commas"
           >
             <Select
               mode="tags"
-              placeholder="输入Tags，按回车Confirm"
+              placeholder="Enter Tags and press Enter to confirm"
               maxTagCount={10}
               maxTagTextLength={20}
             />
@@ -461,14 +461,12 @@ const UploadModal: React.FC<UploadModalProps> = ({
                   setUploading(false)
                   setUploadProgress({
                     status: 'pending',
-                    message: '准备Upload...',
+                    message: 'PrepareUpload...',
                     progress: 0
                   })
                 }}
                 style={{ marginRight: '8px' }}
-              >
-                重新Upload
-              </Button>
+              >Upload again</Button>
             )}
             
             <Button

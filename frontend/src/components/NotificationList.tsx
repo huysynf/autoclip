@@ -61,17 +61,17 @@ const getNotificationColor = (level: Notification['level']) => {
 };
 
 const formatTime = (timestamp: string) => {
-  // 正确Processing时区转换，确保显示本地Time
+  // Processing time zone conversion correctly, ensuring local Time is displayed
   const now = dayjs().tz('Asia/Shanghai');
   const notificationTime = dayjs(timestamp).tz('Asia/Shanghai');
   const diff = now.diff(notificationTime, 'millisecond');
   
-  if (diff < 60000) { // 1minutes内
-    return '刚刚';
-  } else if (diff < 3600000) { // 1hours内
-    return `${Math.floor(diff / 60000)}minutes前`;
-  } else if (diff < 86400000) { // 24hours内
-    return `${Math.floor(diff / 3600000)}hours前`;
+  if (diff < 60000) { // Within 1minutes
+    return 'Just';
+  } else if (diff < 3600000) { // Within 1 hour
+    return `${Math.floor(diff / 60000)}minutes ago`;
+  } else if (diff < 86400000) { // Within 24 hours
+    return `${Math.floor(diff / 3600000)}hours ago`;
   } else {
     return notificationTime.format('MM-DD HH:mm');
   }
@@ -159,13 +159,9 @@ export const NotificationList: React.FC<NotificationListProps> = ({
       extra={
         <Space>
           {unreadCount > 0 && (
-            <Button size="small" onClick={onMarkAllAsRead}>
-              All已读
-            </Button>
+            <Button size="small" onClick={onMarkAllAsRead}>Allread</Button>
           )}
-          <Button size="small" danger onClick={onClearAll}>
-            清Empty
-          </Button>
+          <Button size="small" danger onClick={onClearAll}>ClearEmpty</Button>
         </Space>
       }
       styles={{
@@ -174,9 +170,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({
     >
       <div style={{ maxHeight, overflowY: 'auto' }}>
         {notifications.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: 20, color: '#999' }}>
-            暂NoneNotifications
-          </div>
+          <div style={{ textAlign: 'center', padding: 20, color: '#999' }}>No notifications</div>
         ) : (
           <List
             dataSource={notifications}

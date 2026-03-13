@@ -74,22 +74,17 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
       className="create-collection-modal"
       destroyOnClose
     >
-      <div className="modal-content">
-        {/* 头部 */}
-        <div className="modal-header">
+      <div className="modal-content">{/* Head */}<div className="modal-header">
           <div className="header-icon">
             <PlusOutlined />
           </div>
           <div className="header-text">
-            <Title level={3} className="modal-title">Create新Collection</Title>
-            <Text className="modal-subtitle">将精选clips组合成一themed collections</Text>
+            <Title level={3} className="modal-title">Create new Collection</Title>
+            <Text className="modal-subtitle">Combine selected clips into themed collections</Text>
           </div>
         </div>
 
-        <Divider className="header-divider" />
-
-        {/* 表单区域 */}
-        <div className="form-section">
+        <Divider className="header-divider" />📈 ReceivedTaskUpdate:<div className="form-section">
           {/* CollectionTitle */}
           <div className="form-item">
             <div className="form-label">
@@ -98,7 +93,7 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
               <span className="required-mark">*</span>
             </div>
             <Input
-              placeholder="请输入CollectionTitle"
+              placeholder="Please enter CollectionTitle"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="form-input"
@@ -114,7 +109,7 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
               <Text strong>CollectionDescription</Text>
             </div>
             <TextArea
-              placeholder="请输入CollectionDescription（Optional）"
+              placeholder="Please enter CollectionDescription (Optional)"
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               className="form-textarea"
@@ -134,26 +129,20 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
             
             <div className="clips-selection">
               <div className="selection-header">
-                <Text className="selection-info">
-                  已Select {selectedClips.length} clips
-                </Text>
+                <Text className="selection-info">{selectedClips.length} clips selected</Text>
                 <div className="selection-actions">
                   <Button 
                     type="link" 
                     size="small" 
                     onClick={selectAllClips}
                     className="action-btn"
-                  >
-                    全选
-                  </Button>
+                  >Select all</Button>
                   <Button 
                     type="link" 
                     size="small" 
                     onClick={clearAllClips}
                     className="action-btn"
-                  >
-                    清Empty
-                  </Button>
+                  >ClearEmpty</Button>
                 </div>
               </div>
               
@@ -184,10 +173,7 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
               </div>
             </div>
           </div>
-        </div>
-
-        {/* 底部Action */}
-        <div className="modal-footer">
+        </div>{/* Bottom Action */}<div className="modal-footer">
           <Button onClick={handleCancel} className="cancel-btn">
             Cancel
           </Button>
