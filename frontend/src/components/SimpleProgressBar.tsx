@@ -1,5 +1,5 @@
 /**
- * 简化的Progress条组件 - 基于固定阶段
+ * 简化的Progress条Component - 基于固定Stage
  */
 
 import React, { useEffect } from 'react'
@@ -39,7 +39,7 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
 
   const progress = getProgress(projectId)
 
-  // 自动Start Polling
+  // AutoStart Polling
   useEffect(() => {
     if (autoStart && projectId) {
       startPolling([projectId], pollingInterval)
@@ -50,7 +50,7 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
     }
   }, [projectId, autoStart, pollingInterval, startPolling, stopPolling])
 
-  // Notifications父组件ProgressUpdate
+  // Notifications父ComponentProgressUpdate
   useEffect(() => {
     if (progress && onProgressUpdate) {
       onProgressUpdate(progress)
@@ -93,7 +93,7 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
   return (
     <Card size="small" style={{ margin: '8px 0' }}>
       <Space direction="vertical" style={{ width: '100%' }}>
-        {/* 阶段Tags和Progress */}
+        {/* StageTags和Progress */}
         <Space align="center" style={{ width: '100%', justifyContent: 'space-between' }}>
           <Tag color={stageColor} style={{ margin: 0 }}>
             {stageDisplayName}
@@ -112,7 +112,7 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
           size="small"
         />
 
-        {/* 详细信息 */}
+        {/* 详细Info */}
         {showDetails && message && (
           <Text type="secondary" style={{ fontSize: '12px' }}>
             {message}
@@ -130,7 +130,7 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
   )
 }
 
-// 批量Progress显示组件
+// 批量Progress显示Component
 interface BatchProgressBarProps {
   projectIds: string[]
   autoStart?: boolean
@@ -155,7 +155,7 @@ export const BatchProgressBar: React.FC<BatchProgressBarProps> = ({
 
   const allProgress = getAllProgress()
 
-  // 自动Start Polling
+  // AutoStart Polling
   useEffect(() => {
     if (autoStart && projectIds.length > 0) {
       startPolling(projectIds, pollingInterval)
@@ -166,7 +166,7 @@ export const BatchProgressBar: React.FC<BatchProgressBarProps> = ({
     }
   }, [projectIds, autoStart, pollingInterval, startPolling, stopPolling])
 
-  // Notifications父组件ProgressUpdate
+  // Notifications父ComponentProgressUpdate
   useEffect(() => {
     if (onProgressUpdate) {
       projectIds.forEach(projectId => {
@@ -184,7 +184,7 @@ export const BatchProgressBar: React.FC<BatchProgressBarProps> = ({
         <SimpleProgressBar
           key={projectId}
           projectId={projectId}
-          autoStart={false} // 批量模式下不自动Start
+          autoStart={false} // 批量模式下不AutoStart
           showDetails={showDetails}
           onProgressUpdate={(progress) => onProgressUpdate?.(projectId, progress)}
         />

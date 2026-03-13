@@ -111,7 +111,7 @@ export const useTaskStatus = () => {
   }, []);
 
   const loadProjectTasks = useCallback(async (projectId: string) => {
-    console.log('📤 Start加载projects任务:', projectId);
+    console.log('📤 Start加载projectsTask:', projectId);
     setLoading(true);
     try {
       const response = await fetch(`http://localhost:8000/api/v1/tasks/project/${projectId}`);
@@ -120,12 +120,12 @@ export const useTaskStatus = () => {
       if (response.ok) {
         const data = await response.json();
         const projectTasks = data.data.tasks || [];
-        console.log('📋 获取到任务数量:', projectTasks.length);
+        console.log('📋 获取到TaskCount:', projectTasks.length);
         
         setTasks(prev => {
           const newTasks = new Map(prev);
           projectTasks.forEach((task: any) => {
-            console.log('📝 Add任务:', task.task_id, task.status, task.progress);
+            console.log('📝 AddTask:', task.task_id, task.status, task.progress);
             newTasks.set(task.task_id, {
               id: task.task_id,
               status: task.status as TaskStatus['status'],
@@ -138,15 +138,15 @@ export const useTaskStatus = () => {
           return newTasks;
         });
       } else {
-        console.error('❌ API调用失败:', response.status, response.statusText);
+        console.error('❌ API调用Failed:', response.status, response.statusText);
       }
     } catch (error) {
-      console.error('❌ 加载projects任务失败:', error);
+      console.error('❌ 加载projectsTaskFailed:', error);
     } finally {
       setLoading(false);
-      console.log('✅ 任务加载完成');
+      console.log('✅ Task加载Completed');
     }
-  }, []); // 空依赖数组，避免无限循环
+  }, []); // Empty依赖数组，避免None限循环
 
   return {
     tasks: getAllTasks(),

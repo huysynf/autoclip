@@ -33,7 +33,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
   const [cookieForm] = Form.useForm()
   const [uploadForm] = Form.useForm()
   
-  // UploadStatus相关Status
+  // UploadStatus相OffStatus
   const [uploadRecords, setUploadRecords] = useState<UploadRecord[]>([])
   const [recordsLoading, setRecordsLoading] = useState(false)
   const [selectedRecord, setSelectedRecord] = useState<UploadRecord | null>(null)
@@ -46,7 +46,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
       const data = await uploadApi.getAccounts()
       setAccounts(data)
     } catch (error: any) {
-      message.error('获取Account List失败: ' + (error.message || 'Unknown error'))
+      message.error('获取Account ListFailed: ' + (error.message || 'Unknown error'))
     } finally {
       setLoading(false)
     }
@@ -59,7 +59,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
       const data = await uploadApi.getUploadRecords()
       setUploadRecords(data)
     } catch (error: any) {
-      message.error('获取Upload记录失败: ' + (error.message || 'Unknown error'))
+      message.error('获取Upload记录Failed: ' + (error.message || 'Unknown error'))
     } finally {
       setRecordsLoading(false)
     }
@@ -72,7 +72,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
       message.success('Retry task submitted')
       fetchUploadRecords()
     } catch (error: any) {
-      message.error('Retry失败: ' + (error.message || 'Unknown error'))
+      message.error('RetryFailed: ' + (error.message || 'Unknown error'))
     }
   }
 
@@ -83,7 +83,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
       message.success('Task cancelled')
       fetchUploadRecords()
     } catch (error: any) {
-      message.error('Cancel失败: ' + (error.message || 'Unknown error'))
+      message.error('CancelFailed: ' + (error.message || 'Unknown error'))
     }
   }
 
@@ -94,7 +94,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
       message.success('Task deleted')
       fetchUploadRecords()
     } catch (error: any) {
-      message.error('Delete失败: ' + (error.message || 'Unknown error'))
+      message.error('DeleteFailed: ' + (error.message || 'Unknown error'))
     }
   }
 
@@ -108,7 +108,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
     if (visible) {
       fetchAccounts()
       fetchUploadRecords()
-      // 如果有切片数据，默认显示UploadTags页
+      // 如果有切片数据，Default显示UploadTags页
       if (clipIds.length > 0) {
         setActiveTab('upload')
       } else {
@@ -117,7 +117,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
     }
   }, [visible, clipIds])
 
-  // Cookie导入登录
+  // CookieImportLogin
   const handleCookieLogin = async (values: any) => {
     try {
       setLoading(true)
@@ -139,40 +139,40 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
       })
       
       if (Object.keys(cookies).length === 0) {
-        message.error('Cookie格式不正确，请检查输入')
+        message.error('CookieFormat不正确，请检查输入')
         return
       }
       
       await uploadApi.cookieLogin(cookies, values.nickname)
-      message.success('账号Add成功！')
+      message.success('AccountAddSuccess！')
       setShowAddAccount(false)
       cookieForm.resetFields()
       fetchAccounts()
     } catch (error: any) {
-      message.error('Add账号失败: ' + (error.message || 'Unknown error'))
+      message.error('AddAccountFailed: ' + (error.message || 'Unknown error'))
     } finally {
       setLoading(false)
     }
   }
 
-  // Delete账号
+  // DeleteAccount
   const handleDeleteAccount = async (accountId: string) => {
     try {
       await uploadApi.deleteAccount(accountId)
-      message.success('账号Delete成功')
+      message.success('AccountDeleteSuccess')
       fetchAccounts()
     } catch (error: any) {
-      message.error('Delete账号失败: ' + (error.message || 'Unknown error'))
+      message.error('DeleteAccountFailed: ' + (error.message || 'Unknown error'))
     }
   }
 
   // SubmitUpload
   const handleUpload = async (values: any) => {
-    // 显示开发中提示
+    // 显示On发Medium提示
     message.info('Bilibili upload coming soon!', 3)
     return
     
-    // 原有代码已禁用
+    // 原有代码Disabled
     if (!projectId || clipIds.length === 0) {
       message.error('没有选择要Upload的切片')
       return
@@ -200,15 +200,15 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
       })
 
       if (response.ok) {
-        message.success('Upload任务已Create，正在后台Processing...')
+        message.success('UploadTask已Create，正在后台Processing...')
         onUploadSuccess?.()
         onClose()
       } else {
         const error = await response.json()
-        message.error('Upload失败: ' + (error.detail || 'Unknown error'))
+        message.error('UploadFailed: ' + (error.detail || 'Unknown error'))
       }
     } catch (error: any) {
-      message.error('Upload失败: ' + (error.message || 'Unknown error'))
+      message.error('UploadFailed: ' + (error.message || 'Unknown error'))
     } finally {
       setLoading(false)
     }
@@ -239,7 +239,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
     return partition ? partition.name : `Category ${partitionId}`
   }
 
-  // 格式化文件Size
+  // Format化FileSize
   const formatFileSize = (bytes?: number) => {
     if (!bytes) return '-'
     const sizes = ['B', 'KB', 'MB', 'GB']
@@ -247,7 +247,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
     return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`
   }
 
-  // 格式化时长
+  // Format化Duration
   const formatDuration = (seconds?: number) => {
     if (!seconds) return '-'
     const hours = Math.floor(seconds / 3600)
@@ -263,7 +263,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
     }
   }
 
-  // 获取统计信息
+  // 获取StatisticsInfo
   const getStatistics = () => {
     const total = uploadRecords.length
     const success = uploadRecords.filter(r => r.status === 'success' || r.status === 'completed').length
@@ -279,12 +279,12 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
     <div style={{ maxWidth: 300 }}>
       <div style={{ marginBottom: 8, fontWeight: 'bold' }}>Cookie获取Step：</div>
       <ol style={{ margin: 0, paddingLeft: 16 }}>
-        <li>打开B站网站并登录</li>
+        <li>打OnB站网站并Login</li>
         <li>按F12Open developer tools</li>
         <li>点击NetworkTags页</li>
         <li>Refresh Page</li>
         <li>找到任意请求，点击View</li>
-        <li>在Request Headers中找到Cookie字段</li>
+        <li>在Request HeadersMedium找到Cookie字段</li>
         <li>CopyCookie的值（不包含"Cookie: "前缀）</li>
       </ol>
     </div>
@@ -304,7 +304,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
       ),
     },
     {
-      title: '用户名',
+      title: 'Username',
       dataIndex: 'username',
       key: 'username',
     },
@@ -314,7 +314,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
       key: 'status',
       render: (status: string) => (
         <Tag color={status === 'active' ? 'green' : 'red'} icon={status === 'active' ? <CheckCircleOutlined /> : <CloseCircleOutlined />}>
-          {status === 'active' ? '正常' : '异常'}
+          {status === 'active' ? 'Normal' : 'Abnormal'}
         </Tag>
       ),
     },
@@ -323,8 +323,8 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
       key: 'action',
       render: (_: any, record: BilibiliAccount) => (
         <Popconfirm
-          title="OK要Delete这账号?"
-          description="Delete后将无法恢复，请谨慎操作。"
+          title="OK要Delete这Account?"
+          description="Delete后将None法恢复，请谨慎操作。"
           onConfirm={() => handleDeleteAccount(record.id)}
           okText="OK"
           cancelText="Cancel"
@@ -496,7 +496,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
       destroyOnClose
       className="bilibili-manager-modal"
     >
-      {/* 自定义Title栏 */}
+      {/* CustomTitle栏 */}
       <div className="bilibili-manager-header">
         <div className="bilibili-manager-header-icon">
           <UploadOutlined />
@@ -527,7 +527,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
           >
             <div className="bilibili-manager-content">
               <Alert
-                message="Upload信息"
+                message="UploadInfo"
                 description={`准备Upload ${clipIds.length} 切片到B站`}
                 type="info"
                 showIcon
@@ -539,8 +539,8 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
               onFinish={handleUpload}
               layout="vertical"
               initialValues={{
-                title: clipTitles.length === 1 ? clipTitles[0] : `${clipTitles[0]} 等${clipIds.length}视频`,
-                partition_id: 4 // 默认游戏分区
+                title: clipTitles.length === 1 ? clipTitles[0] : `${clipTitles[0]} 等${clipIds.length}Video`,
+                partition_id: 4 // Default游戏分区
               }}
             >
               <Row gutter={16}>
@@ -554,13 +554,13 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
                       placeholder="选择要使用的Bilibili Account"
                       notFoundContent={
                         <div style={{ textAlign: 'center', padding: '20px' }}>
-                          <p>暂无可用账号</p>
+                          <p>暂None可用Account</p>
                           <Button 
                             type="link" 
                             icon={<PlusOutlined />}
                             onClick={() => setShowAddAccount(true)}
                           >
-                            Add账号
+                            AddAccount
                           </Button>
                         </div>
                       }
@@ -593,9 +593,9 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
               <Form.Item
                 label="Title"
                 name="title"
-                rules={[{ required: true, message: '请输入视频Title' }]}
+                rules={[{ required: true, message: '请输入VideoTitle' }]}
               >
-                <Input placeholder="输入视频Title" maxLength={80} showCount />
+                <Input placeholder="输入VideoTitle" maxLength={80} showCount />
               </Form.Item>
 
               <Form.Item
@@ -603,7 +603,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
                 name="description"
               >
                 <TextArea
-                  placeholder="输入视频Description（可选）"
+                  placeholder="输入VideoDescription（Optional）"
                   rows={3}
                   maxLength={2000}
                   showCount
@@ -614,7 +614,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
                 label="Tags"
                 name="tags"
               >
-                <Input placeholder="输入Tags，用逗号分隔（可选）" />
+                <Input placeholder="输入Tags，用逗号分隔（Optional）" />
               </Form.Item>
 
               <Form.Item>
@@ -653,7 +653,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
                 icon={<PlusOutlined />} 
                 onClick={() => setShowAddAccount(true)}
               >
-                Add账号
+                AddAccount
               </Button>
             </div>
 
@@ -691,7 +691,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
               </Button>
             </div>
 
-            {/* 统计信息 */}
+            {/* StatisticsInfo */}
             {(() => {
               const stats = getStatistics()
               return (
@@ -759,7 +759,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
       </Tabs>
       </div>
 
-      {/* Add账号弹窗 */}
+      {/* AddAccount弹窗 */}
       <Modal
         title="AddBilibili Account"
         open={showAddAccount}
@@ -771,8 +771,8 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
         width={600}
       >
         <Alert
-          message="推荐使用Cookie导入"
-          description="Cookie导入是最安全、最稳定的登录方式，不会触发B站风控。"
+          message="推荐使用CookieImport"
+          description="CookieImportYes最安全、最稳定的Login方式，不会触发B站风控。"
           type="info"
           showIcon
           style={{ marginBottom: 16 }}
@@ -781,10 +781,10 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
         <Form form={cookieForm} onFinish={handleCookieLogin} layout="vertical">
           <Form.Item
             name="nickname"
-            label="账号昵称"
-            rules={[{ required: true, message: '请输入账号昵称' }]}
+            label="Account昵称"
+            rules={[{ required: true, message: '请输入Account昵称' }]}
           >
-            <Input placeholder="请输入账号昵称，用于识别" />
+            <Input placeholder="请输入Account昵称，用于识别" />
           </Form.Item>
           
           <Form.Item
@@ -810,14 +810,14 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
           >
             <TextArea
               rows={4}
-              placeholder="请从浏览器开发者工具中CopyCookie，格式如：SESSDATA=xxx; bili_jct=xxx; DedeUserID=xxx"
+              placeholder="请从浏览器On发者工具MediumCopyCookie，Format如：SESSDATA=xxx; bili_jct=xxx; DedeUserID=xxx"
             />
           </Form.Item>
           
           <Form.Item>
             <Space>
               <Button type="primary" htmlType="submit" loading={loading}>
-                Add账号
+                AddAccount
               </Button>
               <Button onClick={() => setShowAddAccount(false)}>
                 Cancel

@@ -46,7 +46,7 @@ export interface TaskProgressUpdateMessage extends WebSocketMessage {
   progress: number;
   step_name: string;
   message?: string;
-  snapshot?: boolean; // 标记是否为快照消息
+  snapshot?: boolean; // 标记YesNo为快照Message
 }
 
 export type WebSocketEventMessage = 
@@ -86,8 +86,8 @@ const maxReconnectAttempts = 5;
 // 心跳机制
 let heartbeatInterval: number | null = null;
 let heartbeatTimeout: number | null = null;
-const HEARTBEAT_INTERVAL = 25000; // 25秒发送一次心跳
-const HEARTBEAT_TIMEOUT = 5000; // 5秒内没收到pong就重连
+const HEARTBEAT_INTERVAL = 25000; // 25seconds发送一次心跳
+const HEARTBEAT_TIMEOUT = 5000; // 5seconds内没收到pong就重连
 
 // 防抖机制
 let syncDebounceTimeout: number | null = null;
@@ -98,7 +98,7 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
   const [isConnected, setIsConnected] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected' | 'error'>('disconnected');
 
-  // 心跳相关函数
+  // 心跳相Off函数
   const startHeartbeat = useCallback(() => {
     if (heartbeatInterval) {
       clearInterval(heartbeatInterval);
@@ -109,12 +109,12 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
         console.log('发送心跳ping');
         globalWs.send(JSON.stringify({ type: 'ping' }));
         
-        // Settingspong超时
+        // SettingspongTimeout
         if (heartbeatTimeout) {
           clearTimeout(heartbeatTimeout);
         }
         heartbeatTimeout = window.setTimeout(() => {
-          console.log('心跳超时，准备重连');
+          console.log('心跳Timeout，准备重连');
           if (globalWs) {
             globalWs.close();
           }
@@ -140,9 +140,9 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
       return;
     }
     
-    // 如果已经有连接但用户ID不同，先Close旧连接
+    // 如果已经有连接但UserID不同，先Close旧连接
     if (globalWs && globalUserId !== userId) {
-      console.log(`用户ID变更: ${globalUserId} -> ${userId}，Close旧连接`);
+      console.log(`UserID变更: ${globalUserId} -> ${userId}，Close旧连接`);
       globalWs.close();
       globalWs = null;
     }
@@ -160,7 +160,7 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
       globalOnError = onError;
 
       ws.onopen = () => {
-        console.log('WebSocket连接已建立');
+        console.log('WebSocket connection established');
         setIsConnected(true);
         setConnectionStatus('connected');
         reconnectAttempts = 0;
@@ -168,7 +168,7 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
         // 启动心跳
         startHeartbeat();
         
-        // 重连后自动重新订阅之前的projects
+        // 重连后Auto重新订阅之前的projects
         if (globalDesiredSubscriptions.size > 0) {
           console.log('重连后重新订阅projects:', Array.from(globalDesiredSubscriptions));
           sendMessage({
@@ -183,7 +183,7 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
       ws.onmessage = (event) => {
         try {
           const data: WebSocketEventMessage = JSON.parse(event.data);
-          console.log('收到WebSocket消息:', data);
+          console.log('收到WebSocket message:', data);
           
           // 处理pong响应
           if (data.type === 'pong') {
@@ -197,7 +197,7 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
           
           globalOnMessage?.(data);
         } catch (error) {
-          console.error('解析WebSocket消息失败:', error);
+          console.error('解析WebSocket messageFailed:', error);
         }
       };
 
@@ -211,7 +211,7 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
         
         globalOnDisconnect?.();
 
-        // 启用自动重连，但限制重连次数
+        // EnableAuto重连，但Limit重连次数
         if (event.code !== 1000 && reconnectAttempts < maxReconnectAttempts) {
           reconnectAttempts++;
           const delay = Math.min(2000 * Math.pow(2, reconnectAttempts), 15000);
@@ -226,13 +226,13 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
       };
 
       ws.onerror = (error) => {
-        console.error('WebSocket错误:', error);
+        console.error('WebSocketError:', error);
         setConnectionStatus('error');
         globalOnError?.(error);
       };
 
     } catch (error) {
-      console.error('CreateWebSocket连接失败:', error);
+      console.error('CreateWebSocketConnection failed:', error);
       setConnectionStatus('error');
     }
   }, [userId, onMessage, onConnect, onDisconnect, onError]);
@@ -244,7 +244,7 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
     }
     
     if (globalWs) {
-      globalWs.close(1000, '用户主动断开连接');
+      globalWs.close(1000, 'User主动Disconnected');
       globalWs = null;
     }
     
@@ -257,7 +257,7 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
       globalWs.send(JSON.stringify(message));
       return true;
     }
-    console.warn('WebSocket未连接，无法发送消息');
+    console.warn('WebSocket未连接，None法Message sent');
     return false;
   }, []);
 
@@ -351,16 +351,16 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
     });
   }, [sendMessage]);
 
-  // 自动连接
+  // Auto连接
   useEffect(() => {
-    // 延迟连接，避免组件Initializing时的重渲染
+    // Delay连接，避免ComponentInitializing时的重渲染
     const timer = setTimeout(() => {
       ensureConnected();
     }, 500);
 
     return () => {
       clearTimeout(timer);
-      // 不在这里断开连接，保持全局连接
+      // 不在这里Disconnected，保持全局连接
     };
   }, [userId, ensureConnected]);
 

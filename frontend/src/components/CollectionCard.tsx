@@ -111,10 +111,10 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
               gap: '4px'
             }}
           >
-            {collection.collection_type === 'ai_recommended' ? 'AI推荐' : '手动Create'}
+            {collection.collection_type === 'ai_recommended' ? 'AI推荐' : 'ManualCreate'}
           </div>
           
-          {/* 左下角clips数量 */}
+          {/* 左下角clipsCount */}
           <div 
             style={{
               position: 'absolute',
@@ -134,7 +134,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
             {collectionClips.length} clips
           </div>
           
-          {/* 右下角总时长 */}
+          {/* 右下角总Duration */}
           <div 
             style={{
               position: 'absolute',
@@ -163,14 +163,14 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
         flexDirection: 'column',
         justifyContent: 'space-between'
       }}>
-        {/* Content区域 - 固定高度 */}
+        {/* Content区域 - 固定High度 */}
         <div style={{ 
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
           minHeight: 0 // 允许flex子项收缩
         }}>
-          {/* Title区域 - 固定高度 */}
+          {/* Title区域 - 固定High度 */}
           <div style={{ 
             height: '44px',
             marginBottom: '8px',
@@ -201,7 +201,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
             />
           </div>
           
-          {/* CollectionDescription - 固定高度 */}
+          {/* CollectionDescription - 固定High度 */}
           <div style={{ 
             height: '58px',
             marginBottom: '12px',
@@ -209,7 +209,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
             alignItems: 'flex-start'
           }}>
             <Tooltip 
-              title={collection.collection_summary || '暂无Description'} 
+              title={collection.collection_summary || '暂NoneDescription'} 
               placement="top" 
               overlayStyle={{ maxWidth: '300px' }}
               mouseEnterDelay={0.5}
@@ -229,13 +229,13 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
                   width: '100%'
                 }}
               >
-                {collection.collection_summary || '暂无Description'}
+                {collection.collection_summary || '暂NoneDescription'}
               </div>
             </Tooltip>
           </div>
         </div>
         
-        {/* 操作按钮 - 固定在底部 */}
+        {/* 操作Button - 固定在底部 */}
         <div style={{ 
           display: 'flex', 
           gap: '8px',

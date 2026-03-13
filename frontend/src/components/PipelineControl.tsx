@@ -60,13 +60,13 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
       
       const response = await fetch(`http://localhost:8000/api/v1/pipeline/status/${projectId}`);
       if (!response.ok) {
-        throw new Error('获取流水线Status失败');
+        throw new Error('获取流水线StatusFailed');
       }
       
       const data = await response.json();
       setPipelineStatus(data);
       
-      // Notifications父组件Status变化
+      // Notifications父ComponentStatus变化
       if (onStatusChange) {
         onStatusChange(data.project_status);
       }
@@ -88,7 +88,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
       });
       
       if (!response.ok) {
-        throw new Error('Start Pipeline失败');
+        throw new Error('Start PipelineFailed');
       }
       
       const result = await response.json();
@@ -98,7 +98,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
       await fetchPipelineStatus();
       
     } catch (err) {
-      message.error(err instanceof Error ? err.message : '启动失败');
+      message.error(err instanceof Error ? err.message : '启动Failed');
     } finally {
       setActionLoading(false);
     }
@@ -114,7 +114,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
       });
       
       if (!response.ok) {
-        throw new Error('Stop流水线失败');
+        throw new Error('Stop流水线Failed');
       }
       
       const result = await response.json();
@@ -124,7 +124,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
       await fetchPipelineStatus();
       
     } catch (err) {
-      message.error(err instanceof Error ? err.message : 'Stop失败');
+      message.error(err instanceof Error ? err.message : 'StopFailed');
     } finally {
       setActionLoading(false);
     }
@@ -140,7 +140,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
       });
       
       if (!response.ok) {
-        throw new Error('重启流水线失败');
+        throw new Error('重启流水线Failed');
       }
       
       const result = await response.json();
@@ -150,7 +150,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
       await fetchPipelineStatus();
       
     } catch (err) {
-      message.error(err instanceof Error ? err.message : '重启失败');
+      message.error(err instanceof Error ? err.message : '重启Failed');
     } finally {
       setActionLoading(false);
     }
@@ -161,13 +161,13 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
     if (projectId) {
       fetchPipelineStatus();
       
-      // 每10秒Refresh一次
+      // 每10secondsRefresh一次
       const interval = setInterval(fetchPipelineStatus, 10000);
       return () => clearInterval(interval);
     }
   }, [projectId]);
 
-  // 获取Status配置
+  // 获取StatusConfiguration
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'processing':
@@ -185,11 +185,11 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
     }
   };
 
-  // 获取任务Status配置
+  // Get task status config
   const getTaskStatusConfig = (status: string) => {
     switch (status) {
       case 'running':
-        return { color: 'processing', text: '运行中' };
+        return { color: 'processing', text: 'Running' };
       case 'completed':
         return { color: 'success', text: 'Completed' };
       case 'failed':
@@ -220,7 +220,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
     return (
       <Card size="small" style={{ marginBottom: 16 }}>
         <Alert
-          message="获取流水线Status失败"
+          message="获取流水线StatusFailed"
           description={error}
           type="error"
           showIcon
@@ -258,7 +258,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
           </Space>
         </div>
 
-        {/* 控制按钮 */}
+        {/* 控制Button */}
         <Space style={{ marginBottom: 16 }}>
           {canStart && (
             <Button
@@ -300,20 +300,20 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
           </Button>
         </Space>
 
-        {/* 任务统计 */}
+        {/* TaskStatistics */}
         <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: 16 }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#1890ff' }}>
               {pipelineStatus.total_tasks}
             </div>
-            <div style={{ fontSize: '12px', color: '#666' }}>总任务</div>
+            <div style={{ fontSize: '12px', color: '#666' }}>总Task</div>
           </div>
           
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#52c41a' }}>
               {pipelineStatus.running_tasks}
             </div>
-            <div style={{ fontSize: '12px', color: '#666' }}>运行中</div>
+            <div style={{ fontSize: '12px', color: '#666' }}>Running</div>
           </div>
           
           <div style={{ textAlign: 'center' }}>
@@ -359,7 +359,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
         )}
 
         <div style={{ marginTop: 16, textAlign: 'center' }}>
-          <Text type="secondary">Status每10秒自动Update</Text>
+          <Text type="secondary">Status每10secondsAutoUpdate</Text>
         </div>
       </Card>
 
@@ -401,7 +401,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
                           <div>StartTime: {new Date(task.started_at).toLocaleString()}</div>
                         )}
                         {task.completed_at && (
-                          <div>完成Time: {new Date(task.completed_at).toLocaleString()}</div>
+                          <div>CompletedTime: {new Date(task.completed_at).toLocaleString()}</div>
                         )}
                       </div>
                     }

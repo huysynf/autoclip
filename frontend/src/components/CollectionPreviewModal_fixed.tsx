@@ -101,15 +101,15 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
   const handleDragEnd = async (result: DropResult) => {
     console.log('拖拽结束:', result)
     
-    // 无论如何都要清除拖拽Status
+    // None论如何都要清除拖拽Status
     setDragging(false)
     
     if (!result.destination || !collection) {
-      console.log('拖拽Cancel或无目标位置')
+      console.log('拖拽Cancel或NoneTarget位置')
       return
     }
 
-    // 检查是否真的有位置变化
+    // 检查YesNo真的有位置变化
     if (result.source.index === result.destination.index) {
       console.log('位置未变化，SkipUpdate')
       return
@@ -129,7 +129,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
     try {
       await onReorderClips(collection.id, newClipIds)
       
-      // Update当前播放索引
+      // Update当前播放Index
       const currentClipId = collectionClips[currentClipIndex]?.id
       if (currentClipId) {
         const newIndex = newClipIds.indexOf(currentClipId)
@@ -137,11 +137,11 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
       }
       
       hideLoading()
-      message.success('切片顺序Update成功')
+      message.success('切片顺序UpdateSuccess')
     } catch (error) {
       console.error('Failed to reorder clips:', error)
       hideLoading()
-      message.error('切片顺序修改失败')
+      message.error('切片顺序修改Failed')
     } finally {
       setIsUpdating(false)
     }
@@ -156,7 +156,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
     try {
       await onRemoveClip(collection.id, clipId)
       
-      // 调整当前播放索引
+      // 调整当前播放Index
       const removedIndex = collection.clip_ids.indexOf(clipId)
       if (removedIndex <= currentClipIndex && currentClipIndex > 0) {
         setCurrentClipIndex(currentClipIndex - 1)
@@ -165,11 +165,11 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
       }
       
       hideLoading()
-      message.success('切片Remove成功')
+      message.success('切片RemoveSuccess')
     } catch (error) {
       console.error('Failed to remove clip:', error)
       hideLoading()
-      message.error('Remove切片失败')
+      message.error('Remove切片Failed')
     } finally {
       setIsUpdating(false)
     }
@@ -179,10 +179,10 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
     setDownloadingClip(clipId)
     try {
       await projectApi.downloadVideo(projectId, clipId)
-      message.success('切片Download成功')
+      message.success('切片DownloadSuccess')
     } catch (error) {
       console.error('Download clip failed:', error)
-      message.error('切片Download失败')
+      message.error('切片DownloadFailed')
     } finally {
       setDownloadingClip(null)
     }
@@ -194,10 +194,10 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
     setDownloadingCollection(true)
     try {
       await projectApi.downloadVideo(projectId, undefined, collection.id)
-      message.success('CollectionDownload成功')
+      message.success('CollectionDownloadSuccess')
     } catch (error) {
       console.error('Download collection failed:', error)
-      message.error('CollectionDownload失败')
+      message.error('CollectionDownloadFailed')
     } finally {
       setDownloadingCollection(false)
     }
@@ -209,9 +209,9 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
     try {
       setGeneratingVideo(true)
       await projectApi.generateCollectionVideo(projectId, collection.id)
-      message.success('Start生成Collection视频，请稍后ViewDownload')
+      message.success('Start生成CollectionVideo，请稍后ViewDownload')
     } catch (error) {
-      message.error('生成Collection视频失败')
+      message.error('生成CollectionVideoFailed')
     } finally {
       setGeneratingVideo(false)
     }
@@ -227,7 +227,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
       await onAddClip(collection.id, selectedClipIds)
       setShowAddClipModal(false)
       hideLoading()
-      message.success(`成功Add ${selectedClipIds.length} 切片到Collection`)
+      message.success(`SuccessAdd ${selectedClipIds.length} 切片到Collection`)
     } catch (error) {
       console.error('Failed to add clips:', error)
       hideLoading()
@@ -291,7 +291,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                 loading={generatingVideo}
                 onClick={handleGenerateVideo}
               >
-                生成Collection视频
+                生成CollectionVideo
               </Button>
               {onDelete && (
                 <Popconfirm
@@ -323,7 +323,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
         {/* 主体Content */}
         <div className="preview-content">
           <Row style={{ height: '100%' }}>
-            {/* 左侧视频播放器 */}
+            {/* 左侧Video播放器 */}
             <Col span={16} className="video-section">
               <div className="video-player-wrapper">
                 <div className="video-container">
@@ -342,12 +342,12 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                   ) : (
                     <div className="empty-video">
                       <PlayCircleOutlined style={{ fontSize: '64px', color: '#d9d9d9' }} />
-                      <Text style={{ color: '#999', marginTop: 16 }}>暂无视频Content</Text>
+                      <Text style={{ color: '#999', marginTop: 16 }}>暂NoneVideoContent</Text>
                     </div>
                   )}
                 </div>
                 
-                {/* Video Info栏 - 移到视频下方 */}
+                {/* Video Info栏 - 移到Video下方 */}
                 {currentClip && (
                   <div className="video-info-bar">
                     <div className="video-info-content">
@@ -476,7 +476,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                                     />
                                   </Tooltip>
                                   <Popconfirm
-                                    title="OK要从Collection中Remove这切片?"
+                                    title="OK要从CollectionMediumRemove这切片?"
                                     onConfirm={(e) => {
                                       e?.stopPropagation()
                                       handleRemoveClip(clip.id)

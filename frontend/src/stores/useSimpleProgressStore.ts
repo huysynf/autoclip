@@ -13,21 +13,21 @@ export interface SimpleProgress {
 }
 
 interface SimpleProgressState {
-  // Status数据
+  // Status data
   byId: Record<string, SimpleProgress>
   
-  // 轮询控制
+  // Polling control
   pollingInterval: number | null
   isPolling: boolean
   
-  // 操作方法
+  // Methods
   upsert: (progress: SimpleProgress) => void
   startPolling: (projectIds: string[], intervalMs?: number) => void
   stopPolling: () => void
   clearProgress: (projectId: string) => void
   clearAllProgress: () => void
   
-  // 获取方法
+  // Getters
   getProgress: (projectId: string) => SimpleProgress | null
   getAllProgress: () => Record<string, SimpleProgress>
 }
@@ -36,12 +36,12 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
   let timer: ReturnType<typeof setInterval> | null = null
 
   return {
-    // 初始Status
+    // Initial status
     byId: {},
     pollingInterval: null,
     isPolling: false,
 
-    // Update或插入Progress数据
+    // Upsert progress data
     upsert: (progress: SimpleProgress) => {
       set((state) => ({
         byId: {
@@ -55,7 +55,7 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
     startPolling: (projectIds: string[], intervalMs: number = 2000) => {
       const { stopPolling, isPolling } = get()
       
-      // 如果已经在轮询，先Stop
+      // If already polling, stop first
       if (isPolling) {
         stopPolling()
       }
@@ -67,7 +67,7 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
 
       console.log(`Start PollingProgress: ${projectIds.join(', ')}`)
 
-      // 立即获取一次
+      // Fetch immediately
       const fetchSnapshots = async () => {
         try {
           const queryString = projectIds.map(id => `project_ids=${id}`).join('&')
@@ -92,10 +92,10 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
         }
       }
 
-      // 立即执行一次
+      // Execute immediately
       fetchSnapshots()
 
-      // Settings定时器
+      // Set timer
       timer = setInterval(fetchSnapshots, intervalMs)
 
       set({
@@ -119,7 +119,7 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
       console.log('Stop PollingProgress')
     },
 
-    // 清除单projectsProgress
+    // Clear single project progress
     clearProgress: (projectId: string) => {
       set((state) => {
         const newById = { ...state.byId }
@@ -133,12 +133,12 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
       set({ byId: {} })
     },
 
-    // 获取单projectsProgress
+    // Get single project progress
     getProgress: (projectId: string) => {
       return get().byId[projectId] || null
     },
 
-    // 获取所有Progress
+    // Get all progress
     getAllProgress: () => {
       return get().byId
     }

@@ -13,13 +13,13 @@ const SettingsPageTest: React.FC = () => {
     <Content className="settings-page">
       <div className="settings-container">
         <Title level={2} className="settings-title">
-          <SettingOutlined /> 系统配置Test
+          <SettingOutlined /> System ConfigurationTest
         </Title>
         
-        <Card title="API 配置" className="settings-card">
+        <Card title="API Configuration" className="settings-card">
           <Alert
-            message="配置说明"
-            description="请配置通义千问API密钥以启用AI自动切片功能。您可以在阿里云控制台获取API密钥。"
+            message="Configuration说明"
+            description="请Configuration通义千问API密钥以EnableAIAuto切片功能。您可以在阿里云控制台获取API密钥。"
             type="info"
             showIcon
             className="settings-alert"
@@ -69,7 +69,7 @@ const SettingsPageTest: React.FC = () => {
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
-                  label="模型Name"
+                  label="ModelName"
                   name="model_name"
                   className="form-item"
                 >
@@ -95,7 +95,7 @@ const SettingsPageTest: React.FC = () => {
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
-                  label="最低Score阈值"
+                  label="LowestScore阈值"
                   name="min_score_threshold"
                   className="form-item"
                 >
@@ -133,7 +133,7 @@ const SettingsPageTest: React.FC = () => {
                 size="large"
                 className="save-button"
               >
-                Save配置
+                SaveConfiguration
               </Button>
             </Form.Item>
           </Form>
@@ -155,9 +155,9 @@ const SettingsPageTest: React.FC = () => {
                 <InfoCircleOutlined /> 2. Configuration Parameters
               </Title>
               <Paragraph className="instruction-text">
-                • <Text strong>文本分块Size</Text>：影响处理速度和精度，建议5000chars<br />
-                • <Text strong>Score阈值</Text>：只有高于此分数的clips才会被保留<br />
-                • <Text strong>Collection切片数</Text>：控制每themed collections包含的clips数量
+                • <Text strong>文本分块Size</Text>：影响处理Speed和精度，建议5000chars<br />
+                • <Text strong>Score阈值</Text>：只有High于此分数的clips才会被保留<br />
+                • <Text strong>Collection切片数</Text>：控制每themed collections包含的clipsCount
               </Paragraph>
             </div>
             
@@ -166,7 +166,7 @@ const SettingsPageTest: React.FC = () => {
                 <InfoCircleOutlined /> 3. Test连接
               </Title>
               <Paragraph className="instruction-text">
-                Save前建议先TestAPI密钥是否有效，确保服务正常运行
+                Save前建议先TestAPI密钥YesNoValid，确保服务Normal运行
               </Paragraph>
             </div>
           </Space>

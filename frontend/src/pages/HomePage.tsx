@@ -15,7 +15,7 @@ import BilibiliDownload from '../components/BilibiliDownload'
 import { projectApi } from '../services/api'
 import { Project, useProjectStore } from '../store/useProjectStore'
 import { useProjectPolling } from '../hooks/useProjectPolling'
-// import { useWebSocket, WebSocketEventMessage } from '../hooks/useWebSocket'  // 已禁用WebSocket系统
+// import { useWebSocket, WebSocketEventMessage } from '../hooks/useWebSocket'  // DisabledWebSocket系统
 
 const { Content } = Layout
 const { Title, Text } = Typography
@@ -27,13 +27,13 @@ const HomePage: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [activeTab, setActiveTab] = useState<'upload' | 'bilibili'>('upload')
 
-  // WebSocket连接已禁用，使用新的简化Progress系统
+  // WebSocket连接Disabled，使用新的简化Progress系统
   // const handleWebSocketMessage = (message: WebSocketEventMessage) => {
-  //   console.log('HomePage收到WebSocket消息:', message)
+  //   console.log('HomePage收到WebSocket message:', message)
   //   
   //   switch (message.type) {
   //     case 'task_progress_update':
-  //       console.log('📊 收到任务ProgressUpdate:', message)
+  //       console.log('📊 收到TaskProgressUpdate:', message)
   //       // RefreshProject List以获取最新Status
   //       loadProjects()
   //       break
@@ -45,7 +45,7 @@ const HomePage: React.FC = () => {
   //       break
   //       
   //     default:
-  //       console.log('忽略未知Type的WebSocket消息:', (message as any).type)
+  //       console.log('忽略UnknownType的WebSocket message:', (message as any).type)
   //   }
   // }
 
@@ -76,23 +76,23 @@ const HomePage: React.FC = () => {
     } catch (error) {
       message.error('Failed to load projects')
       console.error('Load projects error:', error)
-      // 如果API调用失败，Settings空数组
+      // 如果API调用Failed，SettingsEmpty数组
       setProjects([])
     } finally {
       setLoading(false)
     }
   }
 
-  // 使用集合差异对齐订阅projectsWebSocket主题
-  // WebSocket订阅已禁用，使用新的简化Progress系统
+  // 使用集合差异对齐订阅projectsWebSocketTheme
+  // WebSocket订阅Disabled，使用新的简化Progress系统
   // useEffect(() => {
   //   if (isConnected && projects.length > 0) {
   //     const desiredChannels = projects.map(project => `project_${project.id}`)
   //     console.log('同步订阅projects频道:', desiredChannels)
   //     syncSubscriptions(desiredChannels)
   //   } else if (isConnected && projects.length === 0) {
-  //     // 如果没有projects，清空所有订阅
-  //     console.log('清空所有projects订阅')
+  //     // 如果没有projects，清Empty所有订阅
+  //     console.log('清Empty所有projects订阅')
   //     syncSubscriptions([])
   //   }
   // }, [isConnected, projects, syncSubscriptions])
@@ -117,7 +117,7 @@ const HomePage: React.FC = () => {
         return
       }
       
-      // 统一使用retryProcessing API，它会自动处理视频文件不存在的情况
+      // 统一使用retryProcessing API，它会Auto处理VideoFile不存在的情况
       await projectApi.retryProcessing(projectId)
       message.success('Project retry started')
       
@@ -145,10 +145,10 @@ const HomePage: React.FC = () => {
       message.error(errorMessage)
       console.error('Start processing error:', error)
       
-      // 如果是超时错误，提示用户projects可能仍在处理
+      // 如果YesTimeoutError，提示Userprojects可能仍在处理
       if ((error as { code?: string; message?: string })?.code === 'ECONNABORTED' || (error as { code?: string; message?: string })?.message?.includes('timeout')) {
         message.info('Request timed out, but the project may have started processing. Please check the project status.', 5)
-        // 延迟RefreshProject List
+        // DelayRefreshProject List
         setTimeout(async () => {
           try {
             await refreshNow()
@@ -161,13 +161,13 @@ const HomePage: React.FC = () => {
   }
 
   const handleProjectCardClick = (project: Project) => {
-    // 导入中Status的projects不能点击进入Details页
+    // ImportMediumStatus的projects不能点击进入Details页
     if (project.status === 'pending') {
       message.warning('Project is still importing, please check back later')
       return
     }
     
-    // 其他Status可以正常进入Details页
+    // 其他Status可以Normal进入Details页
     navigate(`/project/${project.id}`)
   }
 
@@ -188,7 +188,7 @@ const HomePage: React.FC = () => {
     }}>
       <Content style={{ padding: '40px 24px', position: 'relative' }}>
         <div style={{ maxWidth: '1600px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-          {/* 文件Upload区域 */}
+          {/* FileUpload区域 */}
           <div style={{ 
             marginBottom: '48px',
             marginTop: '20px',
@@ -255,7 +255,7 @@ const HomePage: React.FC = () => {
                   <BilibiliDownload onDownloadSuccess={async (projectId: string) => {
                     // Done后RefreshProject List
                     await loadProjects()
-                    // 不再显示重复的toast提示，BilibiliDownload组件已经显示了统一的提示
+                    // 不再显示重复的toast提示，BilibiliDownloadComponent已经显示了统一的提示
                   }} />
                 )}
                 {activeTab === 'upload' && (

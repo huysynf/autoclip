@@ -67,7 +67,7 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
           error_message: statusData.error_message
         })
         
-        // 如果Done，Notifications父组件
+        // 如果Done，Notifications父Component
         if (statusData.status === 'completed') {
           onComplete?.(projectId)
         }
@@ -79,7 +79,7 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
     // 立即检查一次Status
     checkStatus()
     
-    // 如果任务还在In Progress，定期检查Status
+    // 如果Task还在In Progress，定期检查Status
     const interval = setInterval(checkStatus, 2000)
     
     return () => clearInterval(interval)
@@ -147,7 +147,7 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
       title={
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <LoadingOutlined style={{ color: '#1890ff' }} />
-          <span>任务处理Progress</span>
+          <span>Task处理Progress</span>
         </div>
       }
       open={visible}
@@ -178,7 +178,7 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
           <div style={{ textAlign: 'center', padding: '40px 0' }}>
             <Spin size="large" />
             <div style={{ marginTop: '16px', color: '#666' }}>
-              正在获取任务Status...
+              正在获取TaskStatus...
             </div>
           </div>
         ) : (
@@ -206,7 +206,7 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
               />
             </div>
 
-            {/* 当前Step信息 */}
+            {/* 当前StepInfo */}
             <div style={{
               background: '#f8f9fa',
               padding: '16px',
@@ -224,7 +224,7 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
               />
             </div>
 
-            {/* 错误信息 */}
+            {/* ErrorInfo */}
             {status.status === 'error' && status.error_message && (
               <Alert
                 message="Failed"
@@ -255,11 +255,11 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
               </Steps>
             </div>
 
-            {/* 完成提示 */}
+            {/* Completed提示 */}
             {status.status === 'completed' && (
               <Alert
                 message="Done"
-                description="视频已成功处理，您可以View生成的clips和Collection。"
+                description="Video已Success处理，您可以View生成的clips和Collection。"
                 type="success"
                 showIcon
               />

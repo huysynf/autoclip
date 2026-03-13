@@ -1,6 +1,6 @@
 /**
- * 统一的Status处理工具
- * 解决前端projects中Status处理不一致的问题
+ * Unified status handling utility
+ * Resolves inconsistent status handling across frontend projects
  */
 
 import { 
@@ -12,12 +12,12 @@ import {
   PlayCircleOutlined
 } from '@ant-design/icons'
 
-// 统一的StatusType定义
+// Unified status type definitions
 export type ProjectStatus = 'pending' | 'processing' | 'completed' | 'failed'
 export type TaskStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled'
 export type UploadStatus = 'pending' | 'processing' | 'success' | 'failed'
 
-// projectsStatus配置
+// Project status config
 export interface ProjectStatusConfig {
   color: string
   icon: any
@@ -27,7 +27,7 @@ export interface ProjectStatusConfig {
   borderColor: string
 }
 
-// 任务Status配置
+// Task status config
 export interface TaskStatusConfig {
   color: string
   icon: any
@@ -35,7 +35,7 @@ export interface TaskStatusConfig {
   badgeStatus: 'default' | 'processing' | 'success' | 'error'
 }
 
-// UploadStatus配置
+// Upload status config
 export interface UploadStatusConfig {
   color: string
   icon: any
@@ -44,7 +44,7 @@ export interface UploadStatusConfig {
 }
 
 /**
- * 获取projectsStatus配置
+ * Get project status config
  */
 export const getProjectStatusConfig = (status: ProjectStatus): ProjectStatusConfig => {
   switch (status) {
@@ -88,7 +88,7 @@ export const getProjectStatusConfig = (status: ProjectStatus): ProjectStatusConf
       return {
         color: '#d9d9d9',
         icon: ClockCircleOutlined,
-        text: '未知Status',
+        text: 'Unknown status',
         badgeStatus: 'default',
         backgroundColor: 'rgba(217, 217, 217, 0.15)',
         borderColor: 'rgba(217, 217, 217, 0.3)'
@@ -97,7 +97,7 @@ export const getProjectStatusConfig = (status: ProjectStatus): ProjectStatusConf
 }
 
 /**
- * 获取任务Status配置
+ * Get task status config
  */
 export const getTaskStatusConfig = (status: TaskStatus): TaskStatusConfig => {
   switch (status) {
@@ -112,7 +112,7 @@ export const getTaskStatusConfig = (status: TaskStatus): TaskStatusConfig => {
       return {
         color: '#1890ff',
         icon: PlayCircleOutlined,
-        text: '执行中',
+        text: 'In Progress',
         badgeStatus: 'processing'
       }
     case 'completed':
@@ -140,14 +140,14 @@ export const getTaskStatusConfig = (status: TaskStatus): TaskStatusConfig => {
       return {
         color: '#d9d9d9',
         icon: ClockCircleOutlined,
-        text: '未知Status',
+        text: 'Unknown status',
         badgeStatus: 'default'
       }
   }
 }
 
 /**
- * 获取UploadStatus配置
+ * Get upload status config
  */
 export const getUploadStatusConfig = (status: UploadStatus): UploadStatusConfig => {
   switch (status) {
@@ -155,7 +155,7 @@ export const getUploadStatusConfig = (status: UploadStatus): UploadStatusConfig 
       return {
         color: '#1890ff',
         icon: ClockCircleOutlined,
-        text: '待处理',
+        text: 'Pending',
         badgeStatus: 'processing'
       }
     case 'processing':
@@ -183,14 +183,14 @@ export const getUploadStatusConfig = (status: UploadStatus): UploadStatusConfig 
       return {
         color: '#d9d9d9',
         icon: ClockCircleOutlined,
-        text: '未知Status',
+        text: 'Unknown status',
         badgeStatus: 'default'
       }
   }
 }
 
 /**
- * 获取Progress条Status
+ * Get progress bar status
  */
 export const getProgressStatus = (status: ProjectStatus | TaskStatus | UploadStatus): 'normal' | 'active' | 'success' | 'exception' => {
   switch (status) {
@@ -208,7 +208,7 @@ export const getProgressStatus = (status: ProjectStatus | TaskStatus | UploadSta
 }
 
 /**
- * 计算projectsProgress百分比
+ * Calculate project progress percentage
  */
 export const calculateProjectProgress = (
   status: ProjectStatus, 
@@ -224,8 +224,8 @@ export const calculateProjectProgress = (
 }
 
 /**
- * Status兼容性转换
- * 将旧的Status值转换为新的统一Status值
+ * Status compatibility conversion
+ * Converts legacy status values to the new unified status values
  */
 export const normalizeProjectStatus = (status: string): ProjectStatus => {
   switch (status) {

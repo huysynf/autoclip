@@ -20,7 +20,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
   const [selectedTask, setSelectedTask] = useState<TaskStatusType | null>(null)
   const [taskDetailVisible, setTaskDetailVisible] = useState(false)
 
-  // 获取当前projects的任务
+  // 获取当前projects的Task
   const projectTasks = getAllTasks().filter(task => task.project_id === projectId)
   const activeTasks = projectTasks.filter(task => 
     task.status === 'running' || task.status === 'pending'
@@ -33,18 +33,18 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
     message.success('Task List已Refresh')
   }
 
-  // View任务Details
+  // ViewTaskDetails
   const handleViewTask = (task: TaskStatusType) => {
     setSelectedTask(task)
     setTaskDetailVisible(true)
   }
 
-  // Delete任务
+  // DeleteTask
   const handleDeleteTask = (taskId: string) => {
     confirm({
       title: 'ConfirmDelete',
       icon: <ExclamationCircleOutlined />,
-      content: 'OK要Delete这任务?Delete后无法恢复。',
+      content: 'OK要Delete这Task?Delete后None法恢复。',
       okText: 'Delete',
       okType: 'danger',
       cancelText: 'Cancel',
@@ -54,7 +54,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
     })
   }
 
-  // 获取Status图标
+  // 获取StatusIcon
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
@@ -70,7 +70,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
     }
   }
 
-  // 获取Status颜色
+  // 获取StatusColor
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed':
@@ -89,7 +89,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
   // 表格列定义
   const columns = [
     {
-      title: '任务Name',
+      title: 'TaskName',
       dataIndex: 'name',
       key: 'name',
       render: (text: string, record: TaskStatusType) => (
@@ -106,8 +106,8 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
       render: (status: string) => (
         <Tag color={getStatusColor(status)}>
           {status === 'completed' ? 'Completed' :
-           status === 'running' ? '执行中' :
-           status === 'failed' ? '失败' :
+           status === 'running' ? 'In Progress' :
+           status === 'failed' ? 'Failed' :
            status === 'pending' ? 'Waiting' : status}
         </Tag>
       )
@@ -158,7 +158,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
             size="small"
             icon={<ExclamationCircleOutlined />}
             onClick={() => handleDeleteTask(record.id)}
-            title="Delete任务"
+            title="DeleteTask"
             danger
           />
         </Space>
@@ -168,7 +168,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
 
   if (projectTasks.length === 0) {
     return (
-      <Card title="任务管理" size="small">
+      <Card title="Task Management" size="small">
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <Text type="secondary">该projectsNo tasks记录</Text>
         </div>
@@ -180,7 +180,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
     <Card 
       title={
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span>任务管理</span>
+          <span>Task Management</span>
           <Button 
             type="primary" 
             size="small"
@@ -194,18 +194,18 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
       }
       size="small"
     >
-      {/* 任务统计 */}
+      {/* TaskStatistics */}
       <Row gutter={16} style={{ marginBottom: '16px' }}>
         <Col span={6}>
           <Statistic
-            title="总任务数"
+            title="总Task数"
             value={projectTasks.length}
             prefix={<ClockCircleOutlined />}
           />
         </Col>
         <Col span={6}>
           <Statistic
-            title="活跃任务"
+            title="活跃Task"
             value={activeTasks.length}
             valueStyle={{ color: '#1890ff' }}
             prefix={<ClockCircleOutlined />}
@@ -221,7 +221,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
         </Col>
         <Col span={6}>
           <Statistic
-            title="失败任务"
+            title="FailedTask"
             value={failedTasks.length}
             valueStyle={{ color: '#ff4d4f' }}
             prefix={<CloseCircleOutlined />}
@@ -229,12 +229,12 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
         </Col>
       </Row>
 
-      {/* 活跃任务 */}
+      {/* 活跃Task */}
       {activeTasks.length > 0 && (
         <Card 
           size="small" 
           style={{ marginBottom: '16px' }}
-          title={`活跃任务 (${activeTasks.length})`}
+          title={`活跃Task (${activeTasks.length})`}
         >
           <Space wrap>
             {activeTasks.map(task => (
@@ -262,9 +262,9 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
         loading={loading}
       />
 
-      {/* 任务Details弹窗 */}
+      {/* TaskDetails弹窗 */}
       <Modal
-        title="任务Details"
+        title="TaskDetails"
         open={taskDetailVisible}
         onCancel={() => setTaskDetailVisible(false)}
         footer={[
@@ -276,13 +276,13 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
       >
         {selectedTask && (
           <div>
-            <Text>任务ID: {selectedTask.id}</Text>
+            <Text>TaskID: {selectedTask.id}</Text>
             <br />
             <Text>Status: {selectedTask.status}</Text>
             <br />
             <Text>Progress: {selectedTask.progress}%</Text>
             <br />
-            <Text>消息: {selectedTask.message}</Text>
+            <Text>Message: {selectedTask.message}</Text>
           </div>
         )}
       </Modal>

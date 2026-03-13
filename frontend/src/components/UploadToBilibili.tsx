@@ -12,14 +12,14 @@ const UploadToBilibili: React.FC<UploadToBilibiliProps> = ({ partitionId }) => {
   // 获取分区Name
   const getPartitionName = (id: number) => {
     const partition = BILIBILI_PARTITIONS.find(p => p.id === id)
-    return partition ? partition.name : '未知分区'
+    return partition ? partition.name : 'Unknown分区'
   }
 
   return (
     <Card
       title={
         <Space>
-          <span>B站分区信息</span>
+          <span>Bilibili partition info</span>
           {partitionId && (
             <Tag color="blue">当前分区: {getPartitionName(partitionId)}</Tag>
           )}

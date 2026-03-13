@@ -114,7 +114,7 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
               <Text strong>CollectionDescription</Text>
             </div>
             <TextArea
-              placeholder="请输入CollectionDescription（可选）"
+              placeholder="请输入CollectionDescription（Optional）"
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               className="form-textarea"
@@ -152,7 +152,7 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                     onClick={clearAllClips}
                     className="action-btn"
                   >
-                    清空
+                    清Empty
                   </Button>
                 </div>
               </div>

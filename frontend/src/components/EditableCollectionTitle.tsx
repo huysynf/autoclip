@@ -40,7 +40,7 @@ const EditableCollectionTitle: React.FC<EditableCollectionTitleProps> = ({
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus()
-      // TextArea组件没有select方法，使用setSelectionRange代替
+      // TextAreaComponent没有select方法，使用setSelectionRange代替
       if (inputRef.current.setSelectionRange) {
         inputRef.current.setSelectionRange(0, inputRef.current.value.length)
       }
@@ -61,7 +61,7 @@ const EditableCollectionTitle: React.FC<EditableCollectionTitleProps> = ({
     const trimmedValue = editValue.trim()
 
     if (!trimmedValue) {
-      message.error('Title不能为空')
+      message.error('Title不能为Empty')
       return
     }
 
@@ -78,12 +78,12 @@ const EditableCollectionTitle: React.FC<EditableCollectionTitleProps> = ({
     setLoading(true)
     try {
       await projectApi.updateCollectionTitle(collectionId, trimmedValue)
-      message.success('TitleUpdate成功')
+      message.success('TitleUpdateSuccess')
       setIsEditing(false)
       onTitleUpdate?.(trimmedValue)
     } catch (error: any) {
-      console.error('UpdateTitle失败:', error)
-      message.error(error.userMessage || error.message || 'UpdateTitle失败')
+      console.error('UpdateTitleFailed:', error)
+      message.error(error.userMessage || error.message || 'UpdateTitleFailed')
     } finally {
       setLoading(false)
     }
@@ -97,13 +97,13 @@ const EditableCollectionTitle: React.FC<EditableCollectionTitleProps> = ({
       console.log('生成CollectionTitle结果:', result)
       if (result.success && result.generated_title) {
         setEditValue(result.generated_title)
-        message.success('Title生成成功，您可以继续Edit或点击Save')
+        message.success('Title生成Success，您可以ResumeEdit或点击Save')
       } else {
-        message.error('Title生成失败')
+        message.error('TitleGeneration failed')
       }
     } catch (error: any) {
-      console.error('生成Title失败:', error)
-      message.error(error.userMessage || error.message || '生成Title失败')
+      console.error('生成TitleFailed:', error)
+      message.error(error.userMessage || error.message || '生成TitleFailed')
     } finally {
       setGenerating(false)
     }

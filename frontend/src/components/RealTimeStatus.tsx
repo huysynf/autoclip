@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import { TaskProgress } from './TaskProgress';
 import { NotificationList } from './NotificationList';
-// import { useWebSocket, WebSocketEventMessage } from '../hooks/useWebSocket'  // 已禁用WebSocket系统;
+// import { useWebSocket, WebSocketEventMessage } from '../hooks/useWebSocket'  // DisabledWebSocket系统;
 import { useNotifications } from '../hooks/useNotifications';
 import { useProjectStore } from '../store/useProjectStore';
 import { projectApi } from '../api/projectApi';
@@ -21,7 +21,7 @@ interface RealTimeStatusProps {
 }
 
 export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
-  console.log('🎬 RealTimeStatus组件已加载');
+  console.log('🎬 RealTimeStatusComponent已加载');
   const { setProjects } = useProjectStore();
   
   const [tasks, setTasks] = useState<any[]>([]);
@@ -29,7 +29,7 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
   
   // 直接使用简单的Status管理，不使用复杂的Hook
   const loadProjectTasks = useCallback(async (projectId: string) => {
-    console.log('📤 Start加载projects任务:', projectId);
+    console.log('📤 Start加载projectsTask:', projectId);
     setLoading(true);
     try {
       const response = await fetch(`http://localhost:8000/api/v1/tasks/project/${projectId}`);
@@ -38,27 +38,27 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
       if (response.ok) {
         const data = await response.json();
         const projectTasks = data.items || []; // 使用正确的字段名
-        console.log('📋 获取到任务数量:', projectTasks.length);
+        console.log('📋 获取到TaskCount:', projectTasks.length);
         
-        // 转换为TaskProgress组件期望的格式
+        // 转换为TaskProgressComponent期望的Format
         const formattedTasks = projectTasks.map((task: any) => ({
           id: task.id,
           status: task.status,
           progress: task.progress || 0,
-          message: task.name || `任务 ${task.id}`, // 使用name字段或默认值
+          message: task.name || `Task ${task.id}`, // 使用name字段或Default值
           updatedAt: task.created_at || task.updated_at || new Date().toISOString(),
           project_id: task.project_id // AddprojectsID字段
         }));
         
         setTasks(formattedTasks);
       } else {
-        console.error('❌ API调用失败:', response.status, response.statusText);
+        console.error('❌ API调用Failed:', response.status, response.statusText);
       }
     } catch (error) {
-      console.error('❌ 加载projects任务失败:', error);
+      console.error('❌ 加载projectsTaskFailed:', error);
     } finally {
       setLoading(false);
-      console.log('✅ 任务加载完成');
+      console.log('✅ Task加载Completed');
     }
   }, []);
 
@@ -73,23 +73,23 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
     handleErrorNotification
   } = useNotifications();
 
-  // WebSocket功能已禁用，使用新的简化Progress系统
+  // WebSocket功能Disabled，使用新的简化Progress系统
   // const handleWebSocketMessage = async (message: WebSocketEventMessage) => {
-  //   console.log('收到WebSocket消息:', message);
+  //   console.log('收到WebSocket message:', message);
   //   
   //   switch (message.type) {
   //     case 'task_update':
-  //       console.log('📈 收到任务Update:', message);
-  //       // 处理任务Update，UpdateprojectsStatus
+  //       console.log('📈 收到TaskUpdate:', message);
+  //       // Processing TaskUpdate，UpdateprojectsStatus
   //       if (message.task_id && message.status) {
-  //         console.log('任务StatusUpdate:', message.task_id, message.status);
+  //         console.log('TaskStatusUpdate:', message.task_id, message.status);
   //         // RefreshProject List以获取最新Status
   //         try {
   //           const projects = await projectApi.getProjects();
   //           setProjects(projects);
   //           console.log('Project List已Refresh');
   //         } catch (error) {
-  //           console.error('RefreshProject List失败:', error);
+  //           console.error('RefreshProject ListFailed:', error);
   //         }
   //       }
   //       break;
@@ -105,7 +105,7 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
   //           setProjects(projects);
   //           console.log('Project List已Refresh');
   //         } catch (error) {
-  //           console.error('RefreshProject List失败:', error);
+  //           console.error('RefreshProject ListFailed:', error);
   //         }
   //       }
   //       break;
@@ -122,16 +122,16 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
   //       break;
   //       
   //     case 'task_progress_update':
-  //       console.log('📊 收到任务ProgressUpdate:', message);
-  //       // 处理任务ProgressUpdate
+  //       console.log('📊 收到TaskProgressUpdate:', message);
+  //       // Processing TaskProgressUpdate
   //       if (message.project_id && message.progress !== undefined) {
-  //         console.log('任务ProgressUpdate:', message.project_id, message.progress + '%', message.step_name);
+  //         console.log('TaskProgressUpdate:', message.project_id, message.progress + '%', message.step_name);
   //         // 这里可以UpdateprojectsStatus或触发其他UIUpdate
   //       }
   //       break;
   //       
   //     default:
-  //       console.log('忽略未知Type的WebSocket消息:', (message as any).type);
+  //       console.log('忽略UnknownType的WebSocket message:', (message as any).type);
   //   }
   // };
 
@@ -148,15 +148,15 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
   //   onMessage: handleWebSocketMessage
   // });
 
-  // 加载projects任务
+  // 加载projectsTask
   useEffect(() => {
     // 这里可以传入具体的projectsID，或者从props获取
     const projectId = '64d5768e-7b6b-40d0-9aed-f216768a6526'; // 示例projectsID
-    console.log('🔄 Start加载projects任务:', projectId);
+    console.log('🔄 Start加载projectsTask:', projectId);
     loadProjectTasks(projectId);
-  }, []); // RemoveloadProjectTasks依赖，避免无限循环
+  }, []); // RemoveloadProjectTasks依赖，避免None限循环
 
-  // WebSocketStatus相关函数已禁用
+  // WebSocketStatus相Off函数Disabled
   // const getConnectionStatusColor = () => {
   //   switch (connectionStatus) {
   //     case 'connected': return 'success';
@@ -170,10 +170,10 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
   // const getConnectionStatusText = () => {
   //   switch (connectionStatus) {
   //     case 'connected': return 'Connected';
-  //     case 'connecting': return '连接中';
+  //     case 'connecting': return 'Connecting';
   //     case 'disconnected': return '未连接';
-  //     case 'error': return '连接错误';
-  //     default: return '未知Status';
+  //     case 'error': return '连接Error';
+  //     default: return 'Unknown status';
   //   }
   // };
 
@@ -190,7 +190,7 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
   return (
     <div style={{ padding: 16 }}>
       <Row gutter={[16, 16]}>
-        {/* WebSocket连接Status已禁用 */}
+        {/* WebSocket连接StatusDisabled */}
         {/* <Col span={24}>
           <Card size="small">
             <Space>
@@ -204,17 +204,17 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
                 icon={<ReloadOutlined />}
                 onClick={isConnected ? disconnect : connect}
               >
-                {isConnected ? '断开' : '连接'}
+                {isConnected ? '断On' : '连接'}
               </Button>
             </Space>
           </Card>
         </Col> */}
 
-        {/* 统计信息 */}
+        {/* StatisticsInfo */}
         <Col span={6}>
           <Card size="small">
             <Statistic
-              title="任务总数"
+              title="TaskTotal"
               value={tasks.length}
               valueStyle={{ color: '#1890ff' }}
             />
@@ -224,12 +224,12 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
           <Card size="small">
             <Statistic
               title="加载Status"
-              value={loading ? '加载中' : 'Completed'}
+              value={loading ? 'Loading' : 'Completed'}
               valueStyle={{ color: loading ? '#52c41a' : '#999' }}
             />
           </Card>
         </Col>
-        {/* WebSocket连接Status已禁用 */}
+        {/* WebSocket连接StatusDisabled */}
         {/* <Col span={6}>
           <Card size="small">
             <Statistic
@@ -249,14 +249,14 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
           </Card>
         </Col>
 
-        {/* 任务Progress */}
+        {/* TaskProgress */}
         <Col span={12}>
           <Card 
-            title="任务Progress" 
+            title="TaskProgress" 
             size="small"
             extra={
               <Button size="small" onClick={() => setTasks([])}>
-                清空
+                清Empty
               </Button>
             }
           >
@@ -270,7 +270,7 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
                   <TaskProgress 
                     key={task.id} 
                     task={task} 
-                    projectId={task.project_id || userId} // 使用任务的projectsID，如果没有则使用userId作为fallback
+                    projectId={task.project_id || userId} // 使用Task的projectsID，如果没有则使用userId作为fallback
                   />
                 ))
               )}

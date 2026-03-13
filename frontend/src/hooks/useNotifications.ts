@@ -26,7 +26,7 @@ export const useNotifications = () => {
       return;
     }
     
-    // 节流控制：相同Type的Notifications至少间隔3秒
+    // 节流控制：相同Type的Notifications至少Interval3seconds
     if (!forceAdd && now - lastNotificationTime.current < 3000) {
       return;
     }
@@ -91,7 +91,7 @@ export const useNotifications = () => {
   const handleErrorNotification = useCallback((message: ErrorNotificationMessage) => {
     addNotification({
       type: 'error',
-      title: `错误: ${message.error_type}`,
+      title: `Error: ${message.error_type}`,
       message: message.error_message,
       level: 'error',
       timestamp: message.timestamp

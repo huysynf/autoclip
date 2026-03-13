@@ -37,7 +37,7 @@ class SubtitleEditorApi {
   private baseUrl = '/api/v1/subtitle-editor'
 
   /**
-   * 获取clips的字粒度字幕数据
+   * 获取clips的字粒度Subtitle数据
    */
   async getClipSubtitles(projectId: string, clipId: string): Promise<SubtitleDataResponse> {
     const response = await fetch(`${this.baseUrl}/${projectId}/clips/${clipId}/subtitles`)
@@ -50,7 +50,7 @@ class SubtitleEditorApi {
   }
 
   /**
-   * 基于字幕DeleteEditVideo Clips
+   * 基于SubtitleDeleteEditVideo Clips
    */
   async editClipBySubtitles(
     projectId: string, 
@@ -80,7 +80,7 @@ class SubtitleEditorApi {
   }
 
   /**
-   * 获取Edit后的视频文件URL
+   * 获取Edit后的VideoFileURL
    */
   getEditedVideoUrl(projectId: string, clipId: string): string {
     return `${this.baseUrl}/${projectId}/clips/${clipId}/edited-video`
@@ -117,14 +117,14 @@ class SubtitleEditorApi {
   }
 
   /**
-   * 获取Previewclips文件URL
+   * 获取PreviewclipsFileURL
    */
   getPreviewSegmentUrl(projectId: string, clipId: string, segmentId: string): string {
     return `${this.baseUrl}/${projectId}/clips/${clipId}/preview/${segmentId}`
   }
 
   /**
-   * DownloadEdit后的视频
+   * DownloadEdit后的Video
    */
   async downloadEditedVideo(projectId: string, clipId: string, filename?: string): Promise<void> {
     const url = this.getEditedVideoUrl(projectId, clipId)
@@ -162,10 +162,10 @@ class SubtitleEditorApi {
     deletedSegments: string[]
   ): Promise<{ valid: boolean; error?: string }> {
     try {
-      // 先获取字幕数据来验证
+      // 先获取Subtitle数据来验证
       const subtitleData = await this.getClipSubtitles(projectId, clipId)
       
-      // 检查Delete的字幕段是否存在
+      // 检查Delete的Subtitle段YesNo存在
       const existingIds = new Set(subtitleData.segments.map(seg => seg.id))
       const invalidIds = deletedSegments.filter(id => !existingIds.has(id))
       
@@ -176,7 +176,7 @@ class SubtitleEditorApi {
         }
       }
 
-      // 检查Delete后是否还有剩余Content
+      // 检查Delete后YesNo还有剩余Content
       const remainingSegments = subtitleData.segments.filter(
         seg => !deletedSegments.includes(seg.id)
       )

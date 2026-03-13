@@ -33,14 +33,14 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
   const [lastTs, setLastTs] = useState(0);
   const finalStateChecked = useRef(false);
 
-  // 处理WebSocket消息
+  // 处理WebSocket message
   const handleWebSocketMessage = useCallback((message: any) => {
     if (message.type === 'task_progress_update' && message.task_id === taskId) {
       const progressMessage = message as TaskProgressUpdateMessage;
       
-      // 消息去重和Sort检查
+      // Message去重和Sort检查
       if (progressMessage.seq <= lastSeq && progressMessage.ts <= lastTs) {
-        console.log(`忽略过期消息: seq=${progressMessage.seq}, ts=${progressMessage.ts}`);
+        console.log(`忽略过期Message: seq=${progressMessage.seq}, ts=${progressMessage.ts}`);
         return;
       }
       
@@ -69,11 +69,11 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
       // 检查终态
       if (progressMessage.status === 'DONE') {
         onTaskComplete?.(newState);
-        // 延迟进行终态校准
+        // Delay进行终态校准
         setTimeout(() => performFinalStateCheck(), 1000);
       } else if (progressMessage.status === 'FAIL') {
         onTaskFailed?.(newState);
-        // 延迟进行终态校准
+        // Delay进行终态校准
         setTimeout(() => performFinalStateCheck(), 1000);
       }
     }
@@ -107,7 +107,7 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
           step: response.data.current_step || 0,
           total: 6,
           phase: 'unknown',
-          message: response.data.current_step || '未知Status',
+          message: response.data.current_step || 'Unknown status',
           status: response.data.status || 'unknown',
           seq: lastSeq + 1,
           ts: Date.now() / 1000,
@@ -115,36 +115,36 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
         };
         
         setTaskState(apiState);
-        console.log('终态校准完成:', apiState);
+        console.log('终态校准Completed:', apiState);
       }
     } catch (error) {
-      console.error('终态校准失败:', error);
+      console.error('终态校准Failed:', error);
     }
   }, [taskId, lastSeq]);
 
-  // 订阅任务Progress
+  // 订阅TaskProgress
   const subscribe = useCallback(() => {
     if (isConnected && !isSubscribed) {
       const success = subscribeToTask(taskId);
       if (success) {
         setIsSubscribed(true);
-        console.log(`已订阅任务Progress: ${taskId}`);
+        console.log(`已订阅TaskProgress: ${taskId}`);
       }
     }
   }, [isConnected, isSubscribed, subscribeToTask, taskId]);
 
-  // Cancel订阅任务Progress
+  // Cancel订阅TaskProgress
   const unsubscribe = useCallback(() => {
     if (isConnected && isSubscribed) {
       const success = unsubscribeFromTask(taskId);
       if (success) {
         setIsSubscribed(false);
-        console.log(`已Cancel订阅任务Progress: ${taskId}`);
+        console.log(`已Cancel订阅TaskProgress: ${taskId}`);
       }
     }
   }, [isConnected, isSubscribed, unsubscribeFromTask, taskId]);
 
-  // 自动订阅/Cancel订阅
+  // Auto订阅/Cancel订阅
   useEffect(() => {
     if (isConnected) {
       subscribe();
@@ -159,7 +159,7 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
     };
   }, [isConnected, subscribe, unsubscribe, isSubscribed]);
 
-  // 组件卸载时清理
+  // Component卸载时清理
   useEffect(() => {
     return () => {
       if (isSubscribed) {

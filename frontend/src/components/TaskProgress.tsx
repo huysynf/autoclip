@@ -35,7 +35,7 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // 获取任务Progress
+  // 获取TaskProgress
   const fetchTaskProgress = async () => {
     if (!projectId) return;
     
@@ -45,19 +45,19 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
       
       const response = await fetch(`http://localhost:8000/api/v1/progress/project/${projectId}`);
       if (!response.ok) {
-        throw new Error('获取Progress失败');
+        throw new Error('获取ProgressFailed');
       }
       
       const data = await response.json();
       if (data.tasks && data.tasks.length > 0) {
-        // 找到Current Task或第一运行中的任务
+        // 找到Current Task或第一Running的Task
         const currentTask = taskId 
           ? data.tasks.find((t: TaskProgressData) => t.id === taskId)
           : data.tasks.find((t: TaskProgressData) => t.status === 'running') || data.tasks[0];
         
         setProgressData(currentTask);
         
-        // Notifications父组件ProgressUpdate
+        // Notifications父ComponentProgressUpdate
         if (onProgressUpdate) {
           const progress = currentTask.realtime_progress || currentTask.progress;
           const step = currentTask.realtime_step || currentTask.current_step;
@@ -74,16 +74,16 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
   // 定期UpdateProgress
   useEffect(() => {
     if (status === 'processing') {
-      // 立即获取一次
+      // Fetch immediately
       fetchTaskProgress();
       
-      // 每5秒Update一次
+      // 每5secondsUpdate一次
       const interval = setInterval(fetchTaskProgress, 5000);
       return () => clearInterval(interval);
     }
   }, [projectId, taskId, status]);
 
-  // 获取Status图标和颜色
+  // 获取StatusIcon和Color
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'running':
@@ -99,7 +99,7 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
     }
   };
 
-  // 获取Progress条Status
+  // Get progress bar status
   const getProgressStatus = (status: string) => {
     switch (status) {
       case 'running':
@@ -119,7 +119,7 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <Spin size="large" />
           <div style={{ marginTop: 16 }}>
-            <Text>正在获取任务Progress...</Text>
+            <Text>正在获取TaskProgress...</Text>
           </div>
         </div>
       </Card>
@@ -154,7 +154,7 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
         <Space>
           {statusConfig.icon}
           <Title level={5} style={{ margin: 0 }}>
-            {progressData.name || '视频处理任务'}
+            {progressData.name || 'Video ProcessingTask'}
           </Title>
           <Tag color={statusConfig.color}>
             {statusConfig.text}
@@ -175,12 +175,12 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
 
       <div style={{ marginBottom: 8 }}>
         <Text strong>Current Step: </Text>
-        <Text>{currentStep || '未知'}</Text>
+        <Text>{currentStep || 'Unknown'}</Text>
       </div>
 
       {progressData.step_details && (
         <div style={{ marginBottom: 8 }}>
-          <Text strong>详细信息: </Text>
+          <Text strong>详细Info: </Text>
           <Text type="secondary">{progressData.step_details}</Text>
         </div>
       )}
@@ -199,7 +199,7 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
           )}
           {progressData.completed_at && (
             <Text type="secondary">
-              完成: {new Date(progressData.completed_at).toLocaleString()}
+              Completed: {new Date(progressData.completed_at).toLocaleString()}
             </Text>
           )}
         </Space>
@@ -207,7 +207,7 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
 
       {status === 'processing' && (
         <div style={{ marginTop: 16, textAlign: 'center' }}>
-          <Text type="secondary">Progress每5秒自动Update</Text>
+          <Text type="secondary">Progress每5secondsAutoUpdate</Text>
         </div>
       )}
     </Card>

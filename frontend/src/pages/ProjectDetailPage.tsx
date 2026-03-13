@@ -25,7 +25,7 @@ import CollectionPreviewModal from '../components/CollectionPreviewModal'
 import CreateCollectionModal from '../components/CreateCollectionModal'
 import { useCollectionVideoDownload } from '../hooks/useCollectionVideoDownload'
 import { ProjectTaskManager } from '../components/ProjectTaskManager'
-// import { useWebSocket, WebSocketEventMessage } from '../hooks/useWebSocket'  // 已禁用WebSocket系统
+// import { useWebSocket, WebSocketEventMessage } from '../hooks/useWebSocket'  // DisabledWebSocket系统
 
 const { Content } = Layout
 const { Title, Text } = Typography
@@ -53,14 +53,14 @@ const ProjectDetailPage: React.FC = () => {
   const [selectedCollection, setSelectedCollection] = useState<any>(null)
   const { generateAndDownloadCollectionVideo } = useCollectionVideoDownload()
 
-  // WebSocket连接已禁用，使用新的简化Progress系统
+  // WebSocket连接Disabled，使用新的简化Progress系统
   // const handleWebSocketMessage = (message: WebSocketEventMessage) => {
-  //   console.log('ProjectDetailPage收到WebSocket消息:', message)
+  //   console.log('ProjectDetailPage收到WebSocket message:', message)
   //   
   //   switch (message.type) {
   //     case 'task_progress_update':
-  //       console.log('📊 收到任务ProgressUpdate:', message)
-  //       // 如果消息是针对当前projects的，RefreshprojectsStatus
+  //       console.log('📊 收到TaskProgressUpdate:', message)
+  //       // 如果MessageYes针对当前projects的，RefreshprojectsStatus
   //       if (message.project_id === id) {
   //         loadProject()
   //         loadProcessingStatus()
@@ -69,7 +69,7 @@ const ProjectDetailPage: React.FC = () => {
   //       
   //     case 'project_update':
   //       console.log('📊 收到projectsUpdate:', message)
-  //       // 如果消息是针对当前projects的，RefreshprojectsStatus
+  //       // 如果MessageYes针对当前projects的，RefreshprojectsStatus
   //       if (message.project_id === id) {
   //         loadProject()
   //         loadProcessingStatus()
@@ -77,7 +77,7 @@ const ProjectDetailPage: React.FC = () => {
   //       break
   //       
   //     default:
-  //       console.log('忽略未知Type的WebSocket消息:', (message as any).type)
+  //       console.log('忽略UnknownType的WebSocket message:', (message as any).type)
   //   }
   // }
 
@@ -86,22 +86,22 @@ const ProjectDetailPage: React.FC = () => {
   //   onMessage: handleWebSocketMessage
   // })
 
-  // WebSocket订阅已禁用，使用新的简化Progress系统
+  // WebSocket订阅Disabled，使用新的简化Progress系统
   // useEffect(() => {
   //   if (isConnected && id) {
   //     const desiredChannels = [`project_${id}`]
   //     console.log('ProjectDetailPage同步订阅频道:', desiredChannels)
   //     syncSubscriptions(desiredChannels)
   //   } else if (isConnected && !id) {
-  //     // 如果没有projectsID，清空订阅
-  //     console.log('ProjectDetailPage清空订阅')
+  //     // 如果没有projectsID，清Empty订阅
+  //     console.log('ProjectDetailPage清Empty订阅')
   //     syncSubscriptions([])
   //   }
   // }, [isConnected, id, syncSubscriptions])
 
   useEffect(() => {
     if (id) {
-      // 只有当store中没有currentProject或者currentProject的id与当前id不匹配时才重新加载
+      // 只有当storeMedium没有currentProject或者currentProject的id与当前id不匹配时才重新加载
       if (!currentProject || currentProject.id !== id) {
         loadProject()
       }
@@ -134,7 +134,7 @@ const ProjectDetailPage: React.FC = () => {
           console.log('🎯 Final project with data:', projectWithData)
           setCurrentProject(projectWithData)
           
-          // 同时Updateprojects数组，确保Store中的数据同步
+          // 同时Updateprojects数组，确保StoreMedium的数据同步
           const { projects } = useProjectStore.getState()
           const updatedProjects = projects.map(p => 
             p.id === id ? projectWithData : p
@@ -142,7 +142,7 @@ const ProjectDetailPage: React.FC = () => {
           useProjectStore.setState({ projects: updatedProjects })
         } catch (error) {
           console.error('Failed to load clips/collections:', error)
-          // 即使clips/collectionsLoad Failed，也Settingsprojects基本信息
+          // 即使clips/collectionsLoad Failed，也Settingsprojects基本Info
           setCurrentProject(project)
         }
       } else {
@@ -190,10 +190,10 @@ const ProjectDetailPage: React.FC = () => {
         created_at: new Date().toISOString()
       })
       setShowCreateCollection(false)
-      message.success('CollectionCreate成功')
+      message.success('CollectionCreateSuccess')
     } catch (error) {
       console.error('Failed to create collection:', error)
-      message.error('CreateCollection失败')
+      message.error('CreateCollectionFailed')
     }
   }
 
@@ -206,10 +206,10 @@ const ProjectDetailPage: React.FC = () => {
     if (!id) return
     try {
       await removeClipFromCollection(id, collectionId, clipId)
-      message.success('切片已从Collection中Remove')
+      message.success('切片已从CollectionMediumRemove')
     } catch (error) {
       console.error('Failed to remove clip from collection:', error)
-      message.error('Remove切片失败')
+      message.error('Remove切片Failed')
     }
   }
 
@@ -222,7 +222,7 @@ const ProjectDetailPage: React.FC = () => {
       message.success('Collection已Delete')
     } catch (error) {
       console.error('Failed to delete collection:', error)
-      message.error('DeleteCollection失败')
+      message.error('DeleteCollectionFailed')
     }
   }
 
@@ -233,7 +233,7 @@ const ProjectDetailPage: React.FC = () => {
       message.success('Collection顺序已Update')
     } catch (error) {
       console.error('Failed to reorder collection clips:', error)
-      message.error('UpdateCollection顺序失败')
+      message.error('UpdateCollection顺序Failed')
     }
   }
 
@@ -255,7 +255,7 @@ const ProjectDetailPage: React.FC = () => {
     if (sortBy === 'score') {
       return clips.sort((a, b) => b.final_score - a.final_score)
     } else {
-      // 按TimeSort - 将Timechars串转换为秒数进行比较
+      // 按TimeSort - 将Timechars串转换为seconds数进行比较
       return clips.sort((a, b) => {
         const getTimeInSeconds = (timeStr: string) => {
           const parts = timeStr.split(':')
@@ -418,7 +418,7 @@ const ProjectDetailPage: React.FC = () => {
               </div>
               
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                {/* Sort控件 - 暗黑主题优化 */}
+                {/* Sort控件 - 暗黑Theme优化 */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <Text style={{ fontSize: '13px', color: '#b0b0b0', fontWeight: 500 }}>Sort</Text>
                   <Radio.Group
@@ -547,7 +547,7 @@ const ProjectDetailPage: React.FC = () => {
         </div>
       ) : (
         <div>
-          {/* 任务管理组件 */}
+          {/* Task ManagementComponent */}
           <ProjectTaskManager 
             projectId={currentProject.id} 
             projectName={currentProject.name}

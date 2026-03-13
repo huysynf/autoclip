@@ -1,5 +1,5 @@
 /**
- * 简化的projects卡片组件 - 集成新的Progress系统
+ * 简化的projects卡片Component - 集成新的Progress系统
  */
 
 import React, { useState, useEffect } from 'react'
@@ -58,7 +58,7 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
   
   const progress = getProgress(project.id)
 
-  // 根据projectsStatus决定是否显示Progress
+  // 根据projectsStatus决定YesNo显示Progress
   useEffect(() => {
     if (project.status === 'processing') {
       setShowProgress(true)
@@ -105,7 +105,7 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
     }
   }
 
-  // 获取Status图标和颜色
+  // 获取StatusIcon和Color
   const getStatusConfig = (status: string, progress?: SimpleProgress) => {
     if (progress && isFailed(progress.message)) {
       return {
@@ -209,7 +209,7 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
           </Text>
         )}
 
-        {/* 分类Tags */}
+        {/* CategoryTags */}
         {project.category && (
           <Tag color="blue" style={{ fontSize: '11px' }}>
             {project.category}
@@ -220,7 +220,7 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
         {showProgress && (
           <SimpleProgressBar
             projectId={project.id}
-            autoStart={false} // 已经在useEffect中处理
+            autoStart={false} // 已经在useEffectMedium处理
             showDetails={true}
             onProgressUpdate={(progress) => {
               // 如果Done，Update显示Status
@@ -234,7 +234,7 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
           />
         )}
 
-        {/* Time信息 */}
+        {/* TimeInfo */}
         <Space style={{ fontSize: '11px', color: '#999' }}>
           <Text type="secondary">
             Created: {new Date(project.created_at).toLocaleDateString()}

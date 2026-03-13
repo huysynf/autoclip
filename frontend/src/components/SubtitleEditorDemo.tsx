@@ -9,7 +9,7 @@ const { Title, Text } = Typography
 const SubtitleEditorDemo: React.FC = () => {
   const [isEditorOpen, setIsEditorOpen] = useState(false)
 
-  // 模拟字幕数据
+  // 模拟Subtitle数据
   const mockSubtitles: SubtitleSegment[] = [
     {
       id: '1',
@@ -29,7 +29,7 @@ const SubtitleEditorDemo: React.FC = () => {
       endTime: 13,
       words: [
         { id: '2-1', text: '字影', startTime: 11, endTime: 12 },
-        { id: '2-2', text: '是', startTime: 12, endTime: 12.5 },
+        { id: '2-2', text: 'Yes', startTime: 12, endTime: 12.5 },
         { id: '2-3', text: '一款', startTime: 12.5, endTime: 13 }
       ]
     },
@@ -47,7 +47,7 @@ const SubtitleEditorDemo: React.FC = () => {
       startTime: 14,
       endTime: 17,
       words: [
-        { id: '4-1', text: '视频', startTime: 14, endTime: 15 },
+        { id: '4-1', text: 'Video', startTime: 14, endTime: 15 },
         { id: '4-2', text: 'Edit', startTime: 15, endTime: 16 },
         { id: '4-3', text: '产品', startTime: 16, endTime: 17 },
         { id: '4-4', text: '。', startTime: 17, endTime: 17 }
@@ -70,12 +70,12 @@ const SubtitleEditorDemo: React.FC = () => {
       words: [
         { id: '6-1', text: '的', startTime: 18, endTime: 18.2 },
         { id: '6-2', text: '创新', startTime: 18.2, endTime: 19 },
-        { id: '6-3', text: '是', startTime: 19, endTime: 19.5 },
+        { id: '6-3', text: 'Yes', startTime: 19, endTime: 19.5 },
         { id: '6-4', text: '通过', startTime: 19.5, endTime: 20 },
         { id: '6-5', text: '文字', startTime: 20, endTime: 21 },
         { id: '6-6', text: '来', startTime: 21, endTime: 21.5 },
         { id: '6-7', text: 'Edit', startTime: 21.5, endTime: 22.5 },
-        { id: '6-8', text: '视频', startTime: 22.5, endTime: 23 },
+        { id: '6-8', text: 'Video', startTime: 22.5, endTime: 23 },
         { id: '6-9', text: '，', startTime: 23, endTime: 23 }
       ]
     }
@@ -90,10 +90,10 @@ const SubtitleEditorDemo: React.FC = () => {
     <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
       <Card style={{ marginBottom: '24px' }}>
         <Title level={2} style={{ color: '#ffffff', marginBottom: '16px' }}>
-          字幕Edit器演示
+          SubtitleEdit器演示
         </Title>
         <Text style={{ color: '#cccccc', fontSize: '16px', display: 'block', marginBottom: '24px' }}>
-          这是一重新设计的字幕Edit器，参考了现代视频Edit软件的布局和交互设计。
+          这Yes一重新设计的SubtitleEdit器，参考了现代VideoEdit软件的Layout和交互设计。
         </Text>
         
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
@@ -102,12 +102,12 @@ const SubtitleEditorDemo: React.FC = () => {
               主要功能特性：
             </Text>
             <ul style={{ color: '#cccccc', fontSize: '14px', lineHeight: '1.6' }}>
-              <li>三栏布局：左侧Subtitle List、中间样式选择、右侧视频播放器</li>
-              <li>右键菜单：支持Deleteclips、关联素材、重置、隐藏字幕、高亮等操作</li>
-              <li>实时Preview：点击字幕段可跳转到对应Time点</li>
-              <li>样式模板：提供多种字幕样式选择</li>
+              <li>三栏Layout：左侧Subtitle List、Medium间样式选择、右侧Video播放器</li>
+              <li>右键菜单：支持Deleteclips、Off联素材、Reset、隐藏Subtitle、High亮等操作</li>
+              <li>Real-timePreview：点击Subtitle段可跳转到对应Time点</li>
+              <li>样式模板：提供多种Subtitle样式选择</li>
               <li>Edit历史：支持撤销/重做操作</li>
-              <li>现代化UI：深色主题，流畅的动画效果</li>
+              <li>现代化UI：深色Theme，流畅的动画效果</li>
             </ul>
           </div>
 
@@ -116,9 +116,9 @@ const SubtitleEditorDemo: React.FC = () => {
               操作说明：
             </Text>
             <ul style={{ color: '#cccccc', fontSize: '14px', lineHeight: '1.6' }}>
-              <li>点击字幕段可跳转到视频对应Time点</li>
-              <li>点击单词可选择/Cancel选择（Ctrl/Cmd+点击可多选）</li>
-              <li>右键点击字幕段可打开上下文菜单</li>
+              <li>点击Subtitle段可跳转到Video对应Time点</li>
+              <li>点击单词Optional择/Cancel选择（Ctrl/Cmd+点击可多选）</li>
+              <li>右键点击Subtitle段可打On上下文菜单</li>
               <li>使用Edit工具进行Delete、撤销、重做等操作</li>
               <li>选择样式模板可Preview不同效果</li>
             </ul>
@@ -137,7 +137,7 @@ const SubtitleEditorDemo: React.FC = () => {
               fontWeight: '600'
             }}
           >
-            打开字幕Edit器
+            打OnSubtitleEdit器
           </Button>
         </Space>
       </Card>

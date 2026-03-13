@@ -3,9 +3,9 @@ import { projectApi } from '../services/api'
 import { Project, useProjectStore } from '../store/useProjectStore'
 
 interface UseProjectPollingOptions {
-  interval?: number // 轮询间隔，默认10秒
+  interval?: number // 轮询Interval，Default10seconds
   onProjectsUpdate?: (projects: Project[]) => void
-  enabled?: boolean // 是否启用轮询
+  enabled?: boolean // YesNoEnable轮询
 }
 
 export const useProjectPolling = ({
@@ -25,7 +25,7 @@ export const useProjectPolling = ({
     
     const poll = async () => {
       try {
-        // 实时获取isDraggingStatus
+        // Real-time获取isDraggingStatus
         const currentIsDragging = useProjectStore.getState().isDragging
         
         // 如果正在拖拽，Skip这次轮询
@@ -47,19 +47,19 @@ export const useProjectPolling = ({
         
         setLastUpdateTime(Date.now())
         
-        // 如果没有Processing的projects，可以适当减少轮询频率
+        // 如果没有Processing的projects，可以适当减少轮询Frequency
         if (!hasProcessingProjects) {
-          // 可以在这里实现动态调整轮询频率的逻辑
+          // 可以在这里实现动态调整轮询Frequency的逻辑
         }
       } catch (error) {
         console.error('Polling error:', error)
       }
     }
 
-    // 立即执行一次
+    // Execute immediately
     poll()
     
-    // Settings定时器
+    // Set timer
     intervalRef.current = setInterval(poll, interval)
   }
 

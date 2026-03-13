@@ -38,7 +38,7 @@ const ProcessingPage: React.FC = () => {
     if (!id) return
     
     loadProject()
-    const interval = setInterval(checkStatus, 2000) // 每2秒检查一次Status
+    const interval = setInterval(checkStatus, 2000) // 每2seconds检查一次Status
     
     return () => clearInterval(interval)
   }, [id])
@@ -56,7 +56,7 @@ const ProcessingPage: React.FC = () => {
         return
       }
       
-      // 如果projectsStatus是Pending，Start Processing
+      // 如果projectsStatusYesPending，Start Processing
       if (project.status === 'pending') {
         await startProcessing()
       }
@@ -95,7 +95,7 @@ const ProcessingPage: React.FC = () => {
         }, 2000)
       }
       
-      // 如果Failed，显示详细错误信息
+      // 如果Failed，显示详细ErrorInfo
       if (statusData.status === 'error') {
         const errorMsg = statusData.error_message || 'An unknown error occurred during processing'
         message.error(`Failed: ${errorMsg}`)
@@ -107,7 +107,7 @@ const ProcessingPage: React.FC = () => {
     } catch (error: any) {
       console.error('Check status error:', error)
       
-      // 根据错误Type提供不同的处理建议
+      // 根据ErrorType提供不同的处理建议
       if (error.response?.status === 404) {
         message.error('Project not found or has been deleted')
         setTimeout(() => navigate('/'), 2000)

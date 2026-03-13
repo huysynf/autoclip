@@ -1,5 +1,5 @@
 /**
- * 简化Progress系统演示页面
+ * 简化Progress系统演示Page
  */
 
 import React, { useState, useEffect } from 'react'
@@ -122,7 +122,7 @@ export const SimpleProgressDemo: React.FC = () => {
     message.success(`Added project: ${newProjectId}`)
   }
 
-  // Start Polling选中的projects
+  // Start Polling选Medium的projects
   const handleStartPolling = () => {
     if (selectedProjectIds.length === 0) {
       message.warning('Please select projects to poll')

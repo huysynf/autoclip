@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
-// 配置dayjs插件
+// Configure dayjs plugins
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -66,12 +66,12 @@ const formatTime = (timestamp: string) => {
   const notificationTime = dayjs(timestamp).tz('Asia/Shanghai');
   const diff = now.diff(notificationTime, 'millisecond');
   
-  if (diff < 60000) { // 1分钟内
+  if (diff < 60000) { // 1minutes内
     return '刚刚';
-  } else if (diff < 3600000) { // 1小时内
-    return `${Math.floor(diff / 60000)}分钟前`;
-  } else if (diff < 86400000) { // 24小时内
-    return `${Math.floor(diff / 3600000)}小时前`;
+  } else if (diff < 3600000) { // 1hours内
+    return `${Math.floor(diff / 60000)}minutes前`;
+  } else if (diff < 86400000) { // 24hours内
+    return `${Math.floor(diff / 3600000)}hours前`;
   } else {
     return notificationTime.format('MM-DD HH:mm');
   }
@@ -164,7 +164,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({
             </Button>
           )}
           <Button size="small" danger onClick={onClearAll}>
-            清空
+            清Empty
           </Button>
         </Space>
       }
@@ -175,7 +175,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({
       <div style={{ maxHeight, overflowY: 'auto' }}>
         {notifications.length === 0 ? (
           <div style={{ textAlign: 'center', padding: 20, color: '#999' }}>
-            暂无Notifications
+            暂NoneNotifications
           </div>
         ) : (
           <List

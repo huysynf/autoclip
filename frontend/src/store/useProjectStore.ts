@@ -127,7 +127,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   })),
   
   deleteProject: (id) => {
-    // 清理缩略图缓存
+    // 清理缩略图Cache
     const thumbnailCacheKey = `thumbnail_${id}`
     localStorage.removeItem(thumbnailCacheKey)
     
@@ -219,7 +219,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     const originalClipIds = [...collection.clip_ids]
     const updatedClipIds = collection.clip_ids.filter(id => id !== clipId)
     
-    // 检查是否真的有变化
+    // 检查YesNo真的有变化
     if (originalClipIds.length === updatedClipIds.length) {
       console.log('Clip not found in collection, skipping update')
       return
@@ -292,11 +292,11 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     console.log('Current state projects:', state.projects.map(p => ({ id: p.id, collectionsCount: p.collections?.length || 0 })))
     console.log('Current state currentProject:', state.currentProject ? { id: state.currentProject.id, collectionsCount: state.currentProject.collections?.length || 0 } : null)
     
-    // 优先从currentProject中查找，如果找不到再从projects数组中查找
+    // 优先从currentProjectMedium查找，如果找不到再从projects数组Medium查找
     let originalProject = state.currentProject?.id === projectId ? state.currentProject : null
     let originalCollection = originalProject?.collections?.find(c => c.id === collectionId)
     
-    // 如果currentProject中没有找到，尝试从projects数组中查找
+    // 如果currentProjectMedium没有找到，尝试从projects数组Medium查找
     if (!originalCollection) {
       const projectFromArray = state.projects.find(p => p.id === projectId)
       if (projectFromArray) {
@@ -321,7 +321,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     
     const originalClipIds = [...originalCollection.clip_ids]
     
-    // 检查是否真的有变化
+    // 检查YesNo真的有变化
     if (JSON.stringify(originalClipIds) === JSON.stringify(newClipIds)) {
       console.log('No changes detected, skipping update')
       return
@@ -381,11 +381,11 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     // 获取原始Status
     const state = get()
     
-    // 优先从currentProject中查找，如果找不到再从projects数组中查找
+    // 优先从currentProjectMedium查找，如果找不到再从projects数组Medium查找
     let originalProject = state.currentProject?.id === projectId ? state.currentProject : null
     let originalCollection = originalProject?.collections?.find(c => c.id === collectionId)
     
-    // 如果currentProject中没有找到，尝试从projects数组中查找
+    // 如果currentProjectMedium没有找到，尝试从projects数组Medium查找
     if (!originalCollection) {
       const projectFromArray = state.projects.find(p => p.id === projectId)
       if (projectFromArray) {
@@ -401,7 +401,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     const originalClipIds = [...originalCollection.clip_ids]
     const updatedClipIds = [...originalClipIds, ...clipIds.filter(id => !originalClipIds.includes(id))]
     
-    // 检查是否真的有变化
+    // 检查YesNo真的有变化
     if (originalClipIds.length === updatedClipIds.length) {
       console.log('No new clips to add, skipping update')
       return

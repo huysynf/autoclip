@@ -47,7 +47,7 @@ const SettingsPage: React.FC = () => {
       name: 'SiliconFlow',
       icon: <RobotOutlined />,
       color: '#722ed1',
-      description: 'SiliconFlow模型服务',
+      description: 'SiliconFlowModel服务',
       apiKeyField: 'siliconflow_api_key',
       placeholder: '请输入SiliconFlowAPI密钥'
     }
@@ -77,15 +77,15 @@ const SettingsPage: React.FC = () => {
     }
   }
 
-  // Save配置
+  // SaveConfiguration
   const handleSave = async (values: any) => {
     try {
       setLoading(true)
       await settingsApi.updateSettings(values)
-      message.success('配置Save成功！')
+      message.success('ConfigurationSaveSuccess！')
       await loadData() // 重新Load Data
     } catch (error: any) {
-      message.error('Save失败: ' + (error.message || 'Unknown error'))
+      message.error('SaveFailed: ' + (error.message || 'Unknown error'))
     } finally {
       setLoading(false)
     }
@@ -110,12 +110,12 @@ const SettingsPage: React.FC = () => {
       setLoading(true)
       const result = await settingsApi.testApiKey(selectedProvider, apiKey, modelName)
       if (result.success) {
-        message.success('API密钥Test成功！')
+        message.success('API密钥TestSuccess！')
       } else {
-        message.error('API密钥Test失败: ' + (result.error || 'Unknown error'))
+        message.error('API密钥TestFailed: ' + (result.error || 'Unknown error'))
       }
     } catch (error: any) {
-      message.error('Test失败: ' + (error.message || 'Unknown error'))
+      message.error('TestFailed: ' + (error.message || 'Unknown error'))
     } finally {
       setLoading(false)
     }
@@ -210,7 +210,7 @@ const SettingsPage: React.FC = () => {
                   />
                 </Form.Item>
 
-                {/* 模型选择 */}
+                {/* Model选择 */}
                 <Form.Item
                   label="Model"
                   name="model_name"
@@ -257,7 +257,7 @@ const SettingsPage: React.FC = () => {
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
-                      label="模型Name"
+                      label="ModelName"
                       name="model_name"
                       className="form-item"
                     >
@@ -283,7 +283,7 @@ const SettingsPage: React.FC = () => {
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
-                      label="最低Score阈值"
+                      label="LowestScore阈值"
                       name="min_score_threshold"
                       className="form-item"
                     >
@@ -322,7 +322,7 @@ const SettingsPage: React.FC = () => {
                     className="save-button"
                     loading={loading}
                   >
-                    Save配置
+                    SaveConfiguration
                   </Button>
                 </Form.Item>
               </Form>
@@ -335,7 +335,7 @@ const SettingsPage: React.FC = () => {
                     <InfoCircleOutlined /> 1. AI Model Provider
                   </Title>
                   <Paragraph className="instruction-text">
-                    系统支持多AI模型提供商：
+                    系统支持多AIModel提供商：
                     <br />• <Text strong>Alibaba Qwen</Text>：Get API key from Alibaba Cloud console
                     <br />• <Text strong>OpenAI</Text>：Get API key from platform.openai.com
                     <br />• <Text strong>Google Gemini</Text>：Get API key from ai.google.dev
@@ -348,9 +348,9 @@ const SettingsPage: React.FC = () => {
                     <InfoCircleOutlined /> 2. Configuration Parameters
                   </Title>
                   <Paragraph className="instruction-text">
-                    • <Text strong>文本分块Size</Text>：影响处理速度和精度，建议5000chars<br />
-                    • <Text strong>Score阈值</Text>：只有高于此分数的clips才会被保留<br />
-                    • <Text strong>Collection切片数</Text>：控制每themed collections包含的clips数量
+                    • <Text strong>文本分块Size</Text>：影响处理Speed和精度，建议5000chars<br />
+                    • <Text strong>Score阈值</Text>：只有High于此分数的clips才会被保留<br />
+                    • <Text strong>Collection切片数</Text>：控制每themed collections包含的clipsCount
                   </Paragraph>
                 </div>
                 
@@ -359,7 +359,7 @@ const SettingsPage: React.FC = () => {
                     <InfoCircleOutlined /> 3. Test连接
                   </Title>
                   <Paragraph className="instruction-text">
-                    Save前建议先TestAPI密钥是否有效，确保服务正常运行
+                    Save前建议先TestAPI密钥YesNoValid，确保服务Normal运行
                   </Paragraph>
                 </div>
               </Space>
@@ -449,7 +449,7 @@ const SettingsPage: React.FC = () => {
                       <Text strong style={{ color: '#722ed1' }}>Batch Management</Text>
                       <br />
                       <Text type="secondary" style={{ color: '#b0b0b0' }}>
-                        支持批量Upload多切片，提高效率
+                        支持批量Upload多切片，提High效率
                       </Text>
                     </div>
                   </div>

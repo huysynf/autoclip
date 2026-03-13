@@ -1,5 +1,5 @@
 /**
- * Progress系统Test页面
+ * Progress系统TestPage
  */
 
 import React, { useState } from 'react'
@@ -29,7 +29,7 @@ export const ProgressTestPage: React.FC = () => {
           clearInterval(interval)
           setTimeout(() => {
             setTestStatus('processing')
-            message.success('Download完成，Start Processing')
+            message.success('DownloadCompleted，Start Processing')
           }, 1000)
           return 100
         }
@@ -42,30 +42,30 @@ export const ProgressTestPage: React.FC = () => {
   const handleStartProcessing = () => {
     setTestStatus('processing')
     startPolling([testProjectId], 2000)
-    message.info('Start Processing，请View后端日志')
+    message.info('Start Processing，请View后端Log')
   }
 
-  // 模拟完成
+  // 模拟Completed
   const handleComplete = () => {
     setTestStatus('completed')
     stopPolling()
     message.success('Done')
   }
 
-  // 模拟失败
+  // 模拟Failed
   const handleFail = () => {
     setTestStatus('failed')
     stopPolling()
     message.error('Failed')
   }
 
-  // 重置
+  // Reset
   const handleReset = () => {
     setTestStatus('pending')
     setDownloadProgress(0)
     stopPolling()
     clearAllProgress()
-    message.info('已重置')
+    message.info('已Reset')
   }
 
   return (
@@ -92,7 +92,7 @@ export const ProgressTestPage: React.FC = () => {
                 style={{ width: '100%', marginTop: '8px' }}
               >
                 <Option value="pending">Waiting</Option>
-                <Option value="downloading">Download中</Option>
+                <Option value="downloading">DownloadMedium</Option>
                 <Option value="processing">Processing</Option>
                 <Option value="completed">Completed</Option>
                 <Option value="failed">Failure</Option>
@@ -143,20 +143,20 @@ export const ProgressTestPage: React.FC = () => {
               onClick={handleComplete}
               disabled={testStatus !== 'processing'}
             >
-              完成
+              Completed
             </Button>
             <Button 
               danger
               onClick={handleFail}
               disabled={testStatus !== 'processing'}
             >
-              失败
+              Failed
             </Button>
             <Button 
               icon={<ReloadOutlined />}
               onClick={handleReset}
             >
-              重置
+              Reset
             </Button>
           </Space>
         </Space>
@@ -186,11 +186,11 @@ export const ProgressTestPage: React.FC = () => {
 
           <Text strong>说明:</Text>
           <ul style={{ fontSize: '12px', color: '#666' }}>
-            <li>点击"StartDownload"模拟Download过程，Progress会自动增长</li>
-            <li>Download完成后会自动切换到"Processing"Status</li>
+            <li>点击"StartDownload"模拟Download过程，Progress会Auto增长</li>
+            <li>DownloadCompleted后会Auto切换到"Processing"Status</li>
             <li>ProcessingStatus会轮询后端API获取Progress</li>
-            <li>可以手动点击"完成"或"失败"来Test终态</li>
-            <li>点击"重置"Clear AllStatus</li>
+            <li>可以Manual点击"Completed"或"Failed"来Test终态</li>
+            <li>点击"Reset"Clear AllStatus</li>
           </ul>
         </Space>
       </Card>

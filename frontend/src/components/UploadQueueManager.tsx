@@ -92,7 +92,7 @@ const UploadQueueManager: React.FC = () => {
   const [form] = Form.useForm();
   const [batchForm] = Form.useForm();
 
-  // 获取队列Status
+  // 获取QueueStatus
   const fetchQueueStatus = async () => {
     try {
       const response = await fetch('/api/upload-queue/status');
@@ -101,7 +101,7 @@ const UploadQueueManager: React.FC = () => {
         setQueueStatus(data);
       }
     } catch (error) {
-      console.error('获取队列Status失败:', error);
+      console.error('获取QueueStatusFailed:', error);
     }
   };
 
@@ -115,8 +115,8 @@ const UploadQueueManager: React.FC = () => {
         setTasks(data.records || []);
       }
     } catch (error) {
-      console.error('获取Upload历史失败:', error);
-      message.error('获取Upload历史失败');
+      console.error('获取Upload历史Failed:', error);
+      message.error('获取Upload历史Failed');
     } finally {
       setLoading(false);
     }
@@ -131,11 +131,11 @@ const UploadQueueManager: React.FC = () => {
         setAccounts(data.accounts || []);
       }
     } catch (error) {
-      console.error('获取Account List失败:', error);
+      console.error('获取Account ListFailed:', error);
     }
   };
 
-  // Add单任务
+  // Add单Task
   const handleAddTask = async (values: any) => {
     try {
       const response = await fetch('/api/upload-queue/add-task', {
@@ -148,22 +148,22 @@ const UploadQueueManager: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        message.success(`任务已Add: ${data.task_id}`);
+        message.success(`Task已Add: ${data.task_id}`);
         setAddTaskModalVisible(false);
         form.resetFields();
         fetchQueueStatus();
         fetchUploadHistory();
       } else {
         const error = await response.json();
-        message.error(`Add任务失败: ${error.detail}`);
+        message.error(`AddTaskFailed: ${error.detail}`);
       }
     } catch (error) {
-      console.error('Add任务失败:', error);
-      message.error('Add任务失败');
+      console.error('AddTaskFailed:', error);
+      message.error('AddTaskFailed');
     }
   };
 
-  // 批量Add任务
+  // 批量AddTask
   const handleBatchUpload = async (values: any) => {
     try {
       const tasks = values.tasks.split('\n').filter((line: string) => line.trim()).map((line: string) => {
@@ -187,22 +187,22 @@ const UploadQueueManager: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        message.success(`批量Add了 ${data.count} 任务`);
+        message.success(`批量Add了 ${data.count} Task`);
         setBatchUploadModalVisible(false);
         batchForm.resetFields();
         fetchQueueStatus();
         fetchUploadHistory();
       } else {
         const error = await response.json();
-        message.error(`批量Add失败: ${error.detail}`);
+        message.error(`批量AddFailed: ${error.detail}`);
       }
     } catch (error) {
-      console.error('批量Add失败:', error);
-      message.error('批量Add失败');
+      console.error('批量AddFailed:', error);
+      message.error('批量AddFailed');
     }
   };
 
-  // Cancel任务
+  // CancelTask
   const handleCancelTask = async (taskId: string) => {
     try {
       const response = await fetch(`/api/upload-queue/task/${taskId}`, {
@@ -215,15 +215,15 @@ const UploadQueueManager: React.FC = () => {
         fetchUploadHistory();
       } else {
         const error = await response.json();
-        message.error(`Cancel任务失败: ${error.detail}`);
+        message.error(`CancelTaskFailed: ${error.detail}`);
       }
     } catch (error) {
-      console.error('Cancel任务失败:', error);
-      message.error('Cancel任务失败');
+      console.error('CancelTaskFailed:', error);
+      message.error('CancelTaskFailed');
     }
   };
 
-  // Retry任务
+  // RetryTask
   const handleRetryTask = async (taskId: string) => {
     try {
       const response = await fetch(`/api/upload-queue/retry/${taskId}`, {
@@ -232,16 +232,16 @@ const UploadQueueManager: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        message.success(`任务已重新Add: ${data.new_task_id}`);
+        message.success(`Task已重新Add: ${data.new_task_id}`);
         fetchQueueStatus();
         fetchUploadHistory();
       } else {
         const error = await response.json();
-        message.error(`Retry任务失败: ${error.detail}`);
+        message.error(`RetryTaskFailed: ${error.detail}`);
       }
     } catch (error) {
-      console.error('Retry任务失败:', error);
-      message.error('Retry任务失败');
+      console.error('RetryTaskFailed:', error);
+      message.error('RetryTaskFailed');
     }
   };
 
@@ -249,7 +249,7 @@ const UploadQueueManager: React.FC = () => {
   const getStatusTag = (status: string) => {
     const statusConfig: Record<string, { color: string; text: string }> = {
       pending: { color: 'default', text: 'Waiting' },
-      queued: { color: 'blue', text: '队列中' },
+      queued: { color: 'blue', text: 'QueueMedium' },
       processing: { color: 'orange', text: 'Processing' },
       completed: { color: 'green', text: 'Completed' },
       failed: { color: 'red', text: 'Failed' },
@@ -263,9 +263,9 @@ const UploadQueueManager: React.FC = () => {
   // 获取优先级Tags
   const getPriorityTag = (priority: number) => {
     const priorityConfig: Record<number, { color: string; text: string }> = {
-      1: { color: 'default', text: '低' },
+      1: { color: 'default', text: 'Low' },
       2: { color: 'blue', text: '普通' },
-      3: { color: 'orange', text: '高' },
+      3: { color: 'orange', text: 'High' },
       4: { color: 'red', text: '紧急' }
     };
     
@@ -320,7 +320,7 @@ const UploadQueueManager: React.FC = () => {
       ),
     },
     {
-      title: '账号ID',
+      title: 'AccountID',
       dataIndex: 'account_id',
       key: 'account_id',
       width: 80,
@@ -373,7 +373,7 @@ const UploadQueueManager: React.FC = () => {
           {record.error_message && (
             <Tooltip title={record.error_message}>
               <Button type="link" size="small" icon={<EyeOutlined />}>
-                错误
+                Error
               </Button>
             </Tooltip>
           )}
@@ -398,13 +398,13 @@ const UploadQueueManager: React.FC = () => {
 
   return (
     <div className="upload-queue-manager">
-      {/* 队列Status统计 */}
+      {/* QueueStatusStatistics */}
       {queueStatus && (
         <Row gutter={16} style={{ marginBottom: 16 }}>
           <Col span={6}>
             <Card>
               <Statistic
-                title="队列中任务"
+                title="QueueMediumTask"
                 value={queueStatus.queued_tasks}
                 prefix={<Badge status="processing" />}
               />
@@ -413,7 +413,7 @@ const UploadQueueManager: React.FC = () => {
           <Col span={6}>
             <Card>
               <Statistic
-                title="Processing任务"
+                title="ProcessingTask"
                 value={queueStatus.processing_tasks}
                 prefix={<Badge status="success" />}
               />
@@ -431,7 +431,7 @@ const UploadQueueManager: React.FC = () => {
           <Col span={6}>
             <Card>
               <Statistic
-                title="可用账号"
+                title="可用Account"
                 value={accounts.filter(acc => acc.status === 'active' && acc.can_upload).length}
                 prefix={<Badge status="success" />}
               />
@@ -440,7 +440,7 @@ const UploadQueueManager: React.FC = () => {
         </Row>
       )}
 
-      {/* 操作按钮 */}
+      {/* 操作Button */}
       <Card style={{ marginBottom: 16 }}>
         <Space>
           <Button
@@ -448,7 +448,7 @@ const UploadQueueManager: React.FC = () => {
             icon={<PlusOutlined />}
             onClick={() => setAddTaskModalVisible(true)}
           >
-            Add任务
+            AddTask
           </Button>
           <Button
             icon={<UploadOutlined />}
@@ -469,7 +469,7 @@ const UploadQueueManager: React.FC = () => {
       </Card>
 
       {/* Task List */}
-      <Card title="Upload任务">
+      <Card title="UploadTask">
         <Table
           columns={columns}
           dataSource={tasks}
@@ -485,9 +485,9 @@ const UploadQueueManager: React.FC = () => {
         />
       </Card>
 
-      {/* Add任务模态框 */}
+      {/* AddTask模态框 */}
       <Modal
-        title="AddUpload任务"
+        title="AddUploadTask"
         open={addTaskModalVisible}
         onCancel={() => setAddTaskModalVisible(false)}
         onOk={() => form.submit()}
@@ -500,25 +500,25 @@ const UploadQueueManager: React.FC = () => {
         >
           <Form.Item
             name="video_path"
-            label="视频文件路径"
-            rules={[{ required: true, message: '请输入视频文件路径' }]}
+            label="VideoFile path"
+            rules={[{ required: true, message: '请输入VideoFile path' }]}
           >
             <Input placeholder="/path/to/video.mp4" />
           </Form.Item>
           
           <Form.Item
             name="title"
-            label="视频Title"
-            rules={[{ required: true, message: '请输入视频Title' }]}
+            label="VideoTitle"
+            rules={[{ required: true, message: '请输入VideoTitle' }]}
           >
-            <Input placeholder="视频Title" maxLength={80} />
+            <Input placeholder="VideoTitle" maxLength={80} />
           </Form.Item>
           
           <Form.Item
             name="description"
-            label="视频Description"
+            label="VideoDescription"
           >
-            <TextArea rows={4} placeholder="视频Description" maxLength={2000} />
+            <TextArea rows={4} placeholder="VideoDescription" maxLength={2000} />
           </Form.Item>
           
           <Form.Item
@@ -530,9 +530,9 @@ const UploadQueueManager: React.FC = () => {
           
           <Form.Item
             name="account_id"
-            label="指定账号"
+            label="指定Account"
           >
-            <Select placeholder="自动选择最佳账号" allowClear>
+            <Select placeholder="Auto选择最佳Account" allowClear>
               {accounts.filter(acc => acc.status === 'active' && acc.can_upload).map(account => (
                 <Option key={account.id} value={account.id}>
                   {account.nickname || account.username} 
@@ -549,9 +549,9 @@ const UploadQueueManager: React.FC = () => {
             initialValue="normal"
           >
             <Select>
-              <Option value="low">低</Option>
+              <Option value="low">Low</Option>
               <Option value="normal">普通</Option>
-              <Option value="high">高</Option>
+              <Option value="high">High</Option>
               <Option value="urgent">紧急</Option>
             </Select>
           </Form.Item>
@@ -560,7 +560,7 @@ const UploadQueueManager: React.FC = () => {
 
       {/* 批量Upload模态框 */}
       <Modal
-        title="批量Upload任务"
+        title="批量UploadTask"
         open={batchUploadModalVisible}
         onCancel={() => setBatchUploadModalVisible(false)}
         onOk={() => batchForm.submit()}
@@ -575,12 +575,12 @@ const UploadQueueManager: React.FC = () => {
             name="tasks"
             label="Task List"
             rules={[{ required: true, message: '请输入Task List' }]}
-            extra="每行一任务，格式：视频路径|Title|Description|Tags"
+            extra="每行一Task，Format：Video Path|Title|Description|Tags"
           >
             <TextArea
               rows={10}
-              placeholder={`/path/to/video1.mp4|视频Title1|视频Description1|Tags1,Tags2
-/path/to/video2.mp4|视频Title2|视频Description2|Tags3,Tags4`}
+              placeholder={`/path/to/video1.mp4|VideoTitle1|VideoDescription1|Tags1,Tags2
+/path/to/video2.mp4|VideoTitle2|VideoDescription2|Tags3,Tags4`}
             />
           </Form.Item>
           
@@ -590,9 +590,9 @@ const UploadQueueManager: React.FC = () => {
             initialValue="normal"
           >
             <Select>
-              <Option value="low">低</Option>
+              <Option value="low">Low</Option>
               <Option value="normal">普通</Option>
-              <Option value="high">高</Option>
+              <Option value="high">High</Option>
               <Option value="urgent">紧急</Option>
             </Select>
           </Form.Item>

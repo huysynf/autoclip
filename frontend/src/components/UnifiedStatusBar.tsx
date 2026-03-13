@@ -1,6 +1,6 @@
 /**
- * 统一Status栏组件 - 替换旧的复杂Progress系统
- * 支持Download中、Processing、完成等Status的统一显示
+ * 统一Status栏Component - 替换旧的复杂Progress系统
+ * 支持DownloadMedium、Processing、Completed等Status的统一显示
  */
 
 import React, { useEffect, useState } from 'react'
@@ -37,7 +37,7 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
   
   const progress = getProgress(projectId)
 
-  // 根据Status决定是否轮询
+  // 根据Status决定YesNo轮询
   useEffect(() => {
     if ((status === 'processing' || status === 'pending') && !isPolling) {
       console.log(`Start Polling处理Progress: ${projectId}`)
@@ -73,25 +73,25 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
             setCurrentDownloadProgress(newProgress)
             onDownloadProgressUpdate?.(newProgress)
             
-            // 如果Download完成，检查是否需要切换到处理Status
+            // 如果DownloadCompleted，检查YesNo需要切换到处理Status
             if (newProgress >= 100) {
-              console.log('Download完成，切换到处理Status')
+              console.log('DownloadCompleted，切换到处理Status')
               setTimeout(() => {
                 onStatusChange?.('processing')
               }, 1000)
             }
           } else {
-            console.error('获取projects数据失败:', response.status, response.statusText)
+            console.error('获取projects数据Failed:', response.status, response.statusText)
           }
         } catch (error) {
-          console.error('获取DownloadProgress失败:', error)
+          console.error('获取DownloadProgressFailed:', error)
         }
       }
 
-      // 立即获取一次
+      // Fetch immediately
       pollDownloadProgress()
       
-      // 每2秒轮询一次
+      // 每2seconds轮询一次
       const interval = setInterval(pollDownloadProgress, 2000)
       
       return () => clearInterval(interval)
@@ -109,7 +109,7 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
     }
   }, [progress, onStatusChange])
 
-  // 导入中Status
+  // ImportMediumStatus
   if (status === 'importing') {
     return (
       <div style={{
@@ -133,13 +133,13 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
           fontSize: '8px', 
           lineHeight: '9px'
         }}>
-          导入中
+          ImportMedium
         </div>
       </div>
     )
   }
 
-  // Download中Status
+  // DownloadMediumStatus
   if (status === 'downloading') {
     return (
       <div style={{
@@ -163,7 +163,7 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
           fontSize: '8px', 
           lineHeight: '9px'
         }}>
-          Download中
+          DownloadMedium
         </div>
       </div>
     )
@@ -195,7 +195,7 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
           fontSize: '8px', 
           lineHeight: '9px'
         }}>
-          Initializing中...
+          InitializingMedium...
         </div>
       </div>
       )
@@ -225,13 +225,13 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
           fontWeight: 600, 
           lineHeight: '12px'
         }}>
-          {failed ? '✗ 失败' : `${percent}%`}
+          {failed ? '✗ Failed' : `${percent}%`}
         </div>
         <div style={{ 
           color: '#999999', 
           fontSize: '8px', 
           lineHeight: '9px',
-          minHeight: '9px' // 确保失败Status也有固定高度
+          minHeight: '9px' // 确保FailedStatus也有固定High度
         }}>
           {failed ? '' : stageDisplayName}
         </div>
@@ -269,7 +269,7 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
     )
   }
 
-  // 失败Status
+  // FailedStatus
   if (status === 'failed') {
     return (
       <div style={{
@@ -286,13 +286,13 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
           fontWeight: 600, 
           lineHeight: '12px'
         }}>
-          ✗ 失败
+          ✗ Failed
         </div>
         <div style={{ 
           color: '#999999', 
           fontSize: '8px', 
           lineHeight: '9px',
-          minHeight: '9px' // 确保失败Status也有固定高度
+          minHeight: '9px' // 确保FailedStatus也有固定High度
         }}>
           Failed
         </div>
@@ -322,7 +322,7 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
         color: '#999999', 
         fontSize: '8px', 
         lineHeight: '9px',
-        minHeight: '9px' // 确保等待Status也有固定高度
+        minHeight: '9px' // 确保等待Status也有固定High度
       }}>
         Pending
       </div>
@@ -330,7 +330,7 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
   )
 }
 
-// 简化的Progress条组件 - 用于详细Progress显示
+// 简化的Progress条Component - 用于详细Progress显示
 interface SimpleProgressDisplayProps {
   projectId: string
   status: string

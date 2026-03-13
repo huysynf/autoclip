@@ -39,11 +39,11 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
     }
   }, [title, isEditing])
 
-  // 进入Edit模式时聚焦输入框
+  // 进入Edit模式时聚焦Input
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus()
-      // TextArea组件没有select方法，使用setSelectionRange代替
+      // TextAreaComponent没有select方法，使用setSelectionRange代替
       if (inputRef.current.setSelectionRange) {
         inputRef.current.setSelectionRange(0, inputRef.current.value.length)
       }
@@ -64,7 +64,7 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
     const trimmedValue = editValue.trim()
     
     if (!trimmedValue) {
-      message.error('Title不能为空')
+      message.error('Title不能为Empty')
       return
     }
     
@@ -81,13 +81,13 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
     setLoading(true)
     try {
       await projectApi.updateClipTitle(clipId, trimmedValue)
-      message.success('TitleUpdate成功')
+      message.success('TitleUpdateSuccess')
       setIsEditing(false)
       // 先Update本地Status，再调用回调
       onTitleUpdate?.(trimmedValue)
     } catch (error: any) {
-      console.error('UpdateTitle失败:', error)
-      message.error(error.userMessage || error.message || 'UpdateTitle失败')
+      console.error('UpdateTitleFailed:', error)
+      message.error(error.userMessage || error.message || 'UpdateTitleFailed')
     } finally {
       setLoading(false)
     }
@@ -101,13 +101,13 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
       console.log('生成Title结果:', result)
       if (result.success && result.generated_title) {
         setEditValue(result.generated_title)
-        message.success('Title生成成功，您可以继续Edit或点击Save')
+        message.success('Title生成Success，您可以ResumeEdit或点击Save')
       } else {
-        message.error('Title生成失败')
+        message.error('TitleGeneration failed')
       }
     } catch (error: any) {
-      console.error('生成Title失败:', error)
-      message.error(error.userMessage || error.message || '生成Title失败')
+      console.error('生成TitleFailed:', error)
+      message.error(error.userMessage || error.message || '生成TitleFailed')
     } finally {
       setGenerating(false)
     }
@@ -158,7 +158,7 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
                 icon={<MagicWandIcon />}
                 loading={generating}
                 onClick={() => {
-                  console.log('AI生成Title按钮被点击');
+                  console.log('AI生成TitleButton被点击');
                   handleGenerateTitle();
                 }}
                 disabled={loading}

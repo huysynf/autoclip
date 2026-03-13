@@ -80,7 +80,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [refreshInterval, setRefreshInterval] = useState<number | null>(null);
 
-  // Time格式化函数
+  // TimeFormat化函数
   const getTimeAgo = (dateString: string) => {
     const now = new Date();
     const date = new Date(dateString);
@@ -90,17 +90,17 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
       return '刚刚';
     } else if (diffInSeconds < 3600) {
       const minutes = Math.floor(diffInSeconds / 60);
-      return `${minutes}分钟前`;
+      return `${minutes}minutes前`;
     } else if (diffInSeconds < 86400) {
       const hours = Math.floor(diffInSeconds / 3600);
-      return `${hours}小时前`;
+      return `${hours}hours前`;
     } else {
       const days = Math.floor(diffInSeconds / 86400);
       return `${days}天前`;
     }
   };
 
-  // 获取健康Status摘要
+  // 获取HealthStatusSummary
   const fetchHealthSummary = async (forceCheck = false) => {
     try {
       setLoading(true);
@@ -124,17 +124,17 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
       setHealthData(data);
       
       if (forceCheck) {
-        message.success('健康检查完成');
+        message.success('Health CheckCompleted');
       }
     } catch (error) {
-      console.error('获取健康Status失败:', error);
-      message.error('获取健康Status失败');
+      console.error('获取HealthStatusFailed:', error);
+      message.error('获取HealthStatusFailed');
     } finally {
       setLoading(false);
     }
   };
 
-  // 检查单账号
+  // 检查单Account
   const checkSingleAccount = async (accountId: number, forceCheck = true) => {
     try {
       setRefreshing(prev => [...prev, accountId]);
@@ -149,7 +149,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
       
       const updatedAccount = await response.json();
       
-      // Update健康数据
+      // UpdateHealth数据
       setHealthData(prev => {
         if (!prev) return prev;
         
@@ -157,7 +157,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
           account.account_id === accountId ? updatedAccount : account
         );
         
-        // 重新计算统计数据
+        // 重新计算Statistics数据
         const statusCounts = {
           healthy: 0,
           warning: 0,
@@ -180,10 +180,10 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
         };
       });
       
-      message.success(`账号 ${updatedAccount.username} 检查完成`);
+      message.success(`Account ${updatedAccount.username} 检查Completed`);
     } catch (error) {
-      console.error('检查账号失败:', error);
-      message.error('检查账号失败');
+      console.error('检查AccountFailed:', error);
+      message.error('检查AccountFailed');
     } finally {
       setRefreshing(prev => prev.filter(id => id !== accountId));
     }
@@ -215,18 +215,18 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
         message.warning(result.message);
       }
     } catch (error) {
-      console.error('RefreshCookie失败:', error);
-      message.error('RefreshCookie失败');
+      console.error('RefreshCookieFailed:', error);
+      message.error('RefreshCookieFailed');
     }
   };
 
   // 获取StatusTags
   const getStatusTag = (status: string) => {
     const statusConfig = {
-      healthy: { color: 'success', icon: <CheckCircleOutlined />, text: '健康' },
-      warning: { color: 'warning', icon: <ExclamationCircleOutlined />, text: '警告' },
+      healthy: { color: 'success', icon: <CheckCircleOutlined />, text: 'Health' },
+      warning: { color: 'warning', icon: <ExclamationCircleOutlined />, text: 'Warning' },
       critical: { color: 'error', icon: <CloseCircleOutlined />, text: '严重' },
-      unknown: { color: 'default', icon: <QuestionCircleOutlined />, text: '未知' }
+      unknown: { color: 'default', icon: <QuestionCircleOutlined />, text: 'Unknown' }
     };
     
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.unknown;
@@ -244,7 +244,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
       return null;
     }
     
-    const totalDays = 30; // 假设Cookie总有效期为30天
+    const totalDays = 30; // 假设Cookie总Valid期为30天
     const percentage = Math.max(0, Math.min(100, (expiresIn / totalDays) * 100));
     
     let status: 'success' | 'normal' | 'exception' = 'success';
@@ -270,7 +270,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
   // 表格列定义
   const columns = [
     {
-      title: '账号',
+      title: 'Account',
       dataIndex: 'username',
       key: 'username',
       render: (username: string, record: AccountHealth) => (
@@ -285,7 +285,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
       ),
     },
     {
-      title: '健康Status',
+      title: 'HealthStatus',
       dataIndex: 'status',
       key: 'status',
       render: (status: string) => getStatusTag(status),
@@ -350,17 +350,17 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
     },
   ];
 
-  // 组件挂载时获取数据
+  // Component挂载时获取数据
   useEffect(() => {
     fetchHealthSummary();
   }, []);
 
-  // 自动Refresh
+  // AutoRefresh
   useEffect(() => {
     if (autoRefresh) {
       const interval = setInterval(() => {
         fetchHealthSummary();
-      }, 60000); // 每分钟Refresh一次
+      }, 60000); // 每minutesRefresh一次
       setRefreshInterval(interval);
     } else {
       if (refreshInterval) {
@@ -378,12 +378,12 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
 
   return (
     <div>
-      {/* 统计卡片 */}
+      {/* Statistics卡片 */}
       <Row gutter={16} style={{ marginBottom: 16 }}>
         <Col span={6}>
           <Card>
             <Statistic
-              title="总账号数"
+              title="总Account数"
               value={healthData?.total_accounts || 0}
               prefix={<CheckCircleOutlined />}
             />
@@ -392,7 +392,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
         <Col span={6}>
           <Card>
             <Statistic
-              title="健康账号"
+              title="HealthAccount"
               value={healthData?.healthy_count || 0}
               valueStyle={{ color: '#3f8600' }}
               prefix={<CheckCircleOutlined />}
@@ -402,7 +402,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
         <Col span={6}>
           <Card>
             <Statistic
-              title="警告账号"
+              title="WarningAccount"
               value={healthData?.warning_count || 0}
               valueStyle={{ color: '#cf1322' }}
               prefix={<ExclamationCircleOutlined />}
@@ -443,7 +443,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
             type={autoRefresh ? 'primary' : 'default'}
             onClick={() => setAutoRefresh(!autoRefresh)}
           >
-            {autoRefresh ? 'Stop自动Refresh' : '开启自动Refresh'}
+            {autoRefresh ? 'StopAutoRefresh' : 'On启AutoRefresh'}
           </Button>
         </Space>
         
@@ -454,11 +454,11 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
         )}
       </Card>
 
-      {/* 警告信息 */}
+      {/* WarningInfo */}
       {healthData && (healthData.critical_count > 0 || healthData.warning_count > 0) && (
         <Alert
-          message="Account Health警告"
-          description={`发现 ${healthData.critical_count} 严重问题和 ${healthData.warning_count} 警告，请及时处理`}
+          message="Account HealthWarning"
+          description={`发现 ${healthData.critical_count} 严重问题和 ${healthData.warning_count} Warning，请及时处理`}
           type="warning"
           showIcon
           style={{ marginBottom: 16 }}
@@ -476,7 +476,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
               pageSize: 10,
               showSizeChanger: true,
               showQuickJumper: true,
-              showTotal: (total) => `Total ${total} 账号`,
+              showTotal: (total) => `Total ${total} Account`,
             }}
           />
         </Spin>
@@ -484,7 +484,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
 
       {/* Details弹窗 */}
       <Modal
-        title={`账号Details - ${selectedAccount?.username}`}
+        title={`AccountDetails - ${selectedAccount?.username}`}
         open={detailsVisible}
         onCancel={() => setDetailsVisible(false)}
         footer={[
@@ -510,11 +510,11 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
           <div>
             <Row gutter={16}>
               <Col span={12}>
-                <Card title="基本信息" size="small">
-                  <p><strong>账号ID:</strong> {selectedAccount.account_id}</p>
-                  <p><strong>用户名:</strong> {selectedAccount.username}</p>
+                <Card title="基本Info" size="small">
+                  <p><strong>AccountID:</strong> {selectedAccount.account_id}</p>
+                  <p><strong>Username:</strong> {selectedAccount.username}</p>
                   <p><strong>整体Status:</strong> {getStatusTag(selectedAccount.status)}</p>
-                  <p><strong>Status消息:</strong> {selectedAccount.message}</p>
+                  <p><strong>StatusMessage:</strong> {selectedAccount.message}</p>
                 </Card>
               </Col>
               <Col span={12}>
@@ -537,10 +537,10 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
               
               {selectedAccount.details.login && (
                 <div style={{ marginBottom: 12 }}>
-                  <strong>登录Status:</strong> {getStatusTag(selectedAccount.details.login.status)}
+                  <strong>LoginStatus:</strong> {getStatusTag(selectedAccount.details.login.status)}
                   <p>{selectedAccount.details.login.message}</p>
                   {selectedAccount.details.login.user_info && (
-                    <p>用户信息: {selectedAccount.details.login.user_info.uname} (等级 {selectedAccount.details.login.user_info.level})</p>
+                    <p>UserInfo: {selectedAccount.details.login.user_info.uname} (等级 {selectedAccount.details.login.user_info.level})</p>
                   )}
                 </div>
               )}

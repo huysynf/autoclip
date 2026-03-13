@@ -60,7 +60,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     message.info('Bilibili upload coming soon!', 3);
     return;
     
-    // 原有代码已禁用
+    // 原有代码Disabled
     try {
       await uploadApi.retryUpload(recordId);
       message.success('Retry task submitted');
@@ -76,7 +76,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     message.info('Bilibili upload coming soon!', 3);
     return;
     
-    // 原有代码已禁用
+    // 原有代码Disabled
     try {
       await uploadApi.cancelUpload(recordId);
       message.success('Task cancelled');
@@ -92,7 +92,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     message.info('Bilibili upload coming soon!', 3);
     return;
     
-    // 原有代码已禁用
+    // 原有代码Disabled
     try {
       await uploadApi.deleteUpload(recordId);
       message.success('Task deleted');
@@ -134,7 +134,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     return partition ? partition.name : `Category ${partitionId}`;
   };
 
-  // 格式化文件Size
+  // Format化FileSize
   const formatFileSize = (bytes?: number) => {
     if (!bytes) return '-';
     const sizes = ['B', 'KB', 'MB', 'GB'];
@@ -142,7 +142,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
   };
 
-  // 格式化时长
+  // Format化Duration
   const formatDuration = (seconds?: number) => {
     if (!seconds) return '-';
     const hours = Math.floor(seconds / 3600);
@@ -312,7 +312,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     }
   ];
 
-  // 统计信息
+  // StatisticsInfo
   const getStatistics = () => {
     const total = records.length;
     const success = records.filter(r => r.status === 'success' || r.status === 'completed').length;
@@ -327,7 +327,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
 
   useEffect(() => {
     fetchRecords();
-    // 每30秒自动Refresh
+    // 每30secondsAutoRefresh
     const interval = setInterval(fetchRecords, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -363,14 +363,14 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           .dark-table .ant-pagination .ant-pagination-item-active a {
             color: #ffffff !important;
           }
-          /* 确保所有文字都是白色 */
+          /* 确保所有文字都Yes白色 */
           .dark-table .ant-typography,
           .dark-table .ant-typography-caption,
           .dark-table .ant-typography-text,
           .dark-table .ant-typography-paragraph {
             color: #ffffff !important;
           }
-          /* 确保链接按钮文字可见 */
+          /* 确保LinkButton文字可见 */
           .dark-table .ant-btn-link {
             color: #4facfe !important;
           }
@@ -383,7 +383,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           .dark-table .ant-btn-link.ant-btn-dangerous:hover {
             color: #ff7875 !important;
           }
-          /* 确保图标颜色正确 */
+          /* 确保IconColor正确 */
           .dark-table .anticon {
             color: inherit !important;
           }
@@ -459,7 +459,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           </Button>
         </div>
 
-        {/* 统计信息 */}
+        {/* StatisticsInfo */}
         <Row gutter={16} style={{ marginBottom: '24px' }}>
           <Col span={6}>
             <Card style={{ background: '#262626', border: '1px solid #404040' }}>

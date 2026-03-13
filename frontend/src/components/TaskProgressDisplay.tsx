@@ -29,16 +29,16 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
     userId,
     taskId,
     onProgressUpdate: (state) => {
-      console.log('任务ProgressUpdate:', state);
+      console.log('TaskProgressUpdate:', state);
     },
     onTaskComplete: (state) => {
-      console.log('任务完成:', state);
-      message.success('任务Done！');
+      console.log('TaskCompleted:', state);
+      message.success('TaskDone！');
       onTaskComplete?.(state);
     },
     onTaskFailed: (state) => {
-      console.log('任务失败:', state);
-      message.error(`任务Failed: ${state.message}`);
+      console.log('TaskFailed:', state);
+      message.error(`TaskFailed: ${state.message}`);
       onTaskFailed?.(state);
     }
   });
@@ -56,10 +56,10 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
 
   const getPhaseText = (phase: string) => {
     switch (phase) {
-      case 'transcribe': return '语音识别';
-      case 'analyze': return 'Content分析';
-      case 'clip': return '视频切片';
-      case 'encode': return '视频编码';
+      case 'transcribe': return 'Speech recognition';
+      case 'analyze': return 'ContentAnalysis';
+      case 'clip': return 'Video切片';
+      case 'encode': return 'VideoCodec';
       case 'upload': return 'Upload处理';
       default: return phase;
     }
@@ -80,7 +80,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
       case 'PENDING': return 'Waiting';
       case 'PROGRESS': return 'In Progress';
       case 'DONE': return 'Completed';
-      case 'FAIL': return '失败';
+      case 'FAIL': return 'Failed';
       default: return status;
     }
   };
@@ -89,7 +89,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
     return (
       <Card size="small" style={{ marginBottom: 16 }}>
         <Space>
-          <Text type="secondary">任务 {taskId}</Text>
+          <Text type="secondary">Task {taskId}</Text>
           <Tag color={isConnected ? 'success' : 'error'}>
             {isConnected ? 'Connected' : '未连接'}
           </Tag>
@@ -107,7 +107,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
       style={{ marginBottom: 16 }}
       title={
         <Space>
-          <Text strong>任务Progress</Text>
+          <Text strong>TaskProgress</Text>
           <Tag color={getStatusColor(taskState.status)}>
             {getStatusText(taskState.status)}
           </Tag>
@@ -129,7 +129,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
             type="text"
             onClick={() => setIsExpanded(!isExpanded)}
           >
-            {isExpanded ? '收起' : '展开'}
+            {isExpanded ? 'Collapse' : 'Expand'}
           </Button>
         </Space>
       }
@@ -151,10 +151,10 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
           </Text>
         </div>
 
-        {/* 当前消息 */}
+        {/* 当前Message */}
         <Text>{taskState.message}</Text>
 
-        {/* 展开的详细信息 */}
+        {/* Expand的详细Info */}
         {isExpanded && (
           <div style={{ 
             padding: '12px', 
@@ -164,7 +164,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
           }}>
             <Space direction="vertical" size="small" style={{ width: '100%' }}>
               <div>
-                <Text strong>任务ID:</Text> {taskState.task_id}
+                <Text strong>TaskID:</Text> {taskState.task_id}
               </div>
               <div>
                 <Text strong>序列号:</Text> {taskState.seq}

@@ -22,12 +22,12 @@ const ProjectStatusIndicator: React.FC<ProjectStatusIndicatorProps> = ({
   const getStepName = () => {
     if (normalizedStatus === 'processing' && project.current_step) {
       const stepNames = {
-        1: 'Content大纲分析',
+        1: 'Content大纲Analysis',
         2: 'Time轴生成',
         3: 'clipsScore',
         4: 'Title生成',
-        5: '主题聚类',
-        6: '视频生成'
+        5: 'Theme聚类',
+        6: 'Video生成'
       }
       return stepNames[project.current_step as keyof typeof stepNames] || 'Processing'
     }

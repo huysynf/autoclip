@@ -32,7 +32,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
   const [showBilibiliManager, setShowBilibiliManager] = useState(false)
   const playerRef = useRef<ReactPlayer>(null)
 
-  // 生成视频缩略图
+  // 生成Video缩略图
   useEffect(() => {
     if (videoUrl) {
       generateThumbnail()
@@ -44,7 +44,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
     
     const video = document.createElement('video')
     video.crossOrigin = 'anonymous'
-    video.currentTime = 1 // 获取第1秒的帧作为缩略图
+    video.currentTime = 1 // 获取第1seconds的帧作为缩略图
     
     video.onloadeddata = () => {
       const canvas = document.createElement('canvas')
@@ -64,7 +64,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
 
   const handleDownloadWithTitle = async () => {
     try {
-      // 直接调用APIDownload方法，它会处理文件名
+      // 直接调用APIDownload方法，它会处理Filename
       await onDownload(clip.id)
     } catch (error) {
       console.error('Download failed:', error)
@@ -77,7 +77,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
   }
 
   const handleOpenSubtitleEditor = async () => {
-    // 显示开发中提示
+    // 显示On发Medium提示
     message.info('Coming soon')
   }
 
@@ -90,7 +90,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
     if (!projectId) return
     
     try {
-      // 提取要Delete的字幕段ID
+      // 提取要Delete的Subtitle段ID
       const deletedSegments = operations
         .filter(op => op.type === 'delete')
         .flatMap(op => op.segmentIds)
@@ -100,7 +100,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
         return
       }
 
-      // 执行视频Edit
+      // 执行VideoEdit
       const result = await subtitleEditorApi.editClipBySubtitles(
         projectId,
         clip.id,
@@ -132,7 +132,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
     if (!startTime || !endTime) return 0
     
     try {
-      // 解析Time格式 "HH:MM:SS,mmm" 或 "HH:MM:SS.mmm"
+      // 解析TimeFormat "HH:MM:SS,mmm" 或 "HH:MM:SS.mmm"
       const parseTime = (timeStr: string): number => {
         const normalized = timeStr.replace(',', '.')
         const parts = normalized.split(':')
@@ -163,7 +163,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
   }
 
   const getScoreColor = (score: number) => {
-    // 根据分数区间Settings不同的颜色
+    // 根据分数区间Settings不同的Color
     if (score >= 0.9) return '#52c41a' // 绿色 - 优秀
     if (score >= 0.8) return '#1890ff' // 蓝色 - 良好
     if (score >= 0.7) return '#faad14' // 橙色 - 一般
@@ -174,17 +174,17 @@ const ClipCard: React.FC<ClipCardProps> = ({
 
   // 获取要显示的简介Content
   const getDisplayContent = () => {
-    // 优先显示推荐理由（这是AI生成的Content要点）
+    // 优先显示推荐理由（这YesAI生成的Content要点）
     if (clip.recommend_reason && clip.recommend_reason.trim()) {
       return clip.recommend_reason
     }
     
-    // 如果没有推荐理由，尝试从content中获取非转写文本的Content要点
+    // 如果没有推荐理由，尝试从contentMedium获取非转写文本的Content要点
     if (clip.content && clip.content.length > 0) {
-      // 过滤掉可能是转写文本的Content（通常转写文本很长且包含标点符号）
+      // 过滤掉可能Yes转写文本的Content（通常转写文本很长且包含标点符号）
       const contentPoints = clip.content.filter(item => {
         const text = item.trim()
-        // 如果文本长度超过100chars或包含大量标点符号，可能是转写文本
+        // 如果文本长度超过100chars或包含大量标点符号，可能Yes转写文本
         if (text.length > 100) return false
         if (text.split(/[，。！？；：""''（）【】]/).length > 3) return false
         return true
@@ -329,14 +329,14 @@ const ClipCard: React.FC<ClipCardProps> = ({
             flexDirection: 'column',
             justifyContent: 'space-between'
           }}>
-            {/* Content区域 - 固定高度 */}
+            {/* Content区域 - 固定High度 */}
             <div style={{ 
               flex: 1,
               display: 'flex',
               flexDirection: 'column',
               minHeight: 0 // 允许flex子项收缩
             }}>
-              {/* Title区域 - 固定高度 */}
+              {/* Title区域 - 固定High度 */}
               <div style={{ 
                 height: '44px',
                 marginBottom: '8px',
@@ -357,7 +357,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
                 />
               </div>
               
-              {/* Content要点 - 固定高度 */}
+              {/* Content要点 - 固定High度 */}
               <div style={{ 
                 height: '58px',
                 marginBottom: '12px',
@@ -392,7 +392,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
               </div>
             </div>
             
-            {/* 操作按钮 - 固定在底部 */}
+            {/* 操作Button - 固定在底部 */}
             <div style={{ 
               display: 'flex', 
               gap: '8px',
@@ -455,7 +455,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
           </div>
         </Card>
 
-      {/* 视频播放模态框 */}
+      {/* Video播放模态框 */}
       <Modal
         open={showPlayer}
         onCancel={handleClosePlayer}
@@ -496,7 +496,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
             display: 'flex', 
             alignItems: 'center', 
             width: '100%',
-            paddingRight: '30px' // 为Close按钮留出空间
+            paddingRight: '30px' // 为CloseButton留出Empty间
           }}>
             <EditableTitle
               title={clip.title || clip.generated_title || 'Video Preview'}
@@ -504,7 +504,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
               onTitleUpdate={(newTitle) => {
                 // Updateclip的Title
                 console.log('播放器Title已Update:', newTitle)
-                // 这里可以触发父组件的Update回调
+                // 这里可以触发父Component的Update回调
                 if (onClipUpdate) {
                   onClipUpdate(clip.id, { title: newTitle })
                 }
@@ -514,7 +514,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
                 fontSize: '16px', 
                 fontWeight: '500',
                 flex: 1,
-                maxWidth: 'calc(100% - 40px)' // 确保不会与Close按钮重叠
+                maxWidth: 'calc(100% - 40px)' // 确保不会与CloseButton重叠
               }}
             />
           </div>
@@ -548,7 +548,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
         )}
       </Modal>
 
-      {/* 字幕Edit器 */}
+      {/* SubtitleEdit器 */}
       {showSubtitleEditor && (
         <>
           {console.log('Rendering SubtitleEditor with:', { showSubtitleEditor, subtitleDataLength: subtitleData.length })}
@@ -569,8 +569,8 @@ const ClipCard: React.FC<ClipCardProps> = ({
         clipIds={[clip.id]}
         clipTitles={[clip.title || clip.generated_title || 'Video Clips']}
         onUploadSuccess={() => {
-          // Upload成功后可以Refresh数据或显示提示
-          console.log('Upload成功')
+          // UploadSuccess后可以Refresh数据或显示提示
+          console.log('UploadSuccess')
         }}
       />
     </>

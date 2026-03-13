@@ -8,7 +8,7 @@ export const SimpleTest: React.FC = () => {
   const [tasks, setTasks] = useState<any[]>([]);
 
   useEffect(() => {
-    console.log('🎯 SimpleTest组件已加载');
+    console.log('🎯 SimpleTestComponent已加载');
     setCount(prev => prev + 1);
   }, []);
 
@@ -21,16 +21,16 @@ export const SimpleTest: React.FC = () => {
         setTasks(data.data.tasks || []);
       })
       .catch(error => {
-        console.error('❌ API调用失败:', error);
+        console.error('❌ API调用Failed:', error);
       });
   }, []);
 
   return (
     <div style={{ padding: 16 }}>
-      <Card title="简单Test组件">
-        <Text>组件加载次数: {count}</Text>
+      <Card title="简单TestComponent">
+        <Text>Component加载次数: {count}</Text>
         <br />
-        <Text>任务数量: {tasks.length}</Text>
+        <Text>TaskCount: {tasks.length}</Text>
         <br />
         <Text>Task List:</Text>
         <ul>

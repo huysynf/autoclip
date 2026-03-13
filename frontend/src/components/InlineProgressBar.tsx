@@ -17,14 +17,14 @@ interface ProgressData {
   stepDetails?: string;
 }
 
-// 流水线Step配置
+// Pipeline step configuration
 const PIPELINE_STEPS = [
-  { id: 1, name: '大纲提取', description: '从视频转写文本中提取结构性大纲' },
-  { id: 2, name: 'Time定位', description: '基于SRT字幕定位话题Time区间' },
-  { id: 3, name: 'ContentScore', description: '多维度评估clips质量与传播潜力' },
-  { id: 4, name: 'Title生成', description: '为高分clips生成吸引人的Title' },
-  { id: 5, name: '主题聚类', description: '将相关clips聚合为Collection推荐' },
-  { id: 6, name: '视频切割', description: '使用FFmpeg生成切片与Collection视频' }
+  { id: 1, name: 'Outline Extraction', description: 'Extract structured outline from video transcript' },
+  { id: 2, name: 'Timestamp Locator', description: 'Locate topic time ranges based on SRT subtitles' },
+  { id: 3, name: 'Content Scoring', description: 'Multi-dimensional evaluation of clip quality and virality' },
+  { id: 4, name: 'Title Generation', description: 'Generate engaging titles for high-score clips' },
+  { id: 5, name: 'Theme Clustering', description: 'Group related clips into collection recommendations' },
+  { id: 6, name: 'Video Cutting', description: 'Generate clip segments and collection videos with FFmpeg' }
 ];
 
 export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
@@ -38,15 +38,15 @@ export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
     progress: currentStep > 0 ? Math.round((currentStep / totalSteps) * 100) : 0,
     currentStep: currentStep,
     totalSteps: totalSteps,
-    stepName: currentStep > 0 ? getStepName(currentStep) : 'Initializing中...',
+    stepName: currentStep > 0 ? getStepName(currentStep) : 'InitializingMedium...',
     stepDetails: ''
   });
 
-  // WebSocket连接用于实时ProgressUpdate
+  // WebSocket connection for real-time progress updates
   const { isConnected, syncSubscriptions } = useWebSocket({
-    userId: `homepage-user`, // 使用统一的用户ID，避免重复连接
+    userId: `homepage-user`, // Use unified UserID to avoid duplicate connections
     onMessage: (message: WebSocketEventMessage) => {
-      console.log('InlineProgressBar收到WebSocket消息:', message);
+      console.log('InlineProgressBar received WebSocket message:', message);
       if (message.type === 'task_progress_update' && 
           message.project_id === projectId) {
         handleProgressUpdate(message);
@@ -54,21 +54,21 @@ export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
     }
   });
 
-  // 处理ProgressUpdate
+  // Handle progress update
   const handleProgressUpdate = (message: any) => {
-    console.log('InlineProgressBar处理ProgressUpdate:', message);
+    console.log('InlineProgressBar handling progress update:', message);
     
     const newProgress = message.progress || 0;
     const stepName = message.step_name || 'Processing...';
     const stepDetails = message.message || '';
     
-    // 快照消息检查 - 避免回退
+    // Snapshot message check - prevent rollback
     if (message.snapshot && progressData.progress > newProgress) {
-      console.log('忽略旧快照消息:', { current: progressData.progress, snapshot: newProgress });
+      console.log('Ignoring old snapshot message:', { current: progressData.progress, snapshot: newProgress });
       return;
     }
     
-    console.log('UpdateProgress数据:', { newProgress, stepName, stepDetails });
+    console.log('Updating progress data:', { newProgress, stepName, stepDetails });
     
     setProgressData(prev => ({
       ...prev,
@@ -77,20 +77,20 @@ export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
       stepDetails: stepDetails
     }));
 
-    // Notifications父组件
+    // Notify parent component
     onProgressUpdate?.(newProgress, stepName);
   };
 
-  // 根据StepID获取StepName
+  // Get step name by step ID
   const getStepName = (stepId: number): string => {
     const step = PIPELINE_STEPS.find(s => s.id === stepId);
     return step ? step.name : 'Processing...';
   };
 
-  // 监听props变化，UpdateProgress数据
+  // Watch props changes, update progress data
   useEffect(() => {
     const newProgress = currentStep > 0 ? Math.round((currentStep / totalSteps) * 100) : 0;
-    const newStepName = currentStep > 0 ? getStepName(currentStep) : 'Initializing中...';
+    const newStepName = currentStep > 0 ? getStepName(currentStep) : 'InitializingMedium...';
     
     setProgressData(prev => ({
       ...prev,
@@ -101,23 +101,23 @@ export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
     }));
   }, [currentStep, totalSteps]);
 
-  // 订阅projectsProgressUpdate
+  // Subscribe to project progress updates
   useEffect(() => {
     console.log('InlineProgressBar WebSocketStatus:', { isConnected, projectId });
     if (isConnected && projectId) {
-      console.log('订阅projectsProgress:', projectId);
+      console.log('Subscribing to project progress:', projectId);
       syncSubscriptions([projectId]);
     }
   }, [isConnected, projectId, syncSubscriptions]);
 
-  // 计算Progress条宽度百分比
+  // Calculate progress bar width percentage
   const progressPercentage = Math.min(Math.max(progressData.progress, 0), 100);
   
-  // 计算当前Step在总Step中的位置
+  // Calculate current step position in total steps
   const stepProgress = progressData.currentStep > 0 ? 
     ((progressData.currentStep - 1) / progressData.totalSteps) * 100 : 0;
 
-  // 生成Progress条背景渐变
+  // Generate progress bar background gradient
   const getProgressGradient = () => {
     const baseColor = '#1890ff';
     const lightColor = '#40a9ff';
@@ -130,7 +130,7 @@ export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
       rgba(24, 144, 255, 0.1) 100%)`;
   };
 
-  // 生成动画效果
+  // Generate animation style
   const getAnimationStyle = () => {
     return {
       background: getProgressGradient()
@@ -145,11 +145,11 @@ export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
       padding: '6px 12px',
       position: 'relative',
       overflow: 'hidden',
-      height: '32px', // 固定高度
+      height: '32px', // Fixed height
       display: 'flex',
       alignItems: 'center'
     }}>
-      {/* Progress条背景 */}
+      {/* Progress bar background */}
       <div style={{
         position: 'absolute',
         top: 0,
@@ -159,7 +159,7 @@ export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
         ...getAnimationStyle()
       }} />
       
-      {/* Content层 - 单行布局 */}
+      {/* Content layer - single row layout */}
       <div style={{ 
         position: 'relative', 
         zIndex: 1,
@@ -169,7 +169,7 @@ export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
         justifyContent: 'space-between',
         gap: '8px'
       }}>
-        {/* 左侧：StepName */}
+        {/* Left: step name */}
         <div style={{ 
           display: 'flex',
           alignItems: 'center',
@@ -189,7 +189,7 @@ export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
           </span>
         </div>
         
-        {/* 中间：Progress条 */}
+        {/* Middle: progress bar */}
         <div style={{
           width: '80px',
           height: '4px',
@@ -211,7 +211,7 @@ export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
           }} />
         </div>
         
-        {/* 右侧：Progress信息 */}
+        {/* Right: progress info */}
         <div style={{ 
           display: 'flex',
           alignItems: 'center',
@@ -236,7 +236,7 @@ export const InlineProgressBar: React.FC<InlineProgressBarProps> = ({
         </div>
       </div>
       
-      {/* AddCSS动画 */}
+      {/* Add CSS animation */}
       <style jsx>{`
         @keyframes progressBarPulse {
           0%, 100% {
