@@ -1,97 +1,105 @@
-# 投稿功能问题分析报告
+# Upload Feature Issue Analysis Report
 
-## 问题概述
+## Problem overview
 
-用户反馈投稿任务显示成功，但实际在B站创作中心没有看到投稿成功。经过排查发现以下问题：
+Users reported that upload tasks were marked as successful, but no corresponding submission appeared in the Bilibili Creator Center. Investigation revealed the following issues:
 
-## 问题分析
+## Root cause analysis
 
-### 1. 文字颜色问题 ✅ 已修复
-- **问题**: 投稿状态页面在深色主题下文字颜色不清晰
-- **原因**: 缺少深色主题的样式配置
-- **解决方案**: 添加了深色背景和白色文字样式
+### 1. Text color issue ✅ Fixed
 
-### 2. 投稿状态错误标记 ✅ 已修复
-- **问题**: 数据库显示状态为"success"，但实际没有BV号/AV号
-- **原因**: 异步上传方法没有被正确等待，导致状态被错误标记
-- **解决方案**: 更新数据库记录状态为"failed"
+- **Problem**: On the upload status page, text was not clearly visible in dark theme.
+- **Cause**: Missing dark theme styling.
+- **Fix**: Added dark background and white text styles.
 
-### 3. 上传功能未实现 ⚠️ 需要重新开发
-- **问题**: `BilibiliDirectUploader`类中的上传方法没有真正调用B站API
-- **原因**: 
-  - Cookie解密失败（加密密钥格式问题）
-  - 上传方法只是占位符，没有实际实现
-  - 异步调用处理有问题
+### 2. Incorrect upload status ✅ Fixed
 
-## 技术细节
+- **Problem**: Database showed status `"success"`, but there was no BV/AV ID.
+- **Cause**: The async upload method was never properly awaited, so status was incorrectly set to success.
+- **Fix**: Updated database records to status `"failed"` for these tasks.
 
-### Cookie解密问题
+### 3. Upload feature not actually implemented ⚠️ Needs full rework
+
+- **Problem**: The upload method in `BilibiliDirectUploader` never actually calls the real Bilibili upload API.
+- **Causes**:
+  - Cookie decryption fails (encryption key format issue).
+  - Upload method is just a placeholder without real implementation.
+  - Async invocation is handled incorrectly.
+
+## Technical details
+
+### Cookie decryption problem
+
 ```
-错误: Fernet key must be 32 url-safe base64-encoded bytes.
-原因: 环境变量ENCRYPTION_KEY格式不正确
-```
-
-### 异步调用问题
-```
-警告: RuntimeWarning: coroutine 'BilibiliUploadService.upload_clip' was never awaited
-原因: 同步方法中调用异步方法时处理不当
+Error: Fernet key must be 32 url-safe base64-encoded bytes.
+Cause: ENV var ENCRYPTION_KEY has invalid format
 ```
 
-### 数据库状态问题
+### Async invocation problem
+
+```
+Warning: RuntimeWarning: coroutine 'BilibiliUploadService.upload_clip' was never awaited
+Cause: Async method called from sync context without proper awaiting
+```
+
+### Database status problem
+
 ```sql
--- 修复前
+-- Before fix
 status: "success", bv_id: null, av_id: null
 
--- 修复后  
-status: "failed", error_message: "上传功能未实现，需要重新开发"
+-- After fix
+status: "failed", error_message: "Upload feature not implemented, needs redevelopment"
 ```
 
-## 解决方案
+## Solutions
 
-### 短期解决方案 ✅ 已完成
-1. 修复页面文字颜色显示问题
-2. 更正数据库中的错误状态
-3. 添加明确的错误信息提示
+### Short-term fixes ✅ Completed
 
-### 长期解决方案 🔄 需要实施
-1. **重新实现上传功能**
-   - 研究B站最新的上传API
-   - 实现真正的分片上传逻辑
-   - 处理Cookie认证和权限验证
+1. Fix text color on status page for dark theme.
+2. Correct erroneous status values in the database.
+3. Add clear error messages explaining that upload is not implemented yet.
 
-2. **修复加密系统**
-   - 生成正确的Fernet密钥
-   - 重新加密现有Cookie数据
-   - 或者重新导入Cookie
+### Long-term fixes 🔄 To be implemented
 
-3. **完善错误处理**
-   - 添加详细的错误日志
-   - 实现重试机制
-   - 提供用户友好的错误提示
+1. **Re-implement upload functionality**
+   - Research the latest Bilibili upload APIs.
+   - Implement true chunked upload logic.
+   - Handle cookie-based authentication and permission checks properly.
 
-## 当前状态
+2. **Fix the encryption system**
+   - Generate a valid Fernet key.
+   - Re-encrypt existing cookie data.
+   - Or re-import cookies from the user.
 
-- ✅ 页面显示正常，文字清晰可见
-- ✅ 投稿状态正确显示为失败
-- ✅ 错误信息明确提示功能未实现
-- ⚠️ 上传功能需要重新开发
+3. **Improve error handling**
+   - Add detailed error logs.
+   - Implement retry mechanisms.
+   - Provide user-friendly error messages and guidance.
 
-## 建议
+## Current status
 
-1. **立即行动**: 用户可以正常使用投稿状态页面查看任务状态
-2. **后续开发**: 需要重新研究和实现B站的上传API
-3. **用户体验**: 当前会显示明确的错误信息，用户知道功能正在开发中
+- ✅ Page display is correct; text is clearly visible.
+- ✅ Upload status is correctly shown as failed when upload is not actually done.
+- ✅ Error messages clearly state that the feature is not yet implemented.
+- ⚠️ Actual upload implementation still needs to be developed.
 
-## 相关文件
+## Recommendations
 
-- `frontend/src/pages/UploadStatusPage.tsx` - 投稿状态页面
-- `backend/services/bilibili_service.py` - B站服务实现
-- `backend/tasks/upload.py` - 上传任务处理
-- `backend/utils/crypto.py` - 加密工具
+1. **Immediate**: Users can reliably use the upload status page to see task outcomes.
+2. **Next steps**: Re-design and implement the Bilibili upload API integration.
+3. **User experience**: Keep explicit messaging so users understand the feature is under development.
 
-## 更新日志
+## Related files
 
-- **2025-09-11**: 问题分析和初步修复
-  - 修复页面显示问题
-  - 更正数据库状态
-  - 识别根本问题
+- `frontend/src/pages/UploadStatusPage.tsx` – upload status page
+- `backend/services/bilibili_service.py` – Bilibili service implementation
+- `backend/tasks/upload.py` – upload task handling
+- `backend/utils/crypto.py` – encryption utilities
+
+## Changelog
+
+- **2025-09-11**: Initial analysis and first round of fixes
+  - Fixed page display issues.
+  - Corrected database status.
+  - Identified root causes.

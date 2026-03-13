@@ -1,23 +1,23 @@
-# 账号密码登录状态说明
+# Username/Password Login Status
 
-## 问题描述
+## Problem description
 
-用户反馈账号密码登录失败，出现"Request failed with status code 400"错误。
+Users reported that username/password login fails with `"Request failed with status code 400"`.
 
-## 问题分析
+## Analysis
 
-经过排查，发现以下情况：
+Investigation shows:
 
-### 1. 原始问题
-- **错误原因**：账号密码登录需要处理验证码，建议使用Cookie导入方式
-- **状态码**：400（预期行为）
-- **说明**：这是设计上的限制，不是bug
+### 1. Original behavior
+- **Root cause**: Username/password login requires CAPTCHA solving; the recommended path is cookie import instead.
+- **Status code**: 400 (expected behavior).
+- **Explanation**: This is a design limitation, not a bug.
 
-### 2. 技术实现
-- **开发环境**：模拟登录成功，返回测试Cookie
-- **生产环境**：尝试真实B站登录，需要处理验证码
+### 2. Implementation details
+- **Development environment**: Simulates successful login and returns mock cookies.
+- **Production environment**: Attempts a real Bilibili login, which requires CAPTCHA handling.
 
-### 3. 环境变量控制
+### 3. Environment control
 ```bash
 # 开发环境（模拟登录成功）
 export ENVIRONMENT=development
@@ -28,40 +28,40 @@ export ENVIRONMENT=production
 export SKIP_COOKIE_VALIDATION=false
 ```
 
-## 当前状态
+## Current state
 
-### ✅ 已解决的问题
-1. **数据格式不匹配**：修复了API与服务的Cookie数据格式不一致问题
-2. **错误处理**：增强了异常处理和错误信息
-3. **开发支持**：提供了开发环境下的模拟登录功能
+### ✅ Issues already addressed
+1. **Data format mismatch**: Fixed cookie data-shape mismatch between API and service.
+2. **Error handling**: Improved exceptions and error messages.
+3. **Dev support**: Added simulated login behavior in development for easier testing.
 
-### ⚠️ 设计限制
-1. **验证码处理**：B站账号密码登录需要处理验证码
-2. **风控风险**：频繁的账号密码登录可能触发B站风控
-3. **复杂度**：完整的验证码流程实现复杂
+### ⚠️ Design constraints
+1. **CAPTCHA**: Bilibili username/password login generally requires CAPTCHA solving.
+2. **Risk control**: Frequent username/password logins can trigger Bilibili risk control.
+3. **Complexity**: Implementing a full CAPTCHA flow is non-trivial.
 
-## 解决方案
+## Solutions
 
-### 方案1：使用Cookie导入（推荐）
-- **优点**：安全、稳定、不会触发风控
-- **缺点**：需要手动获取Cookie
-- **适用场景**：日常使用、批量账号管理
+### Option 1: Cookie import (recommended)
+- **Pros**: Safe, stable, and does not trigger risk control when used reasonably.
+- **Cons**: Requires manual cookie acquisition.
+- **Best for**: Daily use; managing many accounts.
 
-### 方案2：完善账号密码登录
-- **优点**：用户体验好、操作直观
-- **缺点**：需要处理验证码、有风控风险
-- **适用场景**：新用户首次登录、无法获取Cookie的情况
+### Option 2: Fully implement username/password login
+- **Pros**: Very straightforward UX; no manual cookie copy-paste.
+- **Cons**: Requires CAPTCHA handling and carries more risk-control exposure.
+- **Best for**: First-time login for new users; situations where cookie import is hard.
 
-### 方案3：混合策略
-- **开发环境**：模拟登录成功，便于测试
-- **生产环境**：引导用户使用Cookie导入
+### Option 3: Hybrid strategy
+- **Dev**: Simulated success for convenient testing.
+- **Prod**: Steer users towards cookie import as the primary method.
 
-## 技术实现
+## Implementation details
 
-### 开发环境行为
+### Behavior in development
 ```python
 if is_development:
-    # 模拟登录成功，返回测试Cookie
+    # Simulate login success, return mock cookies
     mock_cookies = {
         "SESSDATA": f"mock_sessdata_{username}",
         "bili_jct": f"mock_jct_{username}",
@@ -71,82 +71,81 @@ if is_development:
     return {"success": True, "cookies": mock_cookies}
 ```
 
-### 生产环境行为
+### Behavior in production
 ```python
 else:
-    # 尝试真实B站登录，需要处理验证码
-    # 由于验证码处理复杂，建议用户使用Cookie导入
+    # Attempt a real Bilibili login, which needs CAPTCHA
+    # Because CAPTCHA handling is complex, recommend cookie import instead
     return {
         "success": False,
-        "message": "账号密码登录需要处理验证码，建议使用Cookie导入方式"
+        "message": "Username/password login requires CAPTCHA; please use cookie import instead"
     }
 ```
 
-## 测试结果
+## Test results
 
-### 开发环境测试
+### Dev environment
 ```
-✅ 登录成功 (200)
-用户ID: xxx
-用户名: dev_user
-昵称: 开发用户
-```
-
-### 生产环境测试
-```
-❌ 登录失败 (400)
-错误信息: 账号密码登录需要处理验证码，建议使用Cookie导入方式
+✅ Login succeeded (200)  
+User ID: xxx  
+Username: dev_user  
+Nickname: Dev User
 ```
 
-## 用户建议
+### Production environment
+```
+❌ Login fails (400)  
+Error: username/password login requires CAPTCHA; please use cookie import instead
+```
 
-### 日常使用
-1. **首选**：Cookie导入方式
-   - 最安全稳定
-   - 不会触发风控
-   - 操作简单
+## Recommendations for users
 
-2. **备选**：账号密码登录
-   - 当Cookie失效时使用
-   - 注意验证码处理
-   - 避免频繁使用
+### Daily usage
+1. **Primary**: Cookie import
+   - Safest and most stable.
+   - Does not typically trigger risk control.
+   - Simple flow once you know how to copy cookies.
 
-### 获取Cookie步骤
-1. 在浏览器中登录B站
-2. 按F12打开开发者工具
-3. 切换到Network标签页
-4. 刷新页面，找到任意请求
-5. 在请求头中复制Cookie字段的值
+2. **Fallback**: Username/password
+   - Use only when cookies have expired and you can’t immediately refresh them.
+   - Be aware of CAPTCHAs and avoid repeated attempts.
 
-## 后续优化
+### How to get cookies
+1. Log into Bilibili in your browser.
+2. Press F12 to open DevTools.
+3. Switch to the Network tab.
+4. Refresh the page and pick any request.
+5. Copy the `Cookie` header value.
 
-### 短期计划
-1. **验证码处理**：实现基本的验证码识别和处理
-2. **用户引导**：优化错误提示，提供更清晰的操作指导
-3. **环境检测**：改进环境变量的检测和应用
+## Future improvements
 
-### 长期计划
-1. **智能验证**：根据用户行为智能选择登录方式
-2. **风控规避**：实现更智能的登录策略
-3. **用户体验**：提供多种登录方式的统一界面
+### Short term
+1. **CAPTCHA handling**: Implement a minimal CAPTCHA-handling flow.  
+2. **User guidance**: Refine error messages and inline help for login flows.  
+3. **Env detection**: Make environment-based behavior clearer and safer.
 
-## 总结
+### Long term
+1. **Smart strategy**: Choose login method dynamically based on user behavior and risk.  
+2. **Risk mitigation**: Smarter rate limiting and heuristics to avoid risk control.  
+3. **Unified UX**: A single, polished UI for all login methods.
 
-账号密码登录功能目前工作正常，但有以下特点：
+## Summary
 
-### ✅ 功能状态
-- **开发环境**：模拟登录成功，便于开发和测试
-- **生产环境**：返回400错误，引导用户使用Cookie导入
-- **错误处理**：提供清晰的错误信息和解决建议
+The username/password login feature is behaving as designed, with these characteristics:
 
-### 🔧 技术特点
-- **环境感知**：根据环境变量自动调整行为
-- **数据兼容**：修复了Cookie数据格式问题
-- **错误友好**：提供详细的错误信息和操作指导
+### ✅ Functional status
+- **Development**: Simulated login succeeds for convenient testing.  
+- **Production**: Returns 400 and clearly explains that cookie import is recommended.  
+- **Errors**: Messages include concrete guidance and alternatives.
 
-### 💡 使用建议
-- **开发测试**：使用开发环境，享受模拟登录功能
-- **生产使用**：推荐使用Cookie导入方式
-- **问题排查**：检查环境变量设置和错误日志
+### 🔧 Technical properties
+- **Environment-aware**: Behavior switches safely based on environment variables.  
+- **Data compatibility**: Cookie data-shape issues between layers are fixed.  
+- **Error-friendly**: Detailed error information and user guidance.
 
-这个实现既满足了开发测试的需求，又为生产环境提供了安全的登录方式选择。
+### 💡 Recommended usage
+- **For development/testing**: Use dev mode to take advantage of simulated login.  
+- **For production**: Prefer cookie import for real usage.  
+- **For debugging**: Check env vars and logs first when login fails.
+
+This approach satisfies development needs while providing a safe and intentional path for production use.

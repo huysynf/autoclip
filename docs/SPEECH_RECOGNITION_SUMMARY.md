@@ -1,27 +1,27 @@
-# 🎤 语音识别模块重新设计总结
+# 🎤 Speech Recognition Module Redesign Summary
 
-## 📋 重新设计概述
+## 📋 Redesign overview
 
-根据您的建议，我们已经完成了语音识别模块的全面重新设计，主要改进包括：
+Based on your requirements, we completed a full redesign of the speech recognition module. Main improvements:
 
-### ✅ 已完成的改进
+### ✅ Completed improvements
 
-1. **移除测试字幕数据** ✅
-   - 完全移除了 `generate_subtitle_simple` 方法
-   - 转写失败时直接抛出 `SpeechRecognitionError` 异常
-   - 确保生产环境不使用mock数据
+1. **Removed test subtitle data** ✅
+   - Completely removed `generate_subtitle_simple`.
+   - On transcription failure, we now raise `SpeechRecognitionError` instead of returning mock data.
+   - Ensures production never uses fake/test subtitles.
 
-2. **支持多语种识别** ✅
-   - 支持15种语言：中文、英文、日文、韩文、法文、德文、西班牙文、俄文、阿拉伯文、葡萄牙文、意大利文等
-   - 支持自动语言检测
-   - 支持简体/繁体中文、美式/英式英文等变体
+2. **Multi-language recognition support** ✅
+   - Supports ~15 languages: Chinese, English, Japanese, Korean, French, German, Spanish, Russian, Arabic, Portuguese, Italian, etc.
+   - Automatic language detection.
+   - Supports variants like Simplified/Traditional Chinese, US/UK English, etc.
 
-3. **支持多种API接入** ✅
-   - 本地Whisper（推荐，免费离线）
-   - OpenAI API（准确率最高）
-   - Azure Speech Services（企业级）
-   - Google Speech-to-Text（功能丰富）
-   - 阿里云语音识别（中文效果好）
+3. **Multiple provider integrations** ✅
+   - Local Whisper (recommended, free, offline)
+   - OpenAI API (highest accuracy)
+   - Azure Speech Services (enterprise)
+   - Google Speech-to-Text (feature-rich)
+   - Alibaba Cloud Speech (strong Chinese performance)
 
 ## 🔧 技术架构
 

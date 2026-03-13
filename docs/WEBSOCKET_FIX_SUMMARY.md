@@ -1,179 +1,179 @@
-# WebSocket系统修复总结
+# WebSocket System Fix Summary
 
-## 问题诊断
+## Problem diagnosis
 
-通过分析后端日志，发现了以下关键问题：
+Backend logs revealed several critical issues:
 
-### 1. 语法错误
-- **问题**：`processing_orchestrator.py` 第543行缺少 `except` 块
-- **错误**：`SyntaxError: expected 'except' or 'finally' block`
-- **修复**：添加了缺失的 `except` 块
+### 1. Syntax error
+- **Problem**: `processing_orchestrator.py` was missing an `except` block.
+- **Error**: `SyntaxError: expected 'except' or 'finally' block`
+- **Fix**: Added the missing `except` block.
 
-### 2. WebSocket连接重复
-- **问题**：多个组件使用相同的用户ID `homepage-user`，导致重复连接
-- **现象**：日志显示同一用户被重复连接多次
-- **修复**：统一使用 `homepage-user` 作为用户ID，避免重复连接
+### 2. Duplicate WebSocket connections
+- **Problem**: Multiple components reused the same user ID `homepage-user`, causing duplicate connections.
+- **Symptom**: Logs showed the same user being connected multiple times.
+- **Fix**: Standardized user ID usage and connection management to avoid duplicate connections.
 
-### 3. Task Pending错误
-- **问题**：WebSocket发送工作器没有正确清理
-- **错误**：`Task was destroyed but it is pending!`
-- **修复**：将 `disconnect` 方法改为异步，正确等待任务完成
+### 3. “Task was destroyed but it is pending!” errors
+- **Problem**: WebSocket send workers were not cleaned up correctly.
+- **Error**: `Task was destroyed but it is pending!`
+- **Fix**: Made `disconnect` asynchronous and correctly awaited task completion.
 
-### 4. 订阅数据结构错误
-- **问题**：WebSocket网关服务中使用了错误的订阅数据结构
-- **修复**：修正了用户订阅查找逻辑
+### 4. Subscription data-structure bug
+- **Problem**: The WebSocket gateway service used an incorrect subscription lookup strategy.
+- **Fix**: Corrected the logic for finding users subscribed to a channel.
 
-## 修复内容
+## Fixes
 
-### 1. 语法修复 (`processing_orchestrator.py`)
+### 1. Syntax fix (`processing_orchestrator.py`)
 ```python
-# 修复前：缺少 except 块
+# Before: missing except block
 def _send_realtime_progress_update(self, ...):
     try:
-        # ... 代码 ...
-        logger.debug(f"已发送实时进度更新...")
+        # ... code ...
+        logger.debug("Realtime progress update sent...")
     
     async def _async_send_progress_update(self, payload: dict):  # 语法错误
 
-# 修复后：添加 except 块
+# After: added except block
 def _send_realtime_progress_update(self, ...):
     try:
-        # ... 代码 ...
-        logger.debug(f"已发送实时进度更新...")
+        # ... code ...
+        logger.debug("Realtime progress update sent...")
         
     except Exception as e:
-        logger.error(f"发送实时进度更新失败: {e}")
+        logger.error(f"Failed to send realtime progress update: {e}")
     
-    async def _async_send_progress_update(self, payload: dict):  # 正确
+    async def _async_send_progress_update(self, payload: dict):  # Now valid
 ```
 
-### 2. WebSocket管理器修复 (`websocket_manager.py`)
+### 2. WebSocket manager fix (`websocket_manager.py`)
 ```python
-# 修复前：同步 disconnect
+# Before: sync disconnect
 def disconnect(self, user_id: str):
     if user_id in self.send_tasks:
-        self.send_tasks[user_id].cancel()  # 没有等待完成
+        self.send_tasks[user_id].cancel()  # No await
         del self.send_tasks[user_id]
 
-# 修复后：异步 disconnect
+# After: async disconnect
 async def disconnect(self, user_id: str):
     if user_id in self.send_tasks:
         task = self.send_tasks[user_id]
         task.cancel()
         try:
-            await task  # 等待任务完成
+            await task  # Wait for task to finish
         except asyncio.CancelledError:
             pass
         del self.send_tasks[user_id]
 ```
 
-### 3. WebSocket网关修复 (`websocket_gateway_service.py`)
+### 3. WebSocket gateway fix (`websocket_gateway_service.py`)
 ```python
-# 修复前：错误的订阅查找
+# Before: incorrect subscription lookup
 subscribed_users = self.user_subscriptions.get(channel, set())
 
-# 修复后：正确的订阅查找
+# After: correct lookup over user-channel mapping
 subscribed_users = set()
 for user_id, user_channels in self.user_subscriptions.items():
     if channel in user_channels:
         subscribed_users.add(user_id)
 ```
 
-### 4. 前端连接修复 (`useWebSocket.ts`)
+### 4. Frontend connection fix (`useWebSocket.ts`)
 ```typescript
-// 修复前：可能重复连接
+// Before: could create duplicate connections
 const ensureConnected = useCallback(() => {
     if (globalWs?.readyState === WebSocket.OPEN) {
         return;
     }
-    // 直接创建新连接
+    // Directly create a new connection...
 
-// 修复后：检查用户ID变更
+// After: check for user ID changes
 const ensureConnected = useCallback(() => {
     if (globalWs?.readyState === WebSocket.OPEN) {
         return;
     }
     
-    // 如果已经有连接但用户ID不同，先关闭旧连接
+    // If a connection exists but userId changed, close old connection first
     if (globalWs && globalUserId !== userId) {
-        console.log(`用户ID变更: ${globalUserId} -> ${userId}，关闭旧连接`);
+        console.log(`User ID changed: ${globalUserId} -> ${userId}, closing old connection`);
         globalWs.close();
         globalWs = null;
     }
 ```
 
-### 5. 组件用户ID统一 (`InlineProgressBar.tsx`)
+### 5. Unified user ID in components (`InlineProgressBar.tsx`)
 ```typescript
-// 修复前：使用项目ID作为用户ID
+// Before: using projectId as userId
 userId: `project_${projectId}`
 
-// 修复后：使用统一的用户ID
+// After: use a unified homepage-level userId
 userId: `homepage-user`
 ```
 
-## 验证结果
+## Verification
 
-### 1. 模块导入测试
+### 1. Module import tests
 ```bash
-✅ progress_message_adapter 导入成功
-✅ progress_snapshot_service 导入成功
-✅ websocket_gateway_service 导入成功
-✅ 主应用导入成功
+✅ progress_message_adapter imports successfully  
+✅ progress_snapshot_service imports successfully  
+✅ websocket_gateway_service imports successfully  
+✅ Main app imports successfully
 ```
 
-### 2. 服务启动测试
+### 2. Service startup tests
 ```bash
-✅ WebSocket网关服务已启动
-✅ 进度快照服务已连接Redis
-✅ API服务正常启动 (http://localhost:8000/docs)
+✅ WebSocket gateway service starts correctly  
+✅ Progress snapshot service connects to Redis  
+✅ API service starts normally (`http://localhost:8000/docs`)
 ```
 
-### 3. 功能测试
+### 3. Functional tests
 ```bash
-✅ 消息适配器转换正常
-✅ 快照服务存储和获取正常
-✅ WebSocket管理器初始化正常
+✅ Message adapter conversion works  
+✅ Snapshot service store/fetch works  
+✅ WebSocket manager initializes correctly
 ```
 
-## 系统状态
+## System status
 
-### 当前状态
-- ✅ 后端服务正常启动
-- ✅ WebSocket网关服务运行正常
-- ✅ Redis连接正常
-- ✅ 数据库连接正常
-- ✅ API文档可访问
+### Current status
+- ✅ Backend services start normally  
+- ✅ WebSocket gateway service runs as expected  
+- ✅ Redis connection is healthy  
+- ✅ Database connection is healthy  
+- ✅ API docs are accessible
 
-### 日志状态
-- ✅ 无语法错误
-- ✅ 无导入错误
-- ✅ 无连接错误
-- ✅ 服务启动日志正常
+### Logging
+- ✅ No syntax errors  
+- ✅ No import errors  
+- ✅ No connection errors  
+- ✅ Startup logs look normal
 
-## 后续建议
+## Recommendations
 
-### 1. 监控要点
-- 观察WebSocket连接数是否稳定
-- 检查是否有重复连接日志
-- 监控Task pending错误是否消失
+### 1. Monitoring
+- Watch WebSocket connection counts over time.  
+- Check for duplicate-connection logs.  
+- Confirm that “Task was destroyed but it is pending!” no longer appears.
 
-### 2. 测试建议
-- 测试前端页面加载
-- 测试WebSocket消息收发
-- 测试进度条实时更新
+### 2. Testing
+- Test frontend page loading with live WebSocket connections.  
+- Test sending and receiving WebSocket messages.  
+- Verify real-time progress-bar updates.
 
-### 3. 优化建议
-- 考虑添加连接池管理
-- 优化日志输出级别
-- 添加健康检查端点
+### 3. Further optimizations
+- Consider adding connection-pool management for WebSocket-related deps.  
+- Tune log levels to reduce noise in production.  
+- Add dedicated health-check endpoints.
 
-## 总结
+## Summary
 
-通过系统性的问题诊断和修复，成功解决了：
+Through systematic diagnosis and fixes, we resolved:
 
-1. **语法错误**：修复了缺失的异常处理块
-2. **连接重复**：统一了用户ID管理
-3. **任务清理**：改进了异步任务管理
-4. **数据结构**：修正了订阅查找逻辑
+1. **Syntax issues**: Missing exception handlers are fixed.  
+2. **Duplicate connections**: User ID management and connection reuse are now consistent.  
+3. **Task cleanup**: Async tasks are correctly cancelled and awaited.  
+4. **Subscription lookups**: Subscription data structures and lookups have been corrected.  
 
-系统现在可以正常启动和运行，为后续的进度条功能测试奠定了基础。
+The system now starts and runs reliably, providing a solid foundation for further progress-bar and real-time features.

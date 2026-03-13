@@ -1,104 +1,109 @@
-# 🎤 语音识别设置指南
+# 🎤 Speech Recognition Setup Guide
 
-## 📋 概述
+## 📋 Overview
 
-AutoClip支持多种语音识别方式来生成字幕文件，当视频没有字幕时，系统会自动生成字幕以确保流水线处理能够正常进行。
+AutoClip supports multiple speech recognition methods to generate subtitle files. When a video has no subtitles, the system can automatically generate subtitles to ensure the pipeline can run end-to-end.
 
-## 🔧 支持的语音识别方式
+## 🔧 Supported speech recognition methods
 
-### 1. 本地Whisper（推荐）
+### 1. Local Whisper (recommended)
 
-**特点：**
-- ✅ 完全本地运行，无需网络
-- ✅ 无需API密钥
-- ✅ 免费使用
-- ✅ 支持多种语言
-- ✅ 准确率较高
+**Highlights:**
 
-**安装方法：**
+- ✅ Runs fully locally (no network required)
+- ✅ No API key required
+- ✅ Free to use
+- ✅ Supports many languages
+- ✅ Good accuracy
+
+**Installation:**
 
 ```bash
-# 方法1：使用pip安装
+# Option 1: install via pip
 pip install openai-whisper
 
-# 方法2：使用conda安装
+# Option 2: install via conda
 conda install -c conda-forge openai-whisper
 
-# 方法3：从源码安装
+# Option 3: install from source
 git clone https://github.com/openai/whisper.git
 cd whisper
 pip install -e .
 ```
 
-**验证安装：**
+**Verify installation:**
+
 ```bash
 whisper --help
 ```
 
-**模型选择：**
-- `tiny`: 39MB，最快，准确率较低
-- `base`: 74MB，较快，准确率中等（默认）
-- `small`: 244MB，中等速度，准确率较高
-- `medium`: 769MB，较慢，准确率很高
-- `large`: 1550MB，最慢，准确率最高
+**Model selection:**
 
-### 2. OpenAI API（计划中）
+- `tiny`: 39MB, fastest, lower accuracy
+- `base`: 74MB, fast, medium accuracy (default)
+- `small`: 244MB, medium speed, higher accuracy
+- `medium`: 769MB, slower, very high accuracy
+- `large`: 1550MB, slowest, highest accuracy
 
-**特点：**
-- ✅ 准确率最高
-- ✅ 支持多种语言
-- ❌ 需要API密钥
-- ❌ 需要网络连接
-- ❌ 有使用费用
+### 2. OpenAI API (planned)
 
-**设置方法：**
+**Highlights:**
+
+- ✅ Highest accuracy
+- ✅ Supports many languages
+- ❌ Requires an API key
+- ❌ Requires network connectivity
+- ❌ Usage cost applies
+
+**Setup:**
+
 ```bash
-# 设置环境变量
 export OPENAI_API_KEY="your-api-key-here"
 ```
 
-### 3. 测试字幕（备选方案）
+### 3. Test subtitles (fallback option)
 
-**特点：**
-- ✅ 无需安装任何依赖
-- ✅ 立即可用
-- ❌ 只是测试内容，不是真实字幕
-- ❌ 流水线处理效果有限
+**Highlights:**
 
-## 🚀 使用方式
+- ✅ No dependencies required
+- ✅ Available immediately
+- ❌ Only placeholder content, not real subtitles
+- ❌ Limited usefulness for real pipeline quality
 
-### 自动模式（默认）
+## 🚀 How to use
 
-系统会自动选择最佳的可用方法：
+### Auto mode (default)
+
+The system automatically selects the best available method:
 
 ```python
 from shared.utils.speech_recognizer import generate_subtitle_for_video
 
-# 自动选择最佳方法
+# Auto-select the best method
 result = generate_subtitle_for_video(video_path, method="auto")
 ```
 
-### 手动指定方法
+### Specify a method manually
 
 ```python
-# 强制使用本地Whisper
+# Force local Whisper
 result = generate_subtitle_for_video(video_path, method="whisper_local")
 
-# 强制使用OpenAI API
+# Force OpenAI API
 result = generate_subtitle_for_video(video_path, method="openai_api")
 
-# 强制使用测试字幕
+# Force test subtitles
 result = generate_subtitle_for_video(video_path, method="simple")
 ```
 
-### 检查可用方法
+### Check available methods
 
 ```python
 from shared.utils.speech_recognizer import get_available_speech_recognition_methods
 
 methods = get_available_speech_recognition_methods()
 print(methods)
-# 输出示例：
+# Example output:
 # {
 #     "whisper_local": True,
 #     "openai_api": False,
@@ -106,11 +111,11 @@ print(methods)
 # }
 ```
 
-## 📝 配置选项
+## 📝 Configuration options
 
-### 修改Whisper参数
+### Adjust Whisper parameters
 
-在 `shared/utils/speech_recognizer.py` 中可以修改Whisper的参数：
+You can tune Whisper parameters in `shared/utils/speech_recognizer.py`:
 
 ```python
 cmd = [
@@ -118,109 +123,116 @@ cmd = [
     str(video_path),
     '--output_dir', str(output_path.parent),
     '--output_format', 'srt',
-    '--language', 'zh',  # 语言：zh(中文), en(英文), auto(自动检测)
-    '--model', 'base'    # 模型：tiny, base, small, medium, large
+    '--language', 'zh',  # zh (Chinese), en (English), auto (auto-detect)
+    '--model', 'base'    # tiny, base, small, medium, large
 ]
 ```
 
-### 常用参数说明
+### Common parameters
 
-- `--language`: 指定语言，提高识别准确率
-- `--model`: 选择模型大小，影响速度和准确率
-- `--output_format`: 输出格式，支持srt, vtt, txt等
-- `--task`: 任务类型，transcribe(转录)或translate(翻译)
+- `--language`: specify the language to improve accuracy
+- `--model`: choose model size (trade-off between speed and accuracy)
+- `--output_format`: output format (srt, vtt, txt, etc.)
+- `--task`: `transcribe` or `translate`
 
-## 🔍 故障排除
+## 🔍 Troubleshooting
 
-### Whisper安装问题
+### Whisper installation issues
 
-**问题：** `whisper: command not found`
+**Issue:** `whisper: command not found`
 
-**解决方案：**
+**Fix:**
+
 ```bash
-# 检查是否安装成功
+# Check installation
 pip list | grep whisper
 
-# 重新安装
+# Reinstall
 pip uninstall openai-whisper
 pip install openai-whisper
 
-# 检查PATH
+# Check PATH
 which whisper
 ```
 
-**问题：** 依赖缺失
+**Issue:** missing dependencies
 
-**解决方案：**
+**Fix:**
+
 ```bash
-# 安装系统依赖（Ubuntu/Debian）
+# System dependencies (Ubuntu/Debian)
 sudo apt update
 sudo apt install ffmpeg
 
-# 安装系统依赖（macOS）
+# System dependencies (macOS)
 brew install ffmpeg
 
-# 安装Python依赖
+# Python deps (if needed)
 pip install torch torchvision torchaudio
 ```
 
-### 性能优化
+### Performance tuning
 
-**问题：** Whisper运行太慢
+**Issue:** Whisper is too slow
 
-**解决方案：**
-1. 使用更小的模型：`--model tiny`
-2. 使用GPU加速（如果可用）
-3. 分段处理长视频
+**Fix:**
 
-**问题：** 内存不足
+1. Use a smaller model: `--model tiny`
+2. Use GPU acceleration (if available)
+3. Split long videos into segments
 
-**解决方案：**
-1. 使用更小的模型
-2. 增加系统内存
-3. 使用CPU模式
+**Issue:** out of memory
 
-## 📊 性能对比
+**Fix:**
 
-| 方法 | 速度 | 准确率 | 成本 | 网络依赖 | 安装难度 |
+1. Use a smaller model
+2. Increase system RAM
+3. Use CPU mode
+
+## 📊 Performance comparison
+
+| Method | Speed | Accuracy | Cost | Network | Setup difficulty |
 |------|------|--------|------|----------|----------|
-| Whisper tiny | ⭐⭐⭐⭐⭐ | ⭐⭐ | 免费 | 无 | 简单 |
-| Whisper base | ⭐⭐⭐⭐ | ⭐⭐⭐ | 免费 | 无 | 简单 |
-| Whisper small | ⭐⭐⭐ | ⭐⭐⭐⭐ | 免费 | 无 | 简单 |
-| Whisper medium | ⭐⭐ | ⭐⭐⭐⭐⭐ | 免费 | 无 | 简单 |
-| OpenAI API | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 付费 | 需要 | 简单 |
-| 测试字幕 | ⭐⭐⭐⭐⭐ | ⭐ | 免费 | 无 | 无需安装 |
+| Whisper tiny | ⭐⭐⭐⭐⭐ | ⭐⭐ | Free | No | Easy |
+| Whisper base | ⭐⭐⭐⭐ | ⭐⭐⭐ | Free | No | Easy |
+| Whisper small | ⭐⭐⭐ | ⭐⭐⭐⭐ | Free | No | Easy |
+| Whisper medium | ⭐⭐ | ⭐⭐⭐⭐⭐ | Free | No | Easy |
+| OpenAI API | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Paid | Yes | Easy |
+| Test subtitles | ⭐⭐⭐⭐⭐ | ⭐ | Free | No | None |
 
-## 🎯 推荐配置
+## 🎯 Recommended setup
 
-### 开发环境
+### Development
+
 ```bash
-# 安装base模型（平衡速度和准确率）
+# Install base model (balanced speed and accuracy)
 pip install openai-whisper
 ```
 
-### 生产环境
+### Production
+
 ```bash
-# 安装small或medium模型（更高准确率）
+# Consider small/medium for higher accuracy
 pip install openai-whisper
-# 考虑使用GPU加速
+# Consider enabling GPU acceleration
 ```
 
-### 测试环境
+### Testing
+
 ```bash
-# 无需安装，使用测试字幕
-# 系统会自动生成测试字幕文件
+# No installation required when using test subtitles
 ```
 
-## 📞 技术支持
+## 📞 Support
 
-如果遇到问题，请：
+If you run into issues:
 
-1. 检查日志文件中的错误信息
-2. 验证Whisper是否正确安装
-3. 确认视频文件格式是否支持
-4. 查看系统资源是否充足
+1. Check error messages in logs
+2. Verify Whisper is installed correctly
+3. Confirm the video format is supported
+4. Check system resources
 
-更多帮助请参考：
-- [Whisper官方文档](https://github.com/openai/whisper)
-- [OpenAI API文档](https://platform.openai.com/docs/api-reference)
+References:
+
+- [Whisper docs](https://github.com/openai/whisper)
+- [OpenAI API docs](https://platform.openai.com/docs/api-reference)

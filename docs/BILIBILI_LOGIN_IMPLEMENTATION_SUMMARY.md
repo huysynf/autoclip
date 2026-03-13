@@ -1,187 +1,205 @@
-# B站登录替代方案实现总结
+# Bilibili Login Alternatives: Implementation Summary
 
-## 问题背景
+## Background
 
-用户反馈扫码登录方式容易触发B站的风控机制，导致登录失败或账号被限制。为了解决这个问题，我们调研并实现了多种替代的登录方式。
+Users reported that QR-code login frequently triggers Bilibili’s risk-control mechanisms, causing login failures or account limitations. To address this, we researched and implemented multiple alternative login methods.
 
-## 解决方案概述
+## Solution overview
 
-### 1. 新增登录方式
+### 1. New login methods
 
-我们为AutoClip添加了以下登录方式：
+We added the following login methods to AutoClip:
 
-1. **Cookie导入登录** ⭐⭐⭐⭐⭐ (推荐)
-   - 最安全，不会触发风控
-   - 支持本地加密存储
-   - 提供详细的获取指南
+1. **Cookie import login** ⭐⭐⭐⭐⭐ (recommended)
+   - Safest; does not trigger risk control.
+   - Supports locally encrypted storage.
+   - Comes with a detailed acquisition guide.
 
-2. **账号密码登录** ⭐⭐⭐
-   - 传统登录方式
-   - 需要处理验证码
-   - 有触发风控的风险
+2. **Username/password login** ⭐⭐⭐
+   - Traditional login.
+   - Needs CAPTCHA handling.
+   - Higher risk of triggering risk control.
 
-3. **第三方登录** ⭐⭐
-   - 支持微信、QQ登录
-   - 相对安全
-   - 流程复杂
+3. **Third-party login** ⭐⭐
+   - Supports WeChat and QQ login.
+   - Relatively safe.
+   - Flow is more complex.
 
-4. **扫码登录** ⭐⭐ (原有)
-   - 保留原有功能
-   - 标记为高风险
-   - 建议用户避免使用
+4. **QR-code login** ⭐⭐ (existing)
+   - Kept for compatibility.
+   - Marked as high-risk.
+   - Users are advised to avoid it.
 
-### 2. 技术实现
+### 2. Technical implementation
 
-#### 后端API实现
+#### Backend APIs
 
-**新增API端点：**
-- `GET /api/v1/upload/login-methods` - 获取支持的登录方式
-- `POST /api/v1/upload/password-login` - 账号密码登录
-- `POST /api/v1/upload/cookie-login` - Cookie导入登录
-- `POST /api/v1/upload/third-party-login` - 第三方登录
+**New endpoints:**
 
-**核心功能：**
+- `GET /api/v1/upload/login-methods` – list supported login methods
+- `POST /api/v1/upload/password-login` – username/password login
+- `POST /api/v1/upload/cookie-login` – cookie import login
+- `POST /api/v1/upload/third-party-login` – third-party login
+
+**Core logic:**
+
 ```python
-# Cookie验证
+# Cookie validation
 async def validate_bilibili_cookies(cookies: dict) -> dict:
-    """验证B站Cookie有效性"""
-    # 使用B站API验证Cookie
-    # 返回用户信息
+    """Validate Bilibili cookies."""
+    # Use Bilibili APIs to validate cookies and return user info
 
-# 账号密码登录
+# Username/password login
 async def bilibili_password_login(username: str, password: str) -> dict:
-    """B站账号密码登录"""
-    # 处理验证码和登录流程
-    # 返回登录结果
+    """Bilibili username/password login."""
+    # Handle CAPTCHA and login flow, then return result
 ```
 
-#### 前端组件实现
+#### Frontend components
 
-**新增组件：**
-- `CookieHelper.tsx` - Cookie获取指南组件
-- 重构 `BilibiliAccountManager.tsx` - 支持多种登录方式
+**New/updated components:**
 
-**主要特性：**
-- 标签页式登录界面
-- 风险等级提示
-- 推荐使用方式
-- 详细的Cookie获取指南
+- `CookieHelper.tsx` – cookie acquisition helper / guide
+- Refactored `BilibiliAccountManager.tsx` – supports multiple login methods
 
-### 3. 用户体验优化
+**Key UX features:**
 
-#### 登录方式选择
-- 提供5种登录方式
-- 显示风险等级和推荐状态
-- 智能默认选择（Cookie导入）
+- Tabbed login UI.
+- Risk-level indicators for each method.
+- “Recommended” flags.
+- Detailed cookie acquisition guide.
 
-#### Cookie获取指南
-- 6步详细操作指南
-- 可视化步骤展示
-- 一键复制示例
-- 安全提示
+### 3. UX improvements
 
-#### 错误处理
-- 友好的错误提示
-- 详细的失败原因
-- 建议的解决方案
+#### Login method selection
 
-### 4. 安全考虑
+- Five login methods presented.
+- Shows risk level and recommended status.
+- Cookie import is pre-selected by default.
 
-#### Cookie安全
-- 本地加密存储
-- 不传输明文密码
-- 定期验证有效性
-- 安全使用提示
+#### Cookie acquisition guide
 
-#### 风控规避
-- 避免频繁API调用
-- 使用Cookie而非扫码
-- 提供多种备选方案
-- 智能错误处理
+- 6-step detailed instructions.
+- Visual step-by-step description.
+- One-click copy examples.
+- Security tips.
 
-## 测试结果
+#### Error handling
 
-### API功能测试
+- Friendly error messages.
+- Clear failure reasons.
+- Suggested resolutions.
+
+### 4. Security considerations
+
+#### Cookie security
+
+- Cookies are stored encrypted on the client side (where applicable).
+- Plain-text passwords are never stored.
+- Cookie validity is periodically checked.
+- Explicit security usage tips are shown in UI.
+
+#### Risk-control mitigation
+
+- Avoid frequent API calls.
+- Prefer cookies over QR login.
+- Offer multiple fallback methods.
+- Smart error handling and messaging.
+
+## Test results
+
+### API functional tests
+
 ```
-✅ 获取登录方式列表成功
-✅ Cookie验证功能正常
-✅ 账号密码登录功能正常
-✅ 第三方登录功能正常
+✅ Login-method list API passes
+✅ Cookie validation works correctly
+✅ Username/password login flow works (where enabled)
+✅ Third-party login integration works
 ```
 
-### 支持的登录方式
-1. 扫码登录 (qr) - 推荐: False, 风险: high
-2. 账号密码登录 (password) - 推荐: True, 风险: medium
-3. Cookie导入 (cookie) - 推荐: True, 风险: low
-4. 微信登录 (wechat) - 推荐: False, 风险: medium
-5. QQ登录 (qq) - 推荐: False, 风险: medium
+### Supported login methods
 
-## 使用建议
+1. QR-code login (`qr`) – Recommended: False, Risk: high
+2. Username/password (`password`) – Recommended: True, Risk: medium
+3. Cookie import (`cookie`) – Recommended: True, Risk: low
+4. WeChat login (`wechat`) – Recommended: False, Risk: medium
+5. QQ login (`qq`) – Recommended: False, Risk: medium
 
-### 日常使用
-1. **首选：Cookie导入**
-   - 最稳定可靠
-   - 不会触发风控
-   - 建议定期更新
+## Usage recommendations
 
-2. **备选：账号密码登录**
-   - 当Cookie失效时使用
-   - 注意验证码处理
+### Daily usage
 
-### 批量账号管理
-- 统一使用Cookie导入
-- 建立Cookie更新机制
-- 定期检查账号状态
+1. **Primary: Cookie import**
+   - Most stable and reliable.
+   - Does not trigger risk control.
+   - Should be refreshed periodically.
 
-### 新用户引导
-- 提供详细的Cookie获取教程
-- 制作可视化操作指南
-- 强调安全使用
+2. **Fallback: Username/password**
+   - Use when cookies expire or are unavailable.
+   - Be prepared to handle CAPTCHAs.
 
-## 技术细节
+### Multi-account management
 
-### 文件结构
-```
-backend/api/v1/upload.py          # 新增登录API
+- Standardize on cookie import for all accounts.
+- Establish a cookie refresh/update process.
+- Periodically verify account health.
+
+### New user onboarding
+
+- Provide a detailed cookie acquisition tutorial.
+- Offer visual, step-by-step guidance.
+- Emphasize security best practices.
+
+## Technical details
+
+### File layout
+
+```text
+backend/api/v1/upload.py          # New login APIs
 frontend/src/components/
-├── BilibiliAccountManager.tsx    # 重构账号管理组件
-├── CookieHelper.tsx              # 新增Cookie助手组件
-└── services/uploadApi.ts         # 更新API服务
+├── BilibiliAccountManager.tsx    # Refactored account manager
+├── CookieHelper.tsx              # New cookie helper
+└── services/uploadApi.ts         # Updated API client
 ```
 
-### 依赖关系
-- 后端：aiohttp (网络请求)
-- 前端：antd (UI组件)
-- 数据库：SQLAlchemy (数据存储)
+### Dependencies
 
-### 配置要求
-- B站API访问权限
-- 数据库连接
-- 前端构建环境
+- Backend: `aiohttp` (HTTP calls)
+- Frontend: `antd` (UI components)
+- Database: `SQLAlchemy` (persistence)
 
-## 后续优化计划
+### Requirements
 
-### 短期计划
-1. 添加Cookie自动更新功能
-2. 优化错误提示信息
-3. 增加登录状态监控
+- Bilibili API access.
+- Database connection.
+- Frontend build environment.
 
-### 长期计划
-1. 支持更多第三方登录
-2. 实现Cookie自动获取
-3. 添加登录历史记录
-4. 增强安全性验证
+## Future work
 
-## 总结
+### Short term
 
-通过实现多种登录方式，我们成功解决了B站扫码登录的风控问题。Cookie导入方式成为最推荐的登录方式，既保证了安全性，又避免了风控风险。用户现在可以根据自己的需求选择合适的登录方式，大大提升了使用体验。
+1. Add automatic cookie refresh.
+2. Improve error messages and UX.
+3. Add login status monitoring.
 
-### 关键成果
-- ✅ 解决了扫码登录风控问题
-- ✅ 提供了5种登录方式
-- ✅ 实现了完整的用户界面
-- ✅ 通过了功能测试
-- ✅ 提供了详细的使用文档
+### Long term
 
-这个解决方案不仅解决了当前的问题，还为未来的功能扩展奠定了良好的基础。
+1. Support more third-party login options.
+2. Implement semi-automatic cookie acquisition flows.
+3. Add login history tracking.
+4. Strengthen security checks and monitoring.
+
+## Summary
+
+By implementing multiple login methods, we successfully mitigated the risk-control issues associated with QR-code login. Cookie import has become the most recommended login path, balancing safety and stability while avoiding risk-control triggers. Users can now choose the method that best fits their needs, significantly improving the overall experience.
+
+### Key outcomes
+
+- ✅ Eliminated QR-login risk-control issues as a blocker.
+- ✅ Provided five distinct login options.
+- ✅ Delivered a complete, user-friendly login UI.
+- ✅ All features pass functional tests.
+- ✅ Added thorough documentation and guides.
+
+This solution not only solves the current problem but also lays a solid foundation for future feature expansion.
 

@@ -1,146 +1,148 @@
-# WebSocket问题修复总结
+# WebSocket Issue Fix Summary
 
-## 问题分析
+## Problem analysis
 
-根据日志分析，发现了三个主要问题：
+Log analysis revealed three main problems:
 
-1. **自动断开重连**：每10秒左右就有断开重连，说明缺少心跳机制
-2. **重复日志**：每10秒出现"新增0，移除0，未变8"的重复日志
-3. **进度跳跃**：前端从0%直接跳到100%，缺少快照机制
+1. **Automatic disconnect/reconnect**: Connections dropped and reconnected roughly every 10 seconds, indicating a missing heartbeat.
+2. **Duplicate logs**: Repeated log line every ~10 seconds: `"新增0，移除0，未变8"` (“added 0, removed 0, unchanged 8”).
+3. **Progress jumps**: Frontend progress jumped from 0% directly to 100%, implying missing progress snapshots.
 
-## 修复方案
+## Fix plan
 
-### 1. 修复WebSocket自动断开重连问题 ✅
+### 1. Fix WebSocket auto-disconnect / reconnect ✅
 
-**问题根因**：缺少心跳机制，代理/浏览器在10~60s内回收"静默连接"
+**Root cause**: No heartbeat. Proxies/browsers reclaimed “idle” connections after 10–60 seconds.
 
-**解决方案**：
-- 前端每25秒发送一次ping心跳
-- 后端收到ping后立即回复pong
-- 前端5秒内没收到pong就主动重连
-- 添加指数退避重连机制
+**Solution:**
+- Frontend sends `ping` every 25 seconds.
+- Backend replies `pong` immediately.
+- If the frontend doesn’t receive `pong` within 5 seconds, it triggers a reconnect.
+- Added exponential-backoff reconnect strategy.
 
-**修改文件**：
-- `frontend/src/hooks/useWebSocket.ts`：添加心跳机制和重连逻辑
+**Files changed:**
+- `frontend/src/hooks/useWebSocket.ts`: heartbeat + reconnect logic.
 
-### 2. 修复重复日志问题 ✅
+### 2. Fix duplicate logging ✅
 
-**问题根因**：前端频繁调用syncSubscriptions，后端每次都记录INFO日志
+**Root cause**: Frontend called `syncSubscriptions` too frequently; backend logged INFO every time.
 
-**解决方案**：
-- 前端添加300ms防抖机制
-- 后端只在有实际变化时才记录INFO日志
-- 无变化的同步降为DEBUG级别
+**Solution:**
+- Added a 300ms debounce on the frontend.
+- Backend logs INFO only when there’s an actual change.
+- Unchanged syncs are downgraded to DEBUG level.
 
-**修改文件**：
-- `frontend/src/hooks/useWebSocket.ts`：添加防抖机制
-- `backend/services/websocket_gateway_service.py`：优化日志级别
+**Files changed:**
+- `frontend/src/hooks/useWebSocket.ts`: debounce logic.
+- `backend/services/websocket_gateway_service.py`: log-level tuning.
 
-### 3. 实现进度快照机制 ✅
+### 3. Implement progress snapshot mechanism ✅
 
-**问题根因**：前端错过中间的WebSocket推送，缺少"最新快照/补发机制"
+**Root cause**: Frontend missed mid-stream WebSocket updates, and there was no “latest snapshot / replay” mechanism.
 
-**解决方案**：
-- 后端每次发布进度时同时保存快照到Redis Hash
-- 用户订阅时立即发送最新快照
-- 快照标记为`snapshot: true`，前端可识别
+**Solution:**
+- On every progress publish, backend saves a snapshot into a Redis hash.
+- When a user subscribes, the latest snapshot is sent immediately.
+- Snapshot messages are tagged with `snapshot: true` so frontend can handle them specially.
 
-**修改文件**：
-- `backend/services/progress_event_service.py`：添加快照存储和获取
-- `backend/services/websocket_gateway_service.py`：订阅时发送快照
+**Files changed:**
+- `backend/services/progress_event_service.py`: snapshot store/fetch.
+- `backend/services/websocket_gateway_service.py`: send snapshot on subscribe.
 
-### 4. 修复asyncio.run()错误 ✅
+### 4. Fix `asyncio.run()` errors ✅
 
-**问题根因**：在已运行的事件循环中调用`asyncio.run()`
+**Root cause**: `asyncio.run()` was called while an event loop was already running.
 
-**解决方案**：
-- 使用`asyncio.get_running_loop()`和`create_task()`
-- 避免在async上下文中创建新的事件循环
+**Solution:**
+- Use `asyncio.get_running_loop()` and `create_task()` instead.
+- Avoid creating a new loop inside async contexts.
 
-**修改文件**：
-- `backend/api/v1/bilibili.py`：修复事件循环冲突
+**Files changed:**
+- `backend/api/v1/bilibili.py`: event-loop conflict fix.
 
-### 5. 优化WebSocket发送机制 ✅
+### 5. Optimize WebSocket send mechanism ✅
 
-**问题根因**：直接调用`websocket.send_text()`可能导致close后send错误
+**Root cause**: Direct calls to `websocket.send_text()` could fail when the connection closed between checks.
 
-**解决方案**：
-- 所有消息发送都通过队列机制
-- 避免在连接关闭后发送消息
+**Solution:**
+- Route all outbound messages through a queue-based sender.
+- Avoid sending messages after a connection has already closed.
 
-**修改文件**：
-- `backend/core/websocket_manager.py`：统一使用队列发送
+**Files changed:**
+- `backend/core/websocket_manager.py`: unified queued sending.
 
-## 技术细节
+## Technical details
 
-### 心跳机制实现
+### Heartbeat implementation
+
 ```typescript
-// 前端心跳
-const HEARTBEAT_INTERVAL = 25000; // 25秒
-const HEARTBEAT_TIMEOUT = 5000;   // 5秒超时
+// Frontend heartbeat
+const HEARTBEAT_INTERVAL = 25000; // 25s
+const HEARTBEAT_TIMEOUT = 5000;   // 5s timeout
 
-// 发送ping
+// Send ping
 globalWs.send(JSON.stringify({ type: 'ping' }));
 
-// 处理pong
+// Handle pong
 if (data.type === 'pong') {
   clearTimeout(heartbeatTimeout);
 }
 ```
 
-### 快照机制实现
+### Snapshot implementation
+
 ```python
-# 发布进度时保存快照
+# Save snapshot when publishing progress
 snapshot_key = f"progress:last:{channel}"
 await redis_client.hset(snapshot_key, mapping=filtered_dict)
 
-# 订阅时发送快照
+# Send snapshot on subscribe
 snapshot = await progress_event_service.get_task_snapshot(task_id)
 if snapshot:
     snapshot_message = {**snapshot, "snapshot": True}
     await manager.send_personal_message(snapshot_message, user_id)
 ```
 
-### 防抖机制实现
+### Debounce implementation
+
 ```typescript
-// 300ms防抖
+// 300ms debounce
 if (syncDebounceTimeout) {
   clearTimeout(syncDebounceTimeout);
 }
 syncDebounceTimeout = window.setTimeout(() => {
-  // 发送同步请求
+  // Send sync request
 }, SYNC_DEBOUNCE_DELAY);
 ```
 
-## 测试验证
+## Testing
 
-创建了完整的测试脚本验证修复效果：
-- ✅ Redis连接测试
-- ✅ 进度快照测试  
-- ✅ WebSocket网关测试
+We added end-to-end tests to verify the fixes:
 
-所有测试通过，修复效果良好。
+- ✅ Redis connectivity tests.
+- ✅ Progress snapshot tests.  
+- ✅ WebSocket gateway tests.
 
-## 预期效果
+All tests pass and observed behavior matches expectations.
 
-修复后应该实现：
+## Expected behavior after fixes
 
-1. **稳定的WebSocket连接**：不再频繁断开重连
-2. **清晰的日志输出**：减少重复日志，只在有变化时记录
-3. **平滑的进度显示**：前端能立即看到最新进度，不会从0%直接跳到100%
-4. **稳定的系统运行**：不再出现asyncio事件循环错误
-5. **可靠的消息传递**：避免close后send的错误
+1. **Stable WebSocket connections**: No more frequent disconnect/reconnect cycles.
+2. **Cleaner logs**: Reduced noise; INFO logs only on real changes.
+3. **Smooth progress display**: Frontend immediately shows the latest progress instead of jumping 0% → 100%.
+4. **Stable runtime**: No more `asyncio` event-loop errors.
+5. **Reliable messaging**: No errors from sending on closed WebSocket connections.
 
-## 使用建议
+## Usage tips
 
-1. **监控日志**：观察是否还有频繁的断开重连
-2. **测试进度**：启动一个处理任务，观察前端进度是否平滑显示
-3. **检查快照**：刷新页面后应该立即显示最新进度
-4. **验证心跳**：在浏览器开发者工具中可以看到ping/pong消息
+1. **Monitor logs**: Check that disconnect/reconnect events are no longer frequent.
+2. **Test progress**: Run a processing task and confirm that progress updates smoothly.
+3. **Confirm snapshots**: After a page refresh, the latest progress should appear immediately.
+4. **Verify heartbeat**: You should see ping/pong messages in browser DevTools.
 
-## 后续优化
+## Future improvements
 
-1. **Redis Stream**：可考虑使用Redis Stream实现更完整的消息历史
-2. **连接池**：优化Redis连接管理
-3. **监控指标**：添加WebSocket连接数和消息统计
-4. **错误恢复**：增强网络异常时的自动恢复能力
+1. **Redis Streams**: Consider using Streams for a richer message history.
+2. **Connection pooling**: Improve Redis connection management.
+3. **Metrics**: Add WebSocket-connection and message-rate metrics.
+4. **Resilience**: Enhance auto-recovery under network instability.
