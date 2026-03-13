@@ -1,23 +1,23 @@
-// 字幕单词Type
+// Subtitle word type
 export interface SubtitleWord {
   id: string
   text: string
-  startTime: number  // 秒
-  endTime: number    // 秒
-  confidence?: number // 语音识别置信度
+  startTime: number  // seconds
+  endTime: number    // seconds
+  confidence?: number // speech recognition confidence
 }
 
-// 字幕段落Type
+// Subtitle segment type
 export interface SubtitleSegment {
   id: string
-  startTime: number  // 秒
-  endTime: number    // 秒
+  startTime: number  // seconds
+  endTime: number    // seconds
   words: SubtitleWord[]
-  text: string       // 完整文本
-  index: number      // 原始SRT索引
+  text: string       // full text
+  index: number      // original SRT index
 }
 
-// 视频Edit操作Type
+// Video edit operation type
 export interface VideoEditOperation {
   type: 'delete' | 'insert' | 'modify'
   segmentIds: string[]
@@ -32,7 +32,7 @@ export interface VideoEditOperation {
   }
 }
 
-// 字幕Edit器Status
+// Subtitle editor state
 export interface SubtitleEditorState {
   currentTime: number
   playing: boolean
@@ -43,7 +43,7 @@ export interface SubtitleEditorState {
   showDeleted: boolean
 }
 
-// 字幕数据API响应
+// Subtitle data API response
 export interface SubtitleDataResponse {
   segments: SubtitleSegment[]
   total_duration: number
@@ -51,7 +51,7 @@ export interface SubtitleDataResponse {
   segment_count: number
 }
 
-// 视频Edit结果
+// Video edit result
 export interface VideoEditResult {
   originalVideoPath: string
   editedVideoPath: string

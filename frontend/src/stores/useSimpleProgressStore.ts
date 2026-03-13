@@ -1,5 +1,5 @@
 /**
- * 简化的ProgressStatus管理 - 基于固定阶段和轮询
+ * Simplified progress status management - based on fixed stages and polling
  */
 
 import { create } from 'zustand'
@@ -61,7 +61,7 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
       }
 
       if (projectIds.length === 0) {
-        console.warn('没有projectsID，Skip轮询')
+        console.warn('No project IDs provided, skipping poll')
         return
       }
 
@@ -85,10 +85,10 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
             get().upsert(snapshot)
           })
           
-          console.log(`轮询Update: ${snapshots.length} projects`)
+          console.log(`Poll update: ${snapshots.length} projects`)
           
         } catch (error) {
-          console.error('轮询Progress失败:', error)
+          console.error('Poll progress failed:', error)
         }
       }
 
@@ -145,42 +145,42 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
   }
 })
 
-// 阶段显示Name映射
+// Stage display name mapping
 export const STAGE_DISPLAY_NAMES: Record<string, string> = {
-  'INGEST': '素材准备',
-  'SUBTITLE': '字幕处理',
-  'ANALYZE': 'Content分析', 
-  'HIGHLIGHT': 'clips定位',
-  'EXPORT': '视频导出',
+  'INGEST': 'Preparing Media',
+  'SUBTITLE': 'Processing Subtitles',
+  'ANALYZE': 'Analyzing Content',
+  'HIGHLIGHT': 'Locating Clips',
+  'EXPORT': 'Exporting Video',
   'DONE': 'Done'
 }
 
-// 阶段颜色映射
+// Stage color mapping
 export const STAGE_COLORS: Record<string, string> = {
-  'INGEST': '#1890ff',      // 蓝色
-  'SUBTITLE': '#52c41a',    // 绿色
-  'ANALYZE': '#fa8c16',     // 橙色
-  'HIGHLIGHT': '#722ed1',   // 紫色
-  'EXPORT': '#eb2f96',      // 粉色
-  'DONE': '#13c2c2'         // 青色
+  'INGEST': '#1890ff',      // blue
+  'SUBTITLE': '#52c41a',    // green
+  'ANALYZE': '#fa8c16',     // orange
+  'HIGHLIGHT': '#722ed1',   // purple
+  'EXPORT': '#eb2f96',      // pink
+  'DONE': '#13c2c2'         // cyan
 }
 
-// 获取阶段显示Name
+// Get stage display name
 export const getStageDisplayName = (stage: string): string => {
   return STAGE_DISPLAY_NAMES[stage] || stage
 }
 
-// 获取阶段颜色
+// Get stage color
 export const getStageColor = (stage: string): string => {
   return STAGE_COLORS[stage] || '#666666'
 }
 
-// 判断是否为完成Status
+// Check if stage is completed
 export const isCompleted = (stage: string): boolean => {
   return stage === 'DONE'
 }
 
-// 判断是否为失败Status
+// Check if message indicates failure
 export const isFailed = (message: string): boolean => {
-  return message.includes('失败') || message.includes('错误') || message.includes('失败')
+  return message.toLowerCase().includes('fail') || message.toLowerCase().includes('error')
 }
