@@ -1,138 +1,138 @@
-# 数据存储问题修复文档
+# Data Storage Issue Fix Documentation
 
-## 问题描述
+## Problem Description
 
-前端显示0个切片和0个合集，但实际的处理流程已经成功完成，生成了视频文件和元数据文件。
+Frontend shows 0 clips and 0 collections, but the actual processing workflow has completed successfully, generating video files and metadata files.
 
-## 问题原因
+## Root Cause
 
-1. **数据存储逻辑未被调用**：Pipeline适配器中有完整的数据存储逻辑（`_save_clips_to_database` 和 `_save_collections_to_database`），但在ProcessingOrchestrator的`execute_pipeline`方法中没有被调用。
+1. **Data Storage Logic Not Called**: Pipeline adapter has complete data storage logic (`_save_clips_to_database` and `_save_collections_to_database`), but it's not called in ProcessingOrchestrator's `execute_pipeline` method.
 
-2. **架构设计问题**：ProcessingOrchestrator只负责执行流水线步骤，但没有负责将结果保存到数据库。
+2. **Architecture Design Issue**: ProcessingOrchestrator only handles pipeline step execution but doesn't handle saving results to database.
 
-3. **数据分离存储模式**：系统采用了分离存储模式，将完整数据保存在文件系统中，数据库中只保存元数据和路径引用，但数据存储逻辑没有被正确触发。
+3. **Separated Storage Mode**: System uses separated storage mode, saving complete data in file system and only metadata and path references in database, but data storage logic wasn't properly triggered.
 
-## 解决方案
+## Solution
 
-### 1. 修复ProcessingOrchestrator
+### 1. Fix ProcessingOrchestrator
 
-在`execute_pipeline`方法的最后添加数据存储逻辑：
+Add data storage logic at the end of `execute_pipeline` method:
 
 ```python
 def execute_pipeline(self, srt_path: Path, steps_to_execute: Optional[List[ProcessingStep]] = None) -> Dict[str, Any]:
-    # ... 执行流水线步骤 ...
+    # ... execute pipeline steps ...
 
-    # 流水线执行完成，保存数据到数据库
+    # Pipeline execution completed, save data to database
     self._save_pipeline_results_to_database(results)
 
-    # 更新任务状态为完成
+    # Update task status to completed
     self._update_task_status(TaskStatus.COMPLETED, progress=100)
 ```
 
-### 2. 添加数据存储方法
+### 2. Add Data Storage Method
 
-在ProcessingOrchestrator中添加`_save_pipeline_results_to_database`方法：
+Add `_save_pipeline_results_to_database` method to ProcessingOrchestrator:
 
 ```python
 def _save_pipeline_results_to_database(self, results: Dict[str, Any]):
-    """将流水线执行结果保存到数据库"""
+    """Save pipeline execution results to database"""
     try:
-        logger.info(f"开始保存项目 {self.project_id} 流水线结果到数据库")
+        logger.info(f"Starting to save project {self.project_id} pipeline results to database")
 
-        # 获取项目目录
+        # Get project directory
         project_dir = self.adapter.data_dir / "projects" / self.project_id
 
-        # 保存切片数据到数据库
+        # Save clip data to database
         step4_result = results.get('step4_title', {}).get('result', [])
         if step4_result:
-            logger.info(f"保存 {len(step4_result)} 个切片到数据库")
+            logger.info(f"Saving {len(step4_result)} clips to database")
             self.adapter._save_clips_to_database(self.project_id, project_dir / "step4_title" / "step4_title.json")
 
-        # 保存合集数据到数据库
+        # Save collection data to database
         step5_result = results.get('step5_clustering', {}).get('result', [])
         if step5_result:
-            logger.info(f"保存 {len(step5_result)} 个合集到数据库")
+            logger.info(f"Saving {len(step5_result)} collections to database")
             self.adapter._save_collections_to_database(self.project_id, project_dir / "step5_clustering" / "step5_clustering.json")
 
-        logger.info(f"项目 {self.project_id} 流水线结果已全部保存到数据库")
+        logger.info(f"Project {self.project_id} pipeline results all saved to database")
 
     except Exception as e:
-        logger.error(f"保存流水线结果到数据库失败: {e}")
-        # 不抛出异常，避免影响整个流水线的完成状态
+        logger.error(f"Failed to save pipeline results to database: {e}")
+        # Don't throw exception to avoid affecting entire pipeline completion status
 ```
 
-### 3. 创建修复脚本
+### 3. Create Fix Script
 
-创建`scripts/fix_data_storage.py`脚本来手动修复已存在的项目：
+Create `scripts/fix_data_storage.py` script to manually fix existing projects:
 
 ```python
 def fix_project_data_storage(project_id: str):
-    """修复项目数据存储"""
-    # 创建Pipeline适配器
+    """Fix project data storage"""
+    # Create Pipeline adapter
     adapter = PipelineAdapter(db, None, project_id)
 
-    # 保存切片数据到数据库
+    # Save clip data to database
     adapter._save_clips_to_database(project_id, clips_file)
 
-    # 保存合集数据到数据库
+    # Save collection data to database
     adapter._save_collections_to_database(project_id, collections_file)
 ```
 
-## 修复结果
+## Fix Results
 
-### 修复前
+### Before Fix
 
-- 数据库中的切片数量: 0
-- 数据库中的合集数量: 0
-- 前端显示: 0个切片，0个合集
+- Clips count in database: 0
+- Collections count in database: 0
+- Frontend display: 0 clips, 0 collections
 
-### 修复后
+### After Fix
 
-- 数据库中的切片数量: 6
-- 数据库中的合集数量: 1
-- 前端显示: 6个切片，1个合集
+- Clips count in database: 6
+- Collections count in database: 1
+- Frontend display: 6 clips, 1 collection
 
-### 数据详情
+### Data Details
 
-**切片数据**：
+**Clip Data**:
 
-1. "AI不会取代你，但会用AI的'超级个体'会碾压你" (评分: 0.96)
-2. "AI让经验失效，却让这项能力变得前所未有地重要" (评分: 0.95)
-3. "未来十年真正抗风险的能力，不在技能，而在判断" (评分: 0.94)
-4. "AI创业正进入大学生时代，这届年轻人开始弯道超车" (评分: 0.93)
-5. "所谓的非共识，不过是小圈子的共识" (评分: 0.88)
-6. "投资人和程序员眼中的MCP为何天差地别？" (评分: 0.82)
+1. "AI Won't Replace You, But 'Super Individuals' Using AI Will Crush You" (Score: 0.96)
+2. "AI Makes Experience Invalid, But Makes This Ability Unprecedentedly Important" (Score: 0.95)
+3. "Real Risk-Resistant Ability in Next Decade, Not in Skills, But in Judgment" (Score: 0.94)
+4. "AI Entrepreneurship Entering College Era, Young Generation Starting to Overtake" (Score: 0.93)
+5. "So-called Non-consensus Is Just Small Circle Consensus" (Score: 0.88)
+6. "Why Do Investors and Programmers View MCP So Differently?" (Score: 0.82)
 
-**合集数据**：
+**Collection Data**:
 
-- "职场成长记" - 探讨职业发展、技能提升与职场心态变化。
+- "Career Growth Notes" - Exploring career development, skill improvement, and workplace mindset changes.
 
-## 使用方法
+## Usage
 
-### 修复现有项目
-
-```bash
-python scripts/fix_data_storage.py --project-id <项目ID>
-```
-
-### 仅检查数据
+### Fix Existing Projects
 
 ```bash
-python scripts/fix_data_storage.py --project-id <项目ID> --check-only
+python scripts/fix_data_storage.py --project-id <project_id>
 ```
 
-## 预防措施
+### Check Data Only
 
-1. **自动化修复**：在项目处理完成后自动触发数据存储
-2. **数据验证**：在处理完成后验证数据库中的数据完整性
-3. **错误处理**：改进错误处理机制，确保数据存储失败不会影响整个流水线
-4. **监控告警**：添加监控机制，及时发现数据存储问题
+```bash
+python scripts/fix_data_storage.py --project-id <project_id> --check-only
+```
 
-## 相关文件
+## Prevention Measures
 
-- `backend/services/processing_orchestrator.py` - 处理编排器
-- `backend/services/pipeline_adapter.py` - 流水线适配器
-- `backend/services/storage_service.py` - 存储服务
-- `scripts/fix_data_storage.py` - 数据存储修复脚本
-- `backend/models/clip.py` - 切片模型
-- `backend/models/collection.py` - 合集模型
+1. **Automated Fix**: Automatically trigger data storage after project processing completion
+2. **Data Validation**: Validate database data integrity after processing completion
+3. **Error Handling**: Improve error handling mechanism to ensure data storage failure doesn't affect entire pipeline
+4. **Monitoring Alerts**: Add monitoring mechanism to timely detect data storage issues
+
+## Related Files
+
+- `backend/services/processing_orchestrator.py` - Processing orchestrator
+- `backend/services/pipeline_adapter.py` - Pipeline adapter
+- `backend/services/storage_service.py` - Storage service
+- `scripts/fix_data_storage.py` - Data storage fix script
+- `backend/models/clip.py` - Clip model
+- `backend/models/collection.py` - Collection model

@@ -1,6 +1,6 @@
 # Documentation Translation Summary
 
-## ✅ Completed Translations (15 files)
+## ✅ Completed Translations (23 files)
 
 1. **docs/README.md** - Main documentation center
 2. **docs/QUICK_START_GUIDE.md** - Quick start guide
@@ -18,17 +18,19 @@
 14. **docs/BILIBILI_MANAGER_GUIDE.md** - Bilibili manager guide
 15. **docs/REFACTOR_PLAN.md** - Refactor plan
 16. **docs/SIMPLE_PROGRESS_SYSTEM.md** - Simple progress system
+17. **docs/MULTI_LLM_PROVIDER_GUIDE.md** - Multi-model provider integration guide
+18. **docs/PROGRESS_SYSTEM_GUIDE.md** - Enhanced progress system guide
+19. **docs/AUTO_SYNC_FIX_REPORT.md** - Automatic data synchronization fix report
+20. **docs/CHANNEL_NORMALIZATION_FIX.md** - Channel normalization fix summary
+21. **docs/COLLECTION_CLIP_IDS_FIX.md** - Collection clip_ids mapping issue fix
+22. **docs/CLIP_OUTPUT_PATH_FIX_REPORT.md** - Clip output path fix report
+23. **docs/COLLECTION_REORDER_FIX.md** - Collection sorting function fix
+24. **docs/DATABASE_SYNC_FIX.md** - Database synchronization issue fix report
+25. **docs/DATABASE_OPTIMIZATION_REPORT.md** - Database CRUD logic optimization report
 
-## 📝 Remaining Translations (57 files)
+## 📝 Remaining Translations (49 files)
 
-### Fix Reports (23 files)
-- AUTO_SYNC_FIX_REPORT.md
-- CHANNEL_NORMALIZATION_FIX.md
-- CLIP_OUTPUT_PATH_FIX_REPORT.md
-- COLLECTION_CLIP_IDS_FIX.md
-- COLLECTION_REORDER_FIX.md
-- DATABASE_OPTIMIZATION_REPORT.md
-- DATABASE_SYNC_FIX.md
+### Fix Reports (17 files)
 - DATA_STORAGE_FIX.md
 - DATA_SYNC_BATCH_FIX_REPORT.md
 - DATA_SYNC_FIX_SUMMARY.md
@@ -86,9 +88,9 @@
 
 ## 📊 Progress
 
-- **Completed**: 16 files (22%)
-- **Remaining**: 57 files (78%)
-- **Total**: 73 files
+- **Completed**: 25 files (34%)
+- **Remaining**: 49 files (66%)
+- **Total**: 74 files
 
 ## 🎯 Next Steps
 

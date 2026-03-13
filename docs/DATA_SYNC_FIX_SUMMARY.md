@@ -1,68 +1,68 @@
-# 数据同步问题修复总结
+# Data Synchronization Issue Fix Summary
 
-## 问题描述
+## Problem Description
 
-项目 `295e25e4-25dd-4d4d-a595-2dd7117e0695` 在完成流水线处理后，前端显示切片和合集数量为0，但实际的处理流程已经成功完成，生成了视频文件和元数据文件。
+Project `295e25e4-25dd-4d4d-a595-2dd7117e0695` shows 0 clips and collections on frontend after completing pipeline processing, but the actual processing workflow has completed successfully, generating video files and metadata files.
 
-## 问题分析
+## Problem Analysis
 
-### 根本原因
+### Root Cause
 
-1. **数据同步逻辑缺失**：流水线完成后，切片和合集数据没有正确同步到数据库
-2. **方法调用错误**：`ProcessingOrchestrator` 尝试调用不存在的 `_save_clips_to_database` 和 `_save_collections_to_database` 方法
-3. **数据存储分离**：系统采用分离存储模式，文件系统存储完整数据，数据库只存储元数据，但同步逻辑不完整
+1. **Missing Data Sync Logic**: After pipeline completion, clip and collection data wasn't properly synchronized to database
+2. **Incorrect Method Calls**: `ProcessingOrchestrator` attempts to call non-existent `_save_clips_to_database` and `_save_collections_to_database` methods
+3. **Separated Data Storage**: System uses separated storage mode with file system storing complete data and database storing only metadata, but sync logic is incomplete
 
-### 具体问题
+### Specific Issues
 
-- 项目状态已更新为 `COMPLETED`
-- 文件系统中存在完整的处理结果（8个切片，3个合集）
-- 数据库中切片和合集数量为0
-- 前端依赖数据库统计显示数据
+- Project status updated to `COMPLETED`
+- Complete processing results exist in file system (8 clips, 3 collections)
+- Database shows 0 clips and collections
+- Frontend relies on database statistics to display data
 
-## 修复方案
+## Fix Solution
 
-### 1. 修复 ProcessingOrchestrator
+### 1. Fix ProcessingOrchestrator
 
-**文件**: `backend/services/processing_orchestrator.py`
+**File**: `backend/services/processing_orchestrator.py`
 
-**修改**: 在 `_save_pipeline_results_to_database` 方法中使用 `DataSyncService` 进行数据同步
+**Change**: Use `DataSyncService` for data synchronization in `_save_pipeline_results_to_database` method
 
 ```python
 def _save_pipeline_results_to_database(self, results: Dict[str, Any]):
-    """将流水线执行结果保存到数据库"""
+    """Save pipeline execution results to database"""
     try:
-        logger.info(f"开始保存项目 {self.project_id} 流水线结果到数据库")
+        logger.info(f"Starting to save project {self.project_id} pipeline results to database")
         
-        # 获取项目目录
+        # Get project directory
         project_dir = self.adapter.data_dir / "projects" / self.project_id
         
-        # 使用DataSyncService同步数据到数据库
+        # Use DataSyncService to sync data to database
         from ..services.data_sync_service import DataSyncService
         sync_service = DataSyncService(self.db)
         
-        # 同步项目数据
+        # Sync project data
         sync_result = sync_service.sync_project_from_filesystem(self.project_id, project_dir)
         
         if sync_result.get("success"):
-            logger.info(f"项目 {self.project_id} 数据同步成功: {sync_result}")
+            logger.info(f"Project {self.project_id} data sync successful: {sync_result}")
         else:
-            logger.error(f"项目 {self.project_id} 数据同步失败: {sync_result}")
+            logger.error(f"Project {self.project_id} data sync failed: {sync_result}")
         
-        logger.info(f"项目 {self.project_id} 流水线结果已全部保存到数据库")
+        logger.info(f"Project {self.project_id} pipeline results all saved to database")
         
     except Exception as e:
-        logger.error(f"保存流水线结果到数据库失败: {e}")
-        # 不抛出异常，避免影响整个流水线的完成状态
+        logger.error(f"Failed to save pipeline results to database: {e}")
+        # Don't throw exception to avoid affecting entire pipeline completion status
 ```
 
-### 2. 修复 ProcessingService
+### 2. Fix ProcessingService
 
-**文件**: `backend/services/processing_service.py`
+**File**: `backend/services/processing_service.py`
 
-**修改**: 在项目状态更新后添加数据同步逻辑
+**Change**: Add data sync logic after project status update
 
 ```python
-# 更新项目状态为已完成并同步数据
+# Update project status to completed and sync data
 try:
     from ..models.project import Project, ProjectStatus
     from ..services.data_sync_service import DataSyncService
@@ -72,103 +72,103 @@ try:
     if project:
         project.status = ProjectStatus.COMPLETED
         self.db.commit()
-        logger.info(f"项目状态已更新为已完成: {project_id}")
+        logger.info(f"Project status updated to completed: {project_id}")
         
-        # 同步数据到数据库
+        # Sync data to database
         project_dir = Path("data/projects") / project_id
         if project_dir.exists():
             sync_service = DataSyncService(self.db)
             sync_result = sync_service.sync_project_from_filesystem(project_id, project_dir)
             if sync_result.get("success"):
-                logger.info(f"项目 {project_id} 数据同步成功: {sync_result}")
+                logger.info(f"Project {project_id} data sync successful: {sync_result}")
             else:
-                logger.error(f"项目 {project_id} 数据同步失败: {sync_result}")
+                logger.error(f"Project {project_id} data sync failed: {sync_result}")
 except Exception as e:
-    logger.warning(f"更新项目状态失败: {e}")
+    logger.warning(f"Failed to update project status: {e}")
 ```
 
-### 3. 添加手动同步API端点
+### 3. Add Manual Sync API Endpoints
 
-**文件**: `backend/api/v1/projects.py`
+**File**: `backend/api/v1/projects.py`
 
-**新增端点**:
+**New Endpoints**:
 
-1. **同步所有项目数据**: `POST /api/v1/projects/sync-all-data`
-2. **同步指定项目数据**: `POST /api/v1/projects/{project_id}/sync-data`
+1. **Sync all project data**: `POST /api/v1/projects/sync-all-data`
+2. **Sync specific project data**: `POST /api/v1/projects/{project_id}/sync-data`
 
-## 修复结果
+## Fix Results
 
-### 数据同步成功
+### Data Sync Success
 
-- ✅ 项目 `295e25e4-25dd-4d4d-a595-2dd7117e0695` 数据同步成功
-- ✅ 切片数量: 8个
-- ✅ 合集数量: 3个
-- ✅ 前端现在能正确显示数据
+- ✅ Project `295e25e4-25dd-4d4d-a595-2dd7117e0695` data sync successful
+- ✅ Clips count: 8
+- ✅ Collections count: 3
+- ✅ Frontend now displays data correctly
 
-### 验证结果
+### Verification Results
 
 ```bash
-# 项目统计信息
-项目名称: 欧阳娜娜VLOG】VLOG163 Nabi in Paris
-项目状态: ProjectStatus.COMPLETED
-总切片数: 8
-总合集数: 3
-总任务数: 1
+# Project statistics
+Project Name: Ouyang Nana VLOG】VLOG163 Nabi in Paris
+Project Status: ProjectStatus.COMPLETED
+Total Clips: 8
+Total Collections: 3
+Total Tasks: 1
 ```
 
-## 预防措施
+## Prevention Measures
 
-### 1. 自动化数据同步
+### 1. Automated Data Sync
 
-- 流水线完成后自动同步数据到数据库
-- 使用 `DataSyncService` 统一处理数据同步逻辑
-- 添加错误处理和日志记录
+- Automatically sync data to database after pipeline completion
+- Use `DataSyncService` to uniformly handle data sync logic
+- Add error handling and logging
 
-### 2. 手动同步工具
+### 2. Manual Sync Tools
 
-- 提供API端点进行手动数据同步
-- 支持单个项目和批量项目同步
-- 便于运维和故障恢复
+- Provide API endpoints for manual data sync
+- Support single project and batch project sync
+- Convenient for operations and fault recovery
 
-### 3. 数据一致性检查
+### 3. Data Consistency Checks
 
-- 定期检查文件系统和数据库数据一致性
-- 提供数据修复工具
-- 监控数据同步状态
+- Regularly check file system and database data consistency
+- Provide data repair tools
+- Monitor data sync status
 
-## 技术要点
+## Technical Points
 
-### DataSyncService 功能
+### DataSyncService Features
 
-- 从文件系统读取处理结果
-- 解析切片和合集元数据
-- 同步数据到数据库
-- 处理重复数据
-- 错误恢复机制
+- Read processing results from file system
+- Parse clip and collection metadata
+- Sync data to database
+- Handle duplicate data
+- Error recovery mechanism
 
-### 文件结构
+### File Structure
 
 ```
 data/projects/{project_id}/
 ├── metadata/
-│   ├── clips_metadata.json      # 切片元数据
-│   ├── collections_metadata.json # 合集元数据
-│   ├── step4_titles.json        # 标题生成结果
-│   └── step5_collections.json   # 合集聚类结果
+│   ├── clips_metadata.json      # Clip metadata
+│   ├── collections_metadata.json # Collection metadata
+│   ├── step4_titles.json        # Title generation results
+│   └── step5_collections.json   # Collection clustering results
 └── output/
-    ├── step6_video_output.json  # 视频处理结果
-    ├── clips/                   # 切片视频文件
-    └── collections/             # 合集视频文件
+    ├── step6_video_output.json  # Video processing results
+    ├── clips/                   # Clip video files
+    └── collections/             # Collection video files
 ```
 
-## 总结
+## Summary
 
-通过系统性修复数据同步问题，确保了：
+Through systematic fix of data sync issues, ensured:
 
-1. **数据一致性**: 文件系统和数据库数据保持一致
-2. **自动化同步**: 流水线完成后自动同步数据
-3. **手动恢复**: 提供API端点进行手动数据同步
-4. **错误处理**: 完善的错误处理和日志记录
-5. **可维护性**: 统一的同步逻辑，便于维护和扩展
+1. **Data Consistency**: File system and database data stay consistent
+2. **Automated Sync**: Automatically sync data after pipeline completion
+3. **Manual Recovery**: Provide API endpoints for manual data sync
+4. **Error Handling**: Complete error handling and logging
+5. **Maintainability**: Unified sync logic for easy maintenance and extension
 
-修复后，项目 `295e25e4-25dd-4d4d-a595-2dd7117e0695` 的切片和合集数据已正确显示，前端界面恢复正常。
+After fix, project `295e25e4-25dd-4d4d-a595-2dd7117e0695`'s clip and collection data display correctly, and frontend interface is restored to normal.
