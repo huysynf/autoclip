@@ -40,11 +40,11 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
   // 根据Status决定YesNo轮询
   useEffect(() => {
     if ((status === 'processing' || status === 'pending') && !isPolling) {
-      console.log(`Start Polling处理Progress: ${projectId}`)
+      console.log(`Start PollingProcessingProgress: ${projectId}`)
       startPolling([projectId], 2000)
       setIsPolling(true)
     } else if (status !== 'processing' && status !== 'pending' && isPolling) {
-      console.log(`Stop Polling处理Progress: ${projectId}`)
+      console.log(`Stop PollingProcessingProgress: ${projectId}`)
       stopPolling()
       setIsPolling(false)
     }
@@ -67,24 +67,24 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
           const response = await fetch(`http://localhost:8000/api/v1/projects/${projectId}`)
           if (response.ok) {
             const projectData = await response.json()
-            console.log('projects数据:', projectData)
+            console.log('projectsData:', projectData)
             const newProgress = projectData.processing_config?.download_progress || 0
             console.log(`DownloadProgressUpdate: ${newProgress}%`)
             setCurrentDownloadProgress(newProgress)
             onDownloadProgressUpdate?.(newProgress)
             
-            // 如果DownloadCompleted，检查YesNo需要切换到处理Status
+            // 如果DownloadCompleted，检查YesNo需要切换到ProcessingStatus
             if (newProgress >= 100) {
-              console.log('DownloadCompleted，切换到处理Status')
+              console.log('DownloadCompleted，切换到ProcessingStatus')
               setTimeout(() => {
                 onStatusChange?.('processing')
               }, 1000)
             }
           } else {
-            console.error('获取projects数据Failed:', response.status, response.statusText)
+            console.error('Get projectsDataFailed:', response.status, response.statusText)
           }
         } catch (error) {
-          console.error('获取DownloadProgressFailed:', error)
+          console.error('Get DownloadProgressFailed:', error)
         }
       }
 
@@ -98,7 +98,7 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
     }
   }, [status, projectId, onDownloadProgressUpdate, onStatusChange])
 
-  // 处理Status变化
+  // ProcessingStatus变化
   useEffect(() => {
     if (progress && onStatusChange) {
       if (isCompleted(progress.stage)) {
@@ -169,10 +169,10 @@ export const UnifiedStatusBar: React.FC<UnifiedStatusBarProps> = ({
     )
   }
 
-  // ProcessingStatus - 使用新的简化Progress系统
+  // ProcessingStatus - Use 新的简化Progress系统
   if (status === 'processing') {
     if (!progress) {
-      // 等待Progress数据
+      // 等待ProgressData
       return (
       <div style={{
         background: 'rgba(82, 196, 26, 0.1)',

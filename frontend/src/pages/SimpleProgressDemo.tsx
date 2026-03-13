@@ -28,7 +28,7 @@ import { useSimpleProgressStore } from '../stores/useSimpleProgressStore'
 const { Title, Text, Paragraph } = Typography
 const { Option } = Select
 
-// 模拟projects数据
+// 模拟projectsData
 const mockProjects = [
   {
     id: 'demo-project-1',
@@ -275,7 +275,7 @@ export const SimpleProgressDemo: React.FC = () => {
         </Card>
       )}
 
-      {/* projects卡片列表 */}
+      {/* projects卡片List */}
       <Card title="Project List">
         <Row gutter={[16, 16]}>
           {projects.map(project => (
@@ -292,7 +292,7 @@ export const SimpleProgressDemo: React.FC = () => {
         </Row>
       </Card>
 
-      {/* 当前Progress数据 */}
+      {/* CurrentProgressData */}
       {Object.keys(allProgress).length > 0 && (
         <Card title="Current Progress Data" style={{ marginTop: '24px' }}>
           <pre style={{ 

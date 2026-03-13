@@ -25,7 +25,7 @@ import {
   SettingOutlined,
   ClockCircleOutlined
 } from '@ant-design/icons';
-// Removedate-fns依赖，使用内置方法
+// Removedate-fns依赖，Use 内置方法
 
 // 接口定义
 interface AccountHealth {
@@ -100,7 +100,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
     }
   };
 
-  // 获取HealthStatusSummary
+  // Get HealthStatusSummary
   const fetchHealthSummary = async (forceCheck = false) => {
     try {
       setLoading(true);
@@ -127,8 +127,8 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
         message.success('Health CheckCompleted');
       }
     } catch (error) {
-      console.error('获取HealthStatusFailed:', error);
-      message.error('获取HealthStatusFailed');
+      console.error('Get HealthStatusFailed:', error);
+      message.error('Get HealthStatusFailed');
     } finally {
       setLoading(false);
     }
@@ -149,7 +149,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
       
       const updatedAccount = await response.json();
       
-      // UpdateHealth数据
+      // UpdateHealthData
       setHealthData(prev => {
         if (!prev) return prev;
         
@@ -157,7 +157,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
           account.account_id === accountId ? updatedAccount : account
         );
         
-        // 重新计算Statistics数据
+        // 重新计算StatisticsData
         const statusCounts = {
           healthy: 0,
           warning: 0,
@@ -220,7 +220,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
     }
   };
 
-  // 获取StatusTags
+  // Get status tags
   const getStatusTag = (status: string) => {
     const statusConfig = {
       healthy: { color: 'success', icon: <CheckCircleOutlined />, text: 'Health' },
@@ -238,7 +238,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
     );
   };
 
-  // 获取过期TimeProgress条
+  // Get 过期TimeProgress条
   const getExpirationProgress = (expiresIn?: number) => {
     if (expiresIn === undefined || expiresIn === null) {
       return null;
@@ -267,7 +267,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
     );
   };
 
-  // 表格列定义
+  // Table column definitions
   const columns = [
     {
       title: 'Account',
@@ -350,7 +350,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
     },
   ];
 
-  // Component挂载时获取数据
+  // Component挂载时Get Data
   useEffect(() => {
     fetchHealthSummary();
   }, []);
@@ -421,7 +421,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
         </Col>
       </Row>
 
-      {/* 操作栏 */}
+      {/* Action栏 */}
       <Card style={{ marginBottom: 16 }}>
         <Space>
           <Button
@@ -458,7 +458,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = ({ onRefresh }
       {healthData && (healthData.critical_count > 0 || healthData.warning_count > 0) && (
         <Alert
           message="Account HealthWarning"
-          description={`发现 ${healthData.critical_count} 严重问题和 ${healthData.warning_count} Warning，请及时处理`}
+          description={`发现 ${healthData.critical_count} 严重问题和 ${healthData.warning_count} Warning，请及时Processing`}
           type="warning"
           showIcon
           style={{ marginBottom: 16 }}

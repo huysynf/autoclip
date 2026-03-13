@@ -105,7 +105,7 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
     }
   }
 
-  // 获取StatusIcon和Color
+  // Get StatusIcon和Color
   const getStatusConfig = (status: string, progress?: SimpleProgress) => {
     if (progress && isFailed(progress.message)) {
       return {
@@ -220,7 +220,7 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
         {showProgress && (
           <SimpleProgressBar
             projectId={project.id}
-            autoStart={false} // 已经在useEffectMedium处理
+            autoStart={false} // 已经在useEffectMediumProcessing
             showDetails={true}
             onProgressUpdate={(progress) => {
               // 如果Done，Update显示Status

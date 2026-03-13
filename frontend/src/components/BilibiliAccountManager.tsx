@@ -44,29 +44,29 @@ const BilibiliAccountManager: React.FC = () => {
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('')
   const [statusCheckInterval, setStatusCheckInterval] = useState<number | null>(null)
 
-  // 获取Account List
+  // Get Account List
   const fetchAccounts = async () => {
     try {
       setLoading(true)
       const data = await uploadApi.getAccounts()
       setAccounts(data)
-      // 同时获取Account HealthStatus
+      // 同时Get Account HealthStatus
       await fetchAccountsHealth(data)
     } catch (error: any) {
-      message.error('获取Account ListFailed: ' + (error.message || 'Unknown error'))
+      message.error('Failed to get account list: ' + (error.message || 'Unknown error'))
     } finally {
       setLoading(false)
     }
   }
 
-  // 获取Account HealthStatus
+  // Get Account HealthStatus
   const fetchAccountsHealth = async (accountList?: BilibiliAccount[]) => {
     try {
       const targetAccounts = accountList || accounts
       const healthData: Record<string, AccountHealth> = {}
       
       for (const account of targetAccounts) {
-        // 模拟HealthStatus data，实际应该从API获取
+        // 模拟HealthStatus data，实际应该从APIGet 
         const score = Math.floor(Math.random() * 40) + 60 // 60-100分
         const uploadCount = Math.floor(Math.random() * 50) + 10
         const successRate = Math.floor(Math.random() * 30) + 70
@@ -88,7 +88,7 @@ const BilibiliAccountManager: React.FC = () => {
       
       setAccountsHealth(healthData)
     } catch (error: any) {
-      console.error('获取Account HealthStatusFailed:', error)
+      console.error('Get Account HealthStatusFailed:', error)
     }
   }
 
@@ -105,13 +105,13 @@ const BilibiliAccountManager: React.FC = () => {
     }
   }
 
-  // 获取Login方式列表
+  // Get Login方式List
   const fetchLoginMethods = async () => {
     try {
       const response = await uploadApi.getLoginMethods()
       setLoginMethods(response.methods)
     } catch (error: any) {
-      console.error('获取Login方式Failed:', error)
+      console.error('Get Login方式Failed:', error)
     }
   }
 
@@ -248,7 +248,7 @@ const BilibiliAccountManager: React.FC = () => {
     }
   }
 
-  // 获取风险等级Tags
+  // Get 风险等级Tags
   const getRiskLevelTag = (riskLevel: string) => {
     switch (riskLevel) {
       case 'low':
@@ -262,12 +262,12 @@ const BilibiliAccountManager: React.FC = () => {
     }
   }
 
-  // 获取推荐Tags
+  // Get 推荐Tags
   const getRecommendedTag = (recommended: boolean) => {
     return recommended ? <Tag color="blue">推荐</Tag> : null
   }
 
-  // 获取HealthStatusTags和Color
+  // Get HealthStatusTags和Color
   const getHealthStatusTag = (health?: AccountHealth) => {
     if (!health) return <Tag>Unknown</Tag>
     
@@ -369,7 +369,7 @@ const BilibiliAccountManager: React.FC = () => {
           </Tooltip>
           <Popconfirm
             title="OK要Delete这Account?"
-            description="Delete后将None法恢复，请谨慎操作。"
+            description="Delete后将None法恢复，请谨慎Action。"
             onConfirm={() => handleDeleteAccount(record.id)}
             okText="OK"
             cancelText="Cancel"
@@ -383,7 +383,7 @@ const BilibiliAccountManager: React.FC = () => {
     },
   ]
 
-  // 计算总体Statistics数据
+  // 计算总体StatisticsData
   const getTotalStats = () => {
     const totalAccounts = accounts.length
     const activeAccounts = accounts.filter(acc => acc.status === 'active').length
@@ -517,7 +517,7 @@ const BilibiliAccountManager: React.FC = () => {
       >
         <Alert
           message="Login方式说明"
-          description="为了避免B站风控，建议使用CookieImport方式。扫码Login可能触发风控机制。"
+          description="为了避免B站风控，建议Use CookieImport方式。扫码Login可能触发风控机制。"
           type="info"
           showIcon
           style={{ marginBottom: 16 }}
@@ -545,7 +545,7 @@ const BilibiliAccountManager: React.FC = () => {
                        icon={<QuestionCircleOutlined />}
                        onClick={() => setCookieHelperVisible(true)}
                      >
-                       获取Help
+                       Get Help
                      </Button>
                    </Space>
                  }
@@ -566,9 +566,9 @@ const BilibiliAccountManager: React.FC = () => {
             
                          <Divider />
              <Paragraph type="secondary" style={{ fontSize: '12px' }}>
-               <Text strong>快速获取Cookie：</Text>
+               <Text strong>快速Get Cookie：</Text>
                <br />
-               点击上方的"获取Help"Button，View详细的Cookie获取Step指南
+               点击上方的"Get Help"Button，View详细的CookieGet Step指南
              </Paragraph>
           </TabPane>
 
@@ -607,7 +607,7 @@ const BilibiliAccountManager: React.FC = () => {
             
             <Alert
               message="注意"
-              description="AccountPasswordLogin可能需要处理验证码，如果遇到问题建议使用CookieImport方式。"
+              description="AccountPasswordLogin可能需要Processing验证码，如果遇到问题建议Use CookieImport方式。"
               type="warning"
               showIcon
             />
@@ -643,7 +643,7 @@ const BilibiliAccountManager: React.FC = () => {
                   )}
                   
                   {qrLoginStatus === 'processing' && (
-                    <p>请使用B站APP扫描二维码</p>
+                    <p>请Use B站APP扫描二维码</p>
                   )}
                   
                   {qrLoginStatus === 'success' && (
@@ -658,8 +658,8 @@ const BilibiliAccountManager: React.FC = () => {
             </div>
             
             <Alert
-              message="风险提示"
-              description="扫码Login可能触发B站风控机制，建议优先使用CookieImport方式。"
+              message="风险Prompt"
+              description="扫码Login可能触发B站风控机制，建议优先Use CookieImport方式。"
               type="error"
               showIcon
             />

@@ -77,7 +77,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
   }
 
   const handleOpenSubtitleEditor = async () => {
-    // 显示On发Medium提示
+    // 显示On发MediumPrompt
     message.info('Coming soon')
   }
 
@@ -96,7 +96,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
         .flatMap(op => op.segmentIds)
 
       if (deletedSegments.length === 0) {
-        console.log('没有Delete操作')
+        console.log('没有DeleteAction')
         return
       }
 
@@ -109,12 +109,12 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
 
       if (result.success) {
         console.log('VideoEditSuccess:', result)
-        // 这里可以AddSuccess提示
-        // 可以Refreshclips列表或UpdateUI
+        // 这里可以AddSuccessPrompt
+        // 可以RefreshclipsList或UpdateUI
       }
     } catch (error) {
       console.error('VideoEditFailed:', error)
-      // 这里可以AddError提示
+      // 这里可以AddErrorPrompt
     }
   }
 
@@ -147,7 +147,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
             marginBottom: '20px'
           }}>
             <Title level={4} style={{ margin: 0, color: '#ffffff' }}>
-              切片Details
+              ClipDetails
             </Title>
             <Button 
               type="text" 
@@ -203,7 +203,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
                 </Space>
               </div>
 
-              {/* 操作Button */}
+              {/* Operation buttons */}
               {console.log('Rendering operation buttons in ClipDetailModal')}
               <Space>
                 <Button 
@@ -219,7 +219,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
                   loading={downloading}
                   onClick={handleDownload}
                 >
-                  Download切片
+                  DownloadClip
                 </Button>
                 <Button 
                   type="default" 
@@ -285,7 +285,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
                   </Text>
                   <div style={{ color: '#cccccc', fontSize: '14px' }}>
                     <div>StartTime: {formatTime(clip.start_time)}</div>
-                    <div>结束Time: {formatTime(clip.end_time)}</div>
+                    <div>EndTime: {formatTime(clip.end_time)}</div>
                   </div>
                 </div>
 

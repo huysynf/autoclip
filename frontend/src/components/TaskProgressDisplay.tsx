@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Progress, Card, Typography, Tag, Space, Button, message } from 'antd';
 import { PlayCircleOutlined, PauseCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { useTaskProgress, TaskProgressState } from '../hooks/useTaskProgress';
+import { use tasksProgress,  tasksProgressState } from '../hooks/use tasksProgress';
 
 const { Text, Title } = Typography;
 
-interface TaskProgressDisplayProps {
+interface  tasksProgressDisplayProps {
   userId: string;
   taskId: string;
-  onTaskComplete?: (state: TaskProgressState) => void;
-  onTaskFailed?: (state: TaskProgressState) => void;
+  on tasksComplete?: (state:  tasksProgressState) => void;
+  on tasksFailed?: (state:  tasksProgressState) => void;
 }
 
-export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
+export const  tasksProgressDisplay: React.FC< tasksProgressDisplayProps> = ({
   userId,
   taskId,
-  onTaskComplete,
-  onTaskFailed
+  on tasksComplete,
+  on tasksFailed
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
@@ -25,21 +25,21 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
     isConnected,
     isSubscribed,
     performFinalStateCheck
-  } = useTaskProgress({
+  } = use tasksProgress({
     userId,
     taskId,
     onProgressUpdate: (state) => {
-      console.log('TaskProgressUpdate:', state);
+      console.log(' tasksProgressUpdate:', state);
     },
-    onTaskComplete: (state) => {
-      console.log('TaskCompleted:', state);
-      message.success('TaskDone！');
-      onTaskComplete?.(state);
+    on tasksComplete: (state) => {
+      console.log(' tasksCompleted:', state);
+      message.success(' tasksDone！');
+      on tasksComplete?.(state);
     },
-    onTaskFailed: (state) => {
-      console.log('TaskFailed:', state);
-      message.error(`TaskFailed: ${state.message}`);
-      onTaskFailed?.(state);
+    on tasksFailed: (state) => {
+      console.log(' tasksFailed:', state);
+      message.error(` tasksFailed: ${state.message}`);
+      on tasksFailed?.(state);
     }
   });
 
@@ -58,9 +58,9 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
     switch (phase) {
       case 'transcribe': return 'Speech recognition';
       case 'analyze': return 'ContentAnalysis';
-      case 'clip': return 'Video切片';
+      case 'clip': return 'VideoClip';
       case 'encode': return 'VideoCodec';
-      case 'upload': return 'Upload处理';
+      case 'upload': return 'UploadProcessing';
       default: return phase;
     }
   };
@@ -89,7 +89,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
     return (
       <Card size="small" style={{ marginBottom: 16 }}>
         <Space>
-          <Text type="secondary">Task {taskId}</Text>
+          <Text type="secondary"> tasks {taskId}</Text>
           <Tag color={isConnected ? 'success' : 'error'}>
             {isConnected ? 'Connected' : '未连接'}
           </Tag>
@@ -107,7 +107,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
       style={{ marginBottom: 16 }}
       title={
         <Space>
-          <Text strong>TaskProgress</Text>
+          <Text strong> tasksProgress</Text>
           <Tag color={getStatusColor(taskState.status)}>
             {getStatusText(taskState.status)}
           </Tag>
@@ -151,7 +151,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
           </Text>
         </div>
 
-        {/* 当前Message */}
+        {/* CurrentMessage */}
         <Text>{taskState.message}</Text>
 
         {/* Expand的详细Info */}
@@ -164,7 +164,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
           }}>
             <Space direction="vertical" size="small" style={{ width: '100%' }}>
               <div>
-                <Text strong>TaskID:</Text> {taskState.task_id}
+                <Text strong> tasksID:</Text> {taskState.task_id}
               </div>
               <div>
                 <Text strong>序列号:</Text> {taskState.seq}
@@ -177,7 +177,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
               </div>
               {taskState.meta && (
                 <div>
-                  <Text strong>元数据:</Text> {JSON.stringify(taskState.meta, null, 2)}
+                  <Text strong>元Data:</Text> {JSON.stringify(taskState.meta, null, 2)}
                 </div>
               )}
               <div>

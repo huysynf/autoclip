@@ -25,12 +25,12 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
   const [selectedClipIds, setSelectedClipIds] = useState<string[]>([])
   const [searchText, setSearchText] = useState('')
 
-  // 过滤出不在当前CollectionMedium的切片
+  // Filter出不在CurrentCollectionMedium的Clip
   const availableClips = useMemo(() => {
     return clips.filter(clip => !existingClipIds.includes(clip.id))
   }, [clips, existingClipIds])
 
-  // 根据Search文本过滤切片
+  // 根据Search文本FilterClip
   const filteredClips = useMemo(() => {
     if (!searchText.trim()) {
       return availableClips
@@ -91,7 +91,7 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
 
   return (
     <Modal
-      title="Add切片到Collection"
+      title="AddClip到Collection"
       open={visible}
       onCancel={handleCancel}
       width={800}
@@ -111,10 +111,10 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
       ]}
     >
       <div className="add-clip-modal-content">
-        {/* Search和操作栏 */}
+        {/* Search和Action栏 */}
         <div className="search-section">
           <Search
-            placeholder="Search切片Title、Content或推荐理由..."
+            placeholder="SearchClipTitle、Content或推荐理由..."
             prefix={<SearchOutlined />}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -125,7 +125,7 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
           <div className="action-bar">
             <Space>
               <Text type="secondary">
-                可Add {filteredClips.length} 切片
+                可Add {filteredClips.length} Clip
               </Text>
               {filteredClips.length > 0 && (
                 <Button 
@@ -140,7 +140,7 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
           </div>
         </div>
 
-        {/* 切片列表 */}
+        {/* ClipList */}
         <div className="clips-list-container">
           {filteredClips.length > 0 ? (
             <List
@@ -211,8 +211,8 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
                 image={<PlayCircleOutlined style={{ fontSize: '48px', color: '#d9d9d9' }} />}
                 description={
                   availableClips.length === 0 
-                    ? "所有切片都已在CollectionMedium" 
-                    : "没有找到匹配的切片"
+                    ? "AllClip都已在CollectionMedium" 
+                    : "没有找到匹配的Clip"
                 }
               />
             </div>

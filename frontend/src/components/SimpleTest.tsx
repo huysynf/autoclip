@@ -5,7 +5,7 @@ const { Text } = Typography;
 
 export const SimpleTest: React.FC = () => {
   const [count, setCount] = useState(0);
-  const [tasks, setTasks] = useState<any[]>([]);
+  const [tasks, set taskss] = useState<any[]>([]);
 
   useEffect(() => {
     console.log('🎯 SimpleTestComponent已加载');
@@ -18,7 +18,7 @@ export const SimpleTest: React.FC = () => {
       .then(response => response.json())
       .then(data => {
         console.log('📋 API响应:', data);
-        setTasks(data.data.tasks || []);
+        set taskss(data.data.tasks || []);
       })
       .catch(error => {
         console.error('❌ API调用Failed:', error);
@@ -30,9 +30,9 @@ export const SimpleTest: React.FC = () => {
       <Card title="简单TestComponent">
         <Text>Component加载次数: {count}</Text>
         <br />
-        <Text>TaskCount: {tasks.length}</Text>
+        <Text> tasksCount: {tasks.length}</Text>
         <br />
-        <Text>Task List:</Text>
+        <Text> tasks List:</Text>
         <ul>
           {tasks.map((task, index) => (
             <li key={index}>

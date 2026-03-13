@@ -41,7 +41,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
   const [selectedRecord, setSelectedRecord] = useState<UploadRecord | null>(null);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
 
-  // 获取Upload记录
+  // Get UploadRecords
   const fetchRecords = async () => {
     setLoading(true);
     try {
@@ -79,7 +79,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     // 原有代码Disabled
     try {
       await uploadApi.cancelUpload(recordId);
-      message.success('Task cancelled');
+      message.success(' tasks cancelled');
       fetchRecords();
     } catch (error) {
       message.error('Cancel failed');
@@ -95,7 +95,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     // 原有代码Disabled
     try {
       await uploadApi.deleteUpload(recordId);
-      message.success('Task deleted');
+      message.success(' tasks deleted');
       fetchRecords();
     } catch (error) {
       message.error('Delete failed');
@@ -109,7 +109,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     setDetailModalVisible(true);
   };
 
-  // 获取StatusTags
+  // Get status tags
   const getStatusTag = (status: string) => {
     const statusConfig = {
       pending: { color: 'default', icon: <ClockCircleOutlined />, text: 'Waiting' },
@@ -128,7 +128,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     );
   };
 
-  // 获取分区Name
+  // Get 分区Name
   const getPartitionName = (partitionId: number) => {
     const partition = BILIBILI_PARTITIONS.find(p => p.id === partitionId);
     return partition ? partition.name : `Category ${partitionId}`;
@@ -158,10 +158,10 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     }
   };
 
-  // 表格列定义
+  // Table column definitions
   const columns = [
     {
-      title: 'Task ID',
+      title: ' tasks ID',
       dataIndex: 'id',
       key: 'id',
       width: 80,
@@ -363,7 +363,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           .dark-table .ant-pagination .ant-pagination-item-active a {
             color: #ffffff !important;
           }
-          /* 确保所有文字都Yes白色 */
+          /* 确保All文字都Yes白色 */
           .dark-table .ant-typography,
           .dark-table .ant-typography-caption,
           .dark-table .ant-typography-text,
@@ -407,7 +407,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           .dark-table .ant-progress-text {
             color: #ffffff !important;
           }
-          /* 确保分页器所有元素可见 */
+          /* 确保分页器All元素可见 */
           .dark-table .ant-pagination-prev,
           .dark-table .ant-pagination-next {
             color: #ffffff !important;
@@ -448,7 +448,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
       </style>
       <Card style={{ background: '#1f1f1f', border: '1px solid #303030' }}>
         <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Title level={3} style={{ margin: 0, color: '#ffffff' }}>Upload Task Status</Title>
+          <Title level={3} style={{ margin: 0, color: '#ffffff' }}>Upload  tasks Status</Title>
           <Button 
             type="primary" 
             icon={<ReloadOutlined />} 
@@ -464,7 +464,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           <Col span={6}>
             <Card style={{ background: '#262626', border: '1px solid #404040' }}>
               <Statistic 
-                title={<span style={{ color: '#ffffff' }}>Total Tasks</span>} 
+                title={<span style={{ color: '#ffffff' }}>Total  taskss</span>} 
                 value={stats.total} 
                 valueStyle={{ color: '#ffffff' }} 
               />
@@ -502,7 +502,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           </Col>
         </Row>
 
-        {/* Task List */}
+        {/*  tasks List */}
         <Table
           columns={columns}
           dataSource={records}
@@ -522,7 +522,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
 
       {/* Details模态框 */}
       <Modal
-        title="Upload Task Details"
+        title="Upload  tasks Details"
         open={detailModalVisible}
         onCancel={() => setDetailModalVisible(false)}
         footer={null}
@@ -555,7 +555,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
                 border: '1px solid #303030'
               }}
             >
-              <Descriptions.Item label="Task ID" span={1}>
+              <Descriptions.Item label=" tasks ID" span={1}>
                 <Text code style={{ color: '#ffffff' }}>{selectedRecord.id}</Text>
               </Descriptions.Item>
               <Descriptions.Item label="Status" span={1}>

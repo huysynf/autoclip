@@ -43,7 +43,7 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus()
-      // TextAreaComponent没有select方法，使用setSelectionRange代替
+      // TextAreaComponent没有select方法，Use setSelectionRange代替
       if (inputRef.current.setSelectionRange) {
         inputRef.current.setSelectionRange(0, inputRef.current.value.length)
       }

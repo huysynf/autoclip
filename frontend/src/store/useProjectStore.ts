@@ -287,7 +287,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   reorderCollectionClips: async (projectId: string, collectionId: string, newClipIds: string[]) => {
     console.log('Starting reorderCollectionClips:', { projectId, collectionId, newClipIds })
     
-    // 获取原始Status
+    // Get 原始Status
     const state = get()
     console.log('Current state projects:', state.projects.map(p => ({ id: p.id, collectionsCount: p.collections?.length || 0 })))
     console.log('Current state currentProject:', state.currentProject ? { id: state.currentProject.id, collectionsCount: state.currentProject.collections?.length || 0 } : null)
@@ -327,7 +327,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       return
     }
     
-    // 记录EditTime戳
+    // RecordsEditTime戳
     const now = Date.now()
     
     // 乐观Update：立即Update前端Status
@@ -378,7 +378,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   addClipToCollection: async (projectId: string, collectionId: string, clipIds: string[]) => {
     console.log('Starting addClipToCollection:', { projectId, collectionId, clipIds })
     
-    // 获取原始Status
+    // Get 原始Status
     const state = get()
     
     // 优先从currentProjectMedium查找，如果找不到再从projects数组Medium查找

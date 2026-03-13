@@ -18,7 +18,7 @@ interface PipelineControlProps {
   onStatusChange?: (status: string) => void;
 }
 
-interface TaskInfo {
+interface  tasksInfo {
   id: string;
   name: string;
   status: string;
@@ -35,7 +35,7 @@ interface TaskInfo {
 interface PipelineStatus {
   project_id: string;
   project_status: string;
-  tasks: TaskInfo[];
+  tasks:  tasksInfo[];
   total_tasks: number;
   running_tasks: number;
   completed_tasks: number;
@@ -52,7 +52,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [statusModalVisible, setStatusModalVisible] = useState(false);
 
-  // 获取流水线Status
+  // Get 流水线Status
   const fetchPipelineStatus = async () => {
     try {
       setLoading(true);
@@ -60,7 +60,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
       
       const response = await fetch(`http://localhost:8000/api/v1/pipeline/status/${projectId}`);
       if (!response.ok) {
-        throw new Error('获取流水线StatusFailed');
+        throw new Error('Get 流水线StatusFailed');
       }
       
       const data = await response.json();
@@ -167,7 +167,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
     }
   }, [projectId]);
 
-  // 获取StatusConfiguration
+  // Get StatusConfiguration
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'processing':
@@ -186,7 +186,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
   };
 
   // Get task status config
-  const getTaskStatusConfig = (status: string) => {
+  const get tasksStatusConfig = (status: string) => {
     switch (status) {
       case 'running':
         return { color: 'processing', text: 'Running' };
@@ -209,7 +209,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <Spin size="large" />
           <div style={{ marginTop: 16 }}>
-            <Text>正在获取流水线Status...</Text>
+            <Text>正在Get 流水线Status...</Text>
           </div>
         </div>
       </Card>
@@ -220,7 +220,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
     return (
       <Card size="small" style={{ marginBottom: 16 }}>
         <Alert
-          message="获取流水线StatusFailed"
+          message="Get 流水线StatusFailed"
           description={error}
           type="error"
           showIcon
@@ -300,13 +300,13 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
           </Button>
         </Space>
 
-        {/* TaskStatistics */}
+        {/*  tasksStatistics */}
         <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: 16 }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#1890ff' }}>
               {pipelineStatus.total_tasks}
             </div>
-            <div style={{ fontSize: '12px', color: '#666' }}>总Task</div>
+            <div style={{ fontSize: '12px', color: '#666' }}>总 tasks</div>
           </div>
           
           <div style={{ textAlign: 'center' }}>
@@ -331,16 +331,16 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
           </div>
         </div>
 
-        {/* Current TaskProgress */}
+        {/* Current  tasksProgress */}
         {pipelineStatus.tasks.length > 0 && (
           <div>
-            <Text strong>Current Task:</Text>
+            <Text strong>Current  tasks:</Text>
             {pipelineStatus.tasks.map((task, index) => (
               <div key={task.id} style={{ marginTop: 8 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
                   <Text>{task.name}</Text>
-                  <Tag color={getTaskStatusConfig(task.status).color}>
-                    {getTaskStatusConfig(task.status).text}
+                  <Tag color={get tasksStatusConfig(task.status).color}>
+                    {get tasksStatusConfig(task.status).text}
                   </Tag>
                 </div>
                 
@@ -379,7 +379,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
             </div>
             
             <List
-              header={<Text strong>Task List</Text>}
+              header={<Text strong> tasks List</Text>}
               dataSource={pipelineStatus.tasks}
               renderItem={(task) => (
                 <List.Item>
@@ -387,8 +387,8 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
                     title={
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text>{task.name}</Text>
-                        <Tag color={getTaskStatusConfig(task.status).color}>
-                          {getTaskStatusConfig(task.status).text}
+                        <Tag color={get tasksStatusConfig(task.status).color}>
+                          {get tasksStatusConfig(task.status).text}
                         </Tag>
                       </div>
                     }

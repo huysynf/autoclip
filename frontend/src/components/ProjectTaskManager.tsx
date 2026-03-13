@@ -1,60 +1,60 @@
 import React, { useState, useEffect } from 'react'
 import { Card, Table, Tag, Progress, Space, Typography, Button, Modal, message, Row, Col, Statistic } from 'antd'
 import { ReloadOutlined, EyeOutlined, ExclamationCircleOutlined, CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined } from '@ant-design/icons'
-import { useTaskStatus } from '../hooks/useTaskStatus'
-import { TaskStatus as TaskStatusType } from '../hooks/useTaskStatus'
+import { use tasksStatus } from '../hooks/use tasksStatus'
+import {  tasksStatus as  tasksStatusType } from '../hooks/use tasksStatus'
 
 const { Title, Text } = Typography
 const { confirm } = Modal
 
-interface ProjectTaskManagerProps {
+interface Project tasksManagerProps {
   projectId: string
   projectName?: string
 }
 
-export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({ 
+export const Project tasksManager: React.FC<Project tasksManagerProps> = ({ 
   projectId, 
   projectName 
 }) => {
-  const { getAllTasks, loading } = useTaskStatus()
-  const [selectedTask, setSelectedTask] = useState<TaskStatusType | null>(null)
-  const [taskDetailVisible, setTaskDetailVisible] = useState(false)
+  const { getAll taskss, loading } = use tasksStatus()
+  const [selected tasks, setSelected tasks] = useState< tasksStatusType | null>(null)
+  const [taskDetailVisible, set tasksDetailVisible] = useState(false)
 
-  // 获取当前projects的Task
-  const projectTasks = getAllTasks().filter(task => task.project_id === projectId)
-  const activeTasks = projectTasks.filter(task => 
+  // Get Currentprojects的 tasks
+  const project taskss = getAll taskss().filter(task => task.project_id === projectId)
+  const active taskss = project taskss.filter(task => 
     task.status === 'running' || task.status === 'pending'
   )
-  const completedTasks = projectTasks.filter(task => task.status === 'completed')
-  const failedTasks = projectTasks.filter(task => task.status === 'failed')
+  const completed taskss = project taskss.filter(task => task.status === 'completed')
+  const failed taskss = project taskss.filter(task => task.status === 'failed')
 
-  // RefreshTask List
+  // Refresh tasks List
   const handleRefresh = () => {
-    message.success('Task List已Refresh')
+    message.success(' tasks List已Refresh')
   }
 
-  // ViewTaskDetails
-  const handleViewTask = (task: TaskStatusType) => {
-    setSelectedTask(task)
-    setTaskDetailVisible(true)
+  // View tasksDetails
+  const handleView tasks = (task:  tasksStatusType) => {
+    setSelected tasks(task)
+    set tasksDetailVisible(true)
   }
 
-  // DeleteTask
-  const handleDeleteTask = (taskId: string) => {
+  // Delete tasks
+  const handleDelete tasks = (taskId: string) => {
     confirm({
       title: 'ConfirmDelete',
       icon: <ExclamationCircleOutlined />,
-      content: 'OK要Delete这Task?Delete后None法恢复。',
+      content: 'OK要Delete这 tasks?Delete后None法恢复。',
       okText: 'Delete',
       okType: 'danger',
       cancelText: 'Cancel',
       onOk() {
-        message.success('Task deleted')
+        message.success(' tasks deleted')
       }
     })
   }
 
-  // 获取StatusIcon
+  // Get StatusIcon
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
@@ -70,7 +70,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
     }
   }
 
-  // 获取StatusColor
+  // Get StatusColor
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed':
@@ -86,13 +86,13 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
     }
   }
 
-  // 表格列定义
+  // Table column definitions
   const columns = [
     {
-      title: 'TaskName',
+      title: ' tasksName',
       dataIndex: 'name',
       key: 'name',
-      render: (text: string, record: TaskStatusType) => (
+      render: (text: string, record:  tasksStatusType) => (
         <Space>
           {getStatusIcon(record.status)}
           <Text strong>{text}</Text>
@@ -116,7 +116,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
       title: 'Progress',
       dataIndex: 'progress',
       key: 'progress',
-      render: (progress: number, record: TaskStatusType) => (
+      render: (progress: number, record:  tasksStatusType) => (
         <Progress 
           percent={Math.round(progress)} 
           size="small"
@@ -125,7 +125,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
       )
     },
     {
-      title: '当前Step',
+      title: 'CurrentStep',
       dataIndex: 'current_step',
       key: 'current_step',
       render: (step: string) => step || '-'
@@ -144,21 +144,21 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
       title: 'Actions',
       key: 'actions',
       width: 120,
-      render: (_: any, record: TaskStatusType) => (
+      render: (_: any, record:  tasksStatusType) => (
         <Space size="small">
           <Button
             type="text"
             size="small"
             icon={<EyeOutlined />}
-            onClick={() => handleViewTask(record)}
+            onClick={() => handleView tasks(record)}
             title="ViewDetails"
           />
           <Button
             type="text"
             size="small"
             icon={<ExclamationCircleOutlined />}
-            onClick={() => handleDeleteTask(record.id)}
-            title="DeleteTask"
+            onClick={() => handleDelete tasks(record.id)}
+            title="Delete tasks"
             danger
           />
         </Space>
@@ -166,11 +166,11 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
     }
   ]
 
-  if (projectTasks.length === 0) {
+  if (project taskss.length === 0) {
     return (
-      <Card title="Task Management" size="small">
+      <Card title=" tasks Management" size="small">
         <div style={{ textAlign: 'center', padding: '20px' }}>
-          <Text type="secondary">该projectsNo tasks记录</Text>
+          <Text type="secondary">该projectsNo tasksRecords</Text>
         </div>
       </Card>
     )
@@ -180,7 +180,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
     <Card 
       title={
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span>Task Management</span>
+          <span> tasks Management</span>
           <Button 
             type="primary" 
             size="small"
@@ -194,19 +194,19 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
       }
       size="small"
     >
-      {/* TaskStatistics */}
+      {/*  tasksStatistics */}
       <Row gutter={16} style={{ marginBottom: '16px' }}>
         <Col span={6}>
           <Statistic
-            title="总Task数"
-            value={projectTasks.length}
+            title="总 tasks数"
+            value={project taskss.length}
             prefix={<ClockCircleOutlined />}
           />
         </Col>
         <Col span={6}>
           <Statistic
-            title="活跃Task"
-            value={activeTasks.length}
+            title="活跃 tasks"
+            value={active taskss.length}
             valueStyle={{ color: '#1890ff' }}
             prefix={<ClockCircleOutlined />}
           />
@@ -214,30 +214,30 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
         <Col span={6}>
           <Statistic
             title="Completed"
-            value={completedTasks.length}
+            value={completed taskss.length}
             valueStyle={{ color: '#52c41a' }}
             prefix={<CheckCircleOutlined />}
           />
         </Col>
         <Col span={6}>
           <Statistic
-            title="FailedTask"
-            value={failedTasks.length}
+            title="Failed tasks"
+            value={failed taskss.length}
             valueStyle={{ color: '#ff4d4f' }}
             prefix={<CloseCircleOutlined />}
           />
         </Col>
       </Row>
 
-      {/* 活跃Task */}
-      {activeTasks.length > 0 && (
+      {/* 活跃 tasks */}
+      {active taskss.length > 0 && (
         <Card 
           size="small" 
           style={{ marginBottom: '16px' }}
-          title={`活跃Task (${activeTasks.length})`}
+          title={`活跃 tasks (${active taskss.length})`}
         >
           <Space wrap>
-            {activeTasks.map(task => (
+            {active taskss.map(task => (
               <div key={task.id} style={{ marginBottom: '8px' }}>
                 <Text>{task.message || task.id}</Text>
                 <Progress percent={task.progress} size="small" />
@@ -247,10 +247,10 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
         </Card>
       )}
 
-      {/* Task List */}
+      {/*  tasks List */}
       <Table
         columns={columns}
-        dataSource={projectTasks}
+        dataSource={project taskss}
         rowKey="id"
         pagination={{
           pageSize: 5,
@@ -262,27 +262,27 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
         loading={loading}
       />
 
-      {/* TaskDetails弹窗 */}
+      {/*  tasksDetails弹窗 */}
       <Modal
-        title="TaskDetails"
+        title=" tasksDetails"
         open={taskDetailVisible}
-        onCancel={() => setTaskDetailVisible(false)}
+        onCancel={() => set tasksDetailVisible(false)}
         footer={[
-          <Button key="close" onClick={() => setTaskDetailVisible(false)}>
+          <Button key="close" onClick={() => set tasksDetailVisible(false)}>
             Close
           </Button>
         ]}
         width={800}
       >
-        {selectedTask && (
+        {selected tasks && (
           <div>
-            <Text>TaskID: {selectedTask.id}</Text>
+            <Text> tasksID: {selected tasks.id}</Text>
             <br />
-            <Text>Status: {selectedTask.status}</Text>
+            <Text>Status: {selected tasks.status}</Text>
             <br />
-            <Text>Progress: {selectedTask.progress}%</Text>
+            <Text>Progress: {selected tasks.progress}%</Text>
             <br />
-            <Text>Message: {selectedTask.message}</Text>
+            <Text>Message: {selected tasks.message}</Text>
           </div>
         )}
       </Modal>

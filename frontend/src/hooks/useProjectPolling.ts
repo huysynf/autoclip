@@ -25,7 +25,7 @@ export const useProjectPolling = ({
     
     const poll = async () => {
       try {
-        // Real-time获取isDraggingStatus
+        // Real-timeGet isDraggingStatus
         const currentIsDragging = useProjectStore.getState().isDragging
         
         // 如果正在拖拽，Skip这次轮询

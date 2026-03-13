@@ -85,7 +85,7 @@ export const ProgressTestPage: React.FC = () => {
               />
             </Col>
             <Col span={12}>
-              <Text strong>当前Status:</Text>
+              <Text strong>CurrentStatus:</Text>
               <Select
                 value={testStatus}
                 onChange={setTestStatus}
@@ -188,7 +188,7 @@ export const ProgressTestPage: React.FC = () => {
           <ul style={{ fontSize: '12px', color: '#666' }}>
             <li>点击"StartDownload"模拟Download过程，Progress会Auto增长</li>
             <li>DownloadCompleted后会Auto切换到"Processing"Status</li>
-            <li>ProcessingStatus会轮询后端API获取Progress</li>
+            <li>ProcessingStatus会轮询后端APIGet Progress</li>
             <li>可以Manual点击"Completed"或"Failed"来Test终态</li>
             <li>点击"Reset"Clear AllStatus</li>
           </ul>

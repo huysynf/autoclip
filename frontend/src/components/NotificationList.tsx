@@ -61,7 +61,7 @@ const getNotificationColor = (level: Notification['level']) => {
 };
 
 const formatTime = (timestamp: string) => {
-  // 正确处理时区转换，确保显示本地Time
+  // 正确Processing时区转换，确保显示本地Time
   const now = dayjs().tz('Asia/Shanghai');
   const notificationTime = dayjs(timestamp).tz('Asia/Shanghai');
   const diff = now.diff(notificationTime, 'millisecond');

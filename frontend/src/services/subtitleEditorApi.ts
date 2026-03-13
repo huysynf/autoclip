@@ -37,7 +37,7 @@ class SubtitleEditorApi {
   private baseUrl = '/api/v1/subtitle-editor'
 
   /**
-   * 获取clips的字粒度Subtitle数据
+   * Get clips的字粒度SubtitleData
    */
   async getClipSubtitles(projectId: string, clipId: string): Promise<SubtitleDataResponse> {
     const response = await fetch(`${this.baseUrl}/${projectId}/clips/${clipId}/subtitles`)
@@ -80,7 +80,7 @@ class SubtitleEditorApi {
   }
 
   /**
-   * 获取Edit后的VideoFileURL
+   * Get Edit后的VideoFileURL
    */
   getEditedVideoUrl(projectId: string, clipId: string): string {
     return `${this.baseUrl}/${projectId}/clips/${clipId}/edited-video`
@@ -117,7 +117,7 @@ class SubtitleEditorApi {
   }
 
   /**
-   * 获取PreviewclipsFileURL
+   * Get PreviewclipsFileURL
    */
   getPreviewSegmentUrl(projectId: string, clipId: string, segmentId: string): string {
     return `${this.baseUrl}/${projectId}/clips/${clipId}/preview/${segmentId}`
@@ -154,7 +154,7 @@ class SubtitleEditorApi {
   }
 
   /**
-   * 验证Edit操作
+   * 验证EditAction
    */
   async validateEditOperations(
     projectId: string, 
@@ -162,7 +162,7 @@ class SubtitleEditorApi {
     deletedSegments: string[]
   ): Promise<{ valid: boolean; error?: string }> {
     try {
-      // 先获取Subtitle数据来验证
+      // 先Get SubtitleData来验证
       const subtitleData = await this.getClipSubtitles(projectId, clipId)
       
       // 检查Delete的Subtitle段YesNo存在

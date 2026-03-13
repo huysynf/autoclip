@@ -158,7 +158,7 @@ const SettingsPage: React.FC = () => {
                   max_clips_per_collection: 5
                 }}
               >
-                {/* 当前提供商Status */}
+                {/* Current提供商Status */}
                 {currentProvider.available && (
                   <Alert
                     message={`Currently using: ${currentProvider.display_name} - ${currentProvider.model}`}
@@ -168,7 +168,7 @@ const SettingsPage: React.FC = () => {
                   />
                 )}
 
-                {/* 提供商选择 */}
+                {/* 提供商Select */}
                 <Form.Item
                   label="AI Model Provider"
                   name="llm_provider"
@@ -210,7 +210,7 @@ const SettingsPage: React.FC = () => {
                   />
                 </Form.Item>
 
-                {/* Model选择 */}
+                {/* ModelSelect */}
                 <Form.Item
                   label="Model"
                   name="model_name"
@@ -299,7 +299,7 @@ const SettingsPage: React.FC = () => {
                   </Col>
                   <Col span={12}>
                     <Form.Item
-                      label="每CollectionMax切片数"
+                      label="每CollectionMaxClip数"
                       name="max_clips_per_collection"
                       className="form-item"
                     >
@@ -348,9 +348,9 @@ const SettingsPage: React.FC = () => {
                     <InfoCircleOutlined /> 2. Configuration Parameters
                   </Title>
                   <Paragraph className="instruction-text">
-                    • <Text strong>文本分块Size</Text>：影响处理Speed和精度，建议5000chars<br />
+                    • <Text strong>文本分块Size</Text>：影响ProcessingSpeed和精度，建议5000chars<br />
                     • <Text strong>Score阈值</Text>：只有High于此分数的clips才会被保留<br />
-                    • <Text strong>Collection切片数</Text>：控制每themed collections包含的clipsCount
+                    • <Text strong>CollectionClip数</Text>：控制每themed collectionsContains的clipsCount
                   </Paragraph>
                 </div>
                 
@@ -413,7 +413,7 @@ const SettingsPage: React.FC = () => {
                       <Text strong style={{ color: '#1890ff' }}>Multi-account Support</Text>
                       <br />
                       <Text type="secondary" style={{ color: '#b0b0b0' }}>
-                        支持Add多Bilibili Account，方便管理和切换
+                        支持Add多Bilibili Account，方便Manage和切换
                       </Text>
                     </div>
                     <div style={{ 
@@ -437,7 +437,7 @@ const SettingsPage: React.FC = () => {
                       <Text strong style={{ color: '#faad14' }}>Quick Upload</Text>
                       <br />
                       <Text type="secondary" style={{ color: '#b0b0b0' }}>
-                        在切片Details页直接Select AccountUpload，操作简单
+                        在ClipDetails页直接Select AccountUpload，Action简单
                       </Text>
                     </div>
                     <div style={{ 
@@ -449,7 +449,7 @@ const SettingsPage: React.FC = () => {
                       <Text strong style={{ color: '#722ed1' }}>Batch Management</Text>
                       <br />
                       <Text type="secondary" style={{ color: '#b0b0b0' }}>
-                        支持批量Upload多切片，提High效率
+                        支持Batch upload多Clip，提High效率
                       </Text>
                     </div>
                   </div>

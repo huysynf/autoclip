@@ -22,14 +22,14 @@ interface ProcessingStatus {
   error_message?: string
 }
 
-interface TaskProgressModalProps {
+interface  tasksProgressModalProps {
   visible: boolean
   projectId: string | null
   onClose: () => void
   onComplete?: (projectId: string) => void
 }
 
-const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
+const  tasksProgressModal: React.FC< tasksProgressModalProps> = ({
   visible,
   projectId,
   onClose,
@@ -79,7 +79,7 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
     // 立即检查一次Status
     checkStatus()
     
-    // 如果Task还在In Progress，定期检查Status
+    // 如果 tasks还在In Progress，定期检查Status
     const interval = setInterval(checkStatus, 2000)
     
     return () => clearInterval(interval)
@@ -91,7 +91,7 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
     setLoading(true)
     try {
       if (status?.current_step !== undefined) {
-        // 从当前StepRetry
+        // 从CurrentStepRetry
         await projectApi.restartStep(projectId, status.current_step)
       } else {
         // 完全Retry
@@ -147,7 +147,7 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
       title={
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <LoadingOutlined style={{ color: '#1890ff' }} />
-          <span>Task处理Progress</span>
+          <span> tasksProcessingProgress</span>
         </div>
       }
       open={visible}
@@ -164,7 +164,7 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
             loading={loading}
             onClick={handleRetry}
           >
-            从当前StepRetry
+            从CurrentStepRetry
           </Button>
         ] : [])
       ]}
@@ -178,7 +178,7 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
           <div style={{ textAlign: 'center', padding: '40px 0' }}>
             <Spin size="large" />
             <div style={{ marginTop: '16px', color: '#666' }}>
-              正在获取TaskStatus...
+              正在Get  tasksStatus...
             </div>
           </div>
         ) : (
@@ -206,7 +206,7 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
               />
             </div>
 
-            {/* 当前StepInfo */}
+            {/* CurrentStepInfo */}
             <div style={{
               background: '#f8f9fa',
               padding: '16px',
@@ -215,7 +215,7 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                 {getStepIcon(status.current_step)}
-                <Text strong>当前Step: {status.step_name}</Text>
+                <Text strong>CurrentStep: {status.step_name}</Text>
               </div>
               <Progress 
                 percent={status.progress}
@@ -234,7 +234,7 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
               />
             )}
 
-            {/* Step列表 */}
+            {/* StepList */}
             <div>
               <Text strong style={{ marginBottom: '16px', display: 'block' }}>Processing Steps</Text>
               <Steps
@@ -255,11 +255,11 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
               </Steps>
             </div>
 
-            {/* Completed提示 */}
+            {/* CompletedPrompt */}
             {status.status === 'completed' && (
               <Alert
                 message="Done"
-                description="Video已Success处理，您可以View生成的clips和Collection。"
+                description="Video已SuccessProcessing，您可以View生成的clips和Collection。"
                 type="success"
                 showIcon
               />
@@ -271,4 +271,4 @@ const TaskProgressModal: React.FC<TaskProgressModalProps> = ({
   )
 }
 
-export default TaskProgressModal
+export default  tasksProgressModal

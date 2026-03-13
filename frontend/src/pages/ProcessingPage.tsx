@@ -107,7 +107,7 @@ const ProcessingPage: React.FC = () => {
     } catch (error: any) {
       console.error('Check status error:', error)
       
-      // 根据ErrorType提供不同的处理建议
+      // 根据ErrorType提供不同的Processing建议
       if (error.response?.status === 404) {
         message.error('Project not found or has been deleted')
         setTimeout(() => navigate('/'), 2000)

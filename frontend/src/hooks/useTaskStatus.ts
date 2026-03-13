@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { TaskUpdateMessage, ProjectUpdateMessage } from './useWebSocket';
+import {  tasksUpdateMessage, ProjectUpdateMessage } from './useWebSocket';
 
-export interface TaskStatus {
+export interface  tasksStatus {
   id: string;
   status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
   progress: number;
@@ -19,28 +19,28 @@ export interface ProjectStatus {
   updatedAt: string;
 }
 
-export const useTaskStatus = () => {
-  console.log('🔧 useTaskStatus Hook已Initializing');
+export const use tasksStatus = () => {
+  console.log('🔧 use tasksStatus Hook已Initializing');
   
-  const [tasks, setTasks] = useState<Map<string, TaskStatus>>(new Map());
+  const [tasks, set taskss] = useState<Map<string,  tasksStatus>>(new Map());
   const [projects, setProjects] = useState<Map<string, ProjectStatus>>(new Map());
   const [loading, setLoading] = useState(false);
 
-  const updateTask = useCallback((taskUpdate: TaskUpdateMessage) => {
-    setTasks(prev => {
-      const newTasks = new Map(prev);
-      const existing = newTasks.get(taskUpdate.task_id);
+  const update tasks = useCallback((taskUpdate:  tasksUpdateMessage) => {
+    set taskss(prev => {
+      const new taskss = new Map(prev);
+      const existing = new taskss.get(taskUpdate.task_id);
       
-      newTasks.set(taskUpdate.task_id, {
+      new taskss.set(taskUpdate.task_id, {
         id: taskUpdate.task_id,
-        status: taskUpdate.status as TaskStatus['status'],
+        status: taskUpdate.status as  tasksStatus['status'],
         progress: taskUpdate.progress || (existing?.progress || 0),
         message: taskUpdate.message,
         error: taskUpdate.error,
         updatedAt: taskUpdate.timestamp
       });
       
-      return newTasks;
+      return new taskss;
     });
   }, []);
 
@@ -61,7 +61,7 @@ export const useTaskStatus = () => {
     });
   }, []);
 
-  const getTask = useCallback((taskId: string): TaskStatus | undefined => {
+  const get tasks = useCallback((taskId: string):  tasksStatus | undefined => {
     return tasks.get(taskId);
   }, [tasks]);
 
@@ -69,7 +69,7 @@ export const useTaskStatus = () => {
     return projects.get(projectId);
   }, [projects]);
 
-  const getAllTasks = useCallback((): TaskStatus[] => {
+  const getAll taskss = useCallback(():  tasksStatus[] => {
     return Array.from(tasks.values());
   }, [tasks]);
 
@@ -77,7 +77,7 @@ export const useTaskStatus = () => {
     return Array.from(projects.values());
   }, [projects]);
 
-  const getActiveTasks = useCallback((): TaskStatus[] => {
+  const getActive taskss = useCallback(():  tasksStatus[] => {
     return Array.from(tasks.values()).filter(
       task => task.status === 'pending' || task.status === 'running'
     );
@@ -89,11 +89,11 @@ export const useTaskStatus = () => {
     );
   }, [projects]);
 
-  const clearTask = useCallback((taskId: string) => {
-    setTasks(prev => {
-      const newTasks = new Map(prev);
-      newTasks.delete(taskId);
-      return newTasks;
+  const clear tasks = useCallback((taskId: string) => {
+    set taskss(prev => {
+      const new taskss = new Map(prev);
+      new taskss.delete(taskId);
+      return new taskss;
     });
   }, []);
 
@@ -106,12 +106,12 @@ export const useTaskStatus = () => {
   }, []);
 
   const clearAll = useCallback(() => {
-    setTasks(new Map());
+    set taskss(new Map());
     setProjects(new Map());
   }, []);
 
-  const loadProjectTasks = useCallback(async (projectId: string) => {
-    console.log('📤 Start加载projectsTask:', projectId);
+  const loadProject taskss = useCallback(async (projectId: string) => {
+    console.log('📤 Start加载projects tasks:', projectId);
     setLoading(true);
     try {
       const response = await fetch(`http://localhost:8000/api/v1/tasks/project/${projectId}`);
@@ -119,48 +119,48 @@ export const useTaskStatus = () => {
       
       if (response.ok) {
         const data = await response.json();
-        const projectTasks = data.data.tasks || [];
-        console.log('📋 获取到TaskCount:', projectTasks.length);
+        const project taskss = data.data.tasks || [];
+        console.log('📋 Get 到 tasksCount:', project taskss.length);
         
-        setTasks(prev => {
-          const newTasks = new Map(prev);
-          projectTasks.forEach((task: any) => {
-            console.log('📝 AddTask:', task.task_id, task.status, task.progress);
-            newTasks.set(task.task_id, {
+        set taskss(prev => {
+          const new taskss = new Map(prev);
+          project taskss.forEach((task: any) => {
+            console.log('📝 Add tasks:', task.task_id, task.status, task.progress);
+            new taskss.set(task.task_id, {
               id: task.task_id,
-              status: task.status as TaskStatus['status'],
+              status: task.status as  tasksStatus['status'],
               progress: task.progress || 0,
               message: task.name,
               updatedAt: task.updated_at,
               project_id: task.project_id || projectId
             });
           });
-          return newTasks;
+          return new taskss;
         });
       } else {
         console.error('❌ API调用Failed:', response.status, response.statusText);
       }
     } catch (error) {
-      console.error('❌ 加载projectsTaskFailed:', error);
+      console.error('❌ 加载projects tasksFailed:', error);
     } finally {
       setLoading(false);
-      console.log('✅ Task加载Completed');
+      console.log('✅  tasks加载Completed');
     }
   }, []); // Empty依赖数组，避免None限循环
 
   return {
-    tasks: getAllTasks(),
+    tasks: getAll taskss(),
     projects: getAllProjects(),
-    activeTasks: getActiveTasks(),
+    active taskss: getActive taskss(),
     activeProjects: getActiveProjects(),
     loading,
-    getTask,
+    get tasks,
     getProject,
-    updateTask,
+    update tasks,
     updateProject,
-    clearTask,
+    clear tasks,
     clearProject,
     clearAll,
-    loadProjectTasks
+    loadProject taskss
   };
 }; 

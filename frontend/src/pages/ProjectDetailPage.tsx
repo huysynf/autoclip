@@ -24,7 +24,7 @@ import CollectionCard from '../components/CollectionCard'
 import CollectionPreviewModal from '../components/CollectionPreviewModal'
 import CreateCollectionModal from '../components/CreateCollectionModal'
 import { useCollectionVideoDownload } from '../hooks/useCollectionVideoDownload'
-import { ProjectTaskManager } from '../components/ProjectTaskManager'
+import { Project tasksManager } from '../components/Project tasksManager'
 // import { useWebSocket, WebSocketEventMessage } from '../hooks/useWebSocket'  // DisabledWebSocket系统
 
 const { Content } = Layout
@@ -53,14 +53,14 @@ const ProjectDetailPage: React.FC = () => {
   const [selectedCollection, setSelectedCollection] = useState<any>(null)
   const { generateAndDownloadCollectionVideo } = useCollectionVideoDownload()
 
-  // WebSocket连接Disabled，使用新的简化Progress系统
+  // WebSocket连接Disabled，Use 新的简化Progress系统
   // const handleWebSocketMessage = (message: WebSocketEventMessage) => {
   //   console.log('ProjectDetailPage收到WebSocket message:', message)
   //   
   //   switch (message.type) {
   //     case 'task_progress_update':
-  //       console.log('📊 收到TaskProgressUpdate:', message)
-  //       // 如果MessageYes针对当前projects的，RefreshprojectsStatus
+  //       console.log('📊 收到 tasksProgressUpdate:', message)
+  //       // 如果MessageYes针对Currentprojects的，RefreshprojectsStatus
   //       if (message.project_id === id) {
   //         loadProject()
   //         loadProcessingStatus()
@@ -69,7 +69,7 @@ const ProjectDetailPage: React.FC = () => {
   //       
   //     case 'project_update':
   //       console.log('📊 收到projectsUpdate:', message)
-  //       // 如果MessageYes针对当前projects的，RefreshprojectsStatus
+  //       // 如果MessageYes针对Currentprojects的，RefreshprojectsStatus
   //       if (message.project_id === id) {
   //         loadProject()
   //         loadProcessingStatus()
@@ -86,7 +86,7 @@ const ProjectDetailPage: React.FC = () => {
   //   onMessage: handleWebSocketMessage
   // })
 
-  // WebSocket订阅Disabled，使用新的简化Progress系统
+  // WebSocket订阅Disabled，Use 新的简化Progress系统
   // useEffect(() => {
   //   if (isConnected && id) {
   //     const desiredChannels = [`project_${id}`]
@@ -101,7 +101,7 @@ const ProjectDetailPage: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      // 只有当storeMedium没有currentProject或者currentProject的id与当前id不匹配时才重新加载
+      // 只有当storeMedium没有currentProject或者currentProject的id与Currentid不匹配时才重新加载
       if (!currentProject || currentProject.id !== id) {
         loadProject()
       }
@@ -134,7 +134,7 @@ const ProjectDetailPage: React.FC = () => {
           console.log('🎯 Final project with data:', projectWithData)
           setCurrentProject(projectWithData)
           
-          // 同时Updateprojects数组，确保StoreMedium的数据同步
+          // 同时Updateprojects数组，确保StoreMedium的Data同步
           const { projects } = useProjectStore.getState()
           const updatedProjects = projects.map(p => 
             p.id === id ? projectWithData : p
@@ -206,10 +206,10 @@ const ProjectDetailPage: React.FC = () => {
     if (!id) return
     try {
       await removeClipFromCollection(id, collectionId, clipId)
-      message.success('切片已从CollectionMediumRemove')
+      message.success('Clip已从CollectionMediumRemove')
     } catch (error) {
       console.error('Failed to remove clip from collection:', error)
-      message.error('Remove切片Failed')
+      message.error('RemoveClipFailed')
     }
   }
 
@@ -547,13 +547,13 @@ const ProjectDetailPage: React.FC = () => {
         </div>
       ) : (
         <div>
-          {/* Task ManagementComponent */}
-          <ProjectTaskManager 
+          {/*  tasks ManagementComponent */}
+          <Project tasksManager 
             projectId={currentProject.id} 
             projectName={currentProject.name}
           />
           
-          {/* projectsStatus提示 */}
+          {/* projectsStatusPrompt */}
           <Card style={{ marginTop: '16px' }}>
             <Empty 
               image={<PlayCircleOutlined style={{ fontSize: '64px', color: '#d9d9d9' }} />}

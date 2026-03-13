@@ -14,7 +14,7 @@ import {
 
 // Unified status type definitions
 export type ProjectStatus = 'pending' | 'processing' | 'completed' | 'failed'
-export type TaskStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled'
+export type  tasksStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled'
 export type UploadStatus = 'pending' | 'processing' | 'success' | 'failed'
 
 // Project status config
@@ -27,8 +27,8 @@ export interface ProjectStatusConfig {
   borderColor: string
 }
 
-// Task status config
-export interface TaskStatusConfig {
+//  tasks status config
+export interface  tasksStatusConfig {
   color: string
   icon: any
   text: string
@@ -99,7 +99,7 @@ export const getProjectStatusConfig = (status: ProjectStatus): ProjectStatusConf
 /**
  * Get task status config
  */
-export const getTaskStatusConfig = (status: TaskStatus): TaskStatusConfig => {
+export const get tasksStatusConfig = (status:  tasksStatus):  tasksStatusConfig => {
   switch (status) {
     case 'pending':
       return {
@@ -192,7 +192,7 @@ export const getUploadStatusConfig = (status: UploadStatus): UploadStatusConfig 
 /**
  * Get progress bar status
  */
-export const getProgressStatus = (status: ProjectStatus | TaskStatus | UploadStatus): 'normal' | 'active' | 'success' | 'exception' => {
+export const getProgressStatus = (status: ProjectStatus |  tasksStatus | UploadStatus): 'normal' | 'active' | 'success' | 'exception' => {
   switch (status) {
     case 'processing':
     case 'running':
@@ -241,14 +241,14 @@ export const normalizeProjectStatus = (status: string): ProjectStatus => {
   }
 }
 
-export const normalizeTaskStatus = (status: string): TaskStatus => {
+export const normalize tasksStatus = (status: string):  tasksStatus => {
   switch (status) {
     case 'pending':
     case 'running':
     case 'completed':
     case 'failed':
     case 'cancelled':
-      return status as TaskStatus
+      return status as  tasksStatus
     default:
       return 'pending'
   }

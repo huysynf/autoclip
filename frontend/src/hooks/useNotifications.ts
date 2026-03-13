@@ -40,7 +40,7 @@ export const useNotifications = () => {
     setNotifications(prev => [newNotification, ...prev.slice(0, 49)]); // 最多保留50条
     setUnreadCount(prev => prev + 1);
     
-    // 记录已Notifications的key和Time
+    // Records已Notifications的key和Time
     notifiedKeys.current.add(key);
     lastNotificationTime.current = now;
   }, []);

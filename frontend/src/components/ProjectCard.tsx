@@ -72,7 +72,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
   const [logs, setLogs] = useState<LogEntry[]>([])
   const [currentLogIndex, setCurrentLogIndex] = useState(0)
 
-  // 获取CategoryInfo
+  // Get CategoryInfo
   const getCategoryInfo = (category?: string) => {
     const categoryMap: Record<string, { name: string; icon: string; color: string }> = {
       'default': { name: 'Default', icon: '🎬', color: '#4facfe' },
@@ -87,16 +87,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
     return categoryMap[category || 'default'] || categoryMap['default']
   }
 
-  // 缩略图Cache管理
+  // 缩略图CacheManage
   const thumbnailCacheKey = `thumbnail_${project.id}`
   
   // 生成projectsVideo缩略图（带Cache）
   useEffect(() => {
     const generateThumbnail = async () => {
-      // 优先使用后端提供的缩略图
+      // 优先Use 后端提供的缩略图
       if (project.thumbnail) {
         setVideoThumbnail(project.thumbnail)
-        console.log(`使用后端提供的缩略图: ${project.id}`)
+        console.log(`Use 后端提供的缩略图: ${project.id}`)
         return
       }
       
@@ -144,7 +144,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
               
               video.onloadedmetadata = () => {
                 clearTimeout(timeoutId)
-                console.log('Video元数据加载Success:', videoUrl)
+                console.log('Video元Data加载Success:', videoUrl)
                 video.currentTime = Math.min(5, video.duration / 4) // 取Video1/4处或5seconds处的帧
               }
               
@@ -154,7 +154,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
                   const canvas = document.createElement('canvas')
                   const ctx = canvas.getContext('2d')
                   if (!ctx) {
-                    reject(new Error('None法获取canvas上下文'))
+                    reject(new Error('None法Get canvas上下文'))
                     return
                   }
                   
@@ -215,7 +215,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
         }
         
         if (!videoLoaded) {
-          console.error('所有Video Path都Load Failed')
+          console.error('AllVideo Path都Load Failed')
         }
       } catch (error) {
         console.error('生成缩略图时发生Error:', error)
@@ -227,7 +227,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
     generateThumbnail()
   }, [project.id, project.video_path, thumbnailCacheKey])
 
-  // 获取projectsLog（仅在Processing时）
+  // Get projectsLog（仅在Processing时）
   useEffect(() => {
     if (project.status !== 'processing') {
       setLogs([])
@@ -241,11 +241,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
           log.message.includes('Step') || 
           log.message.includes('Start') || 
           log.message.includes('Completed') ||
-          log.message.includes('处理') ||
+          log.message.includes('Processing') ||
           log.level === 'ERROR'
         ))
       } catch (error) {
-        console.error('获取LogFailed:', error)
+        console.error('Get LogFailed:', error)
       }
     }
 
@@ -282,7 +282,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
   // 检查YesNoYesPendingStatus - pendingStatus显示为ImportMedium
   const isImporting = project.status === 'pending'
   
-  // Status标准化处理 - pendingStatus显示为ImportMedium
+  // Status标准化Processing - pendingStatus显示为ImportMedium
   const normalizedStatus = project.status === 'error' ? 'failed' : 
                           isImporting ? 'importing' : project.status
   
@@ -308,13 +308,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
     
     setIsRetrying(true)
     try {
-      // 对于PENDINGStatus的projects，使用startProcessing；对于其他Status，使用retryProcessing
+      // 对于PENDINGStatus的projects，Use startProcessing；对于其他Status，Use retryProcessing
       if (project.status === 'pending') {
         await projectApi.startProcessing(project.id)
       } else {
         await projectApi.retryProcessing(project.id)
       }
-      // Remove重复的toast显示，让父Component统一处理
+      // Remove重复的toast显示，让父Component统一Processing
       if (onRetry) {
         onRetry(project.id)
       }
@@ -455,7 +455,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
           
           {/* Remove右上角Status指示器 - 可读性差且冗余 */}
           
-          {/* UpdateTime和操作Button - 移动到Thumbnail底部 */}
+          {/* UpdateTime和Operation buttons - 移动到Thumbnail底部 */}
           <div style={{
             position: 'absolute',
             bottom: '0',
@@ -474,7 +474,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
               {dayjs(project.created_at).tz('Asia/Shanghai').fromNow()}
             </Text>
             
-            {/* 操作Button */}
+            {/* Operation buttons */}
             <div 
               className="card-action-buttons"
               style={{
@@ -545,9 +545,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
                 /* 其他Status：显示Download、Retry和DeleteButton */
                 <>
                   <Space size={4}>
-                    {/* RetryButton - 在Processing和WaitingStatus显示，允许User重新SubmitTask */}
+                    {/* RetryButton - 在Processing和WaitingStatus显示，允许User重新Submit tasks */}
                     {(normalizedStatus === 'processing' || normalizedStatus === 'importing' || project.status === 'pending') && (
-                      <Tooltip title={project.status === 'pending' ? "Start Processing" : "重新SubmitTask"}>
+                      <Tooltip title={project.status === 'pending' ? "Start Processing" : "重新Submit tasks"}>
                         <Button
                           type="text"
                           icon={<ReloadOutlined />}
@@ -685,7 +685,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
               </div>
             </div>
           ) : (
-            // 其他Status：显示Status块 + 切片数 + Collection数
+            // 其他Status：显示Status块 + Clip数 + Collection数
             <div style={{ 
               display: 'flex', 
               gap: '6px',
@@ -706,7 +706,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
                 />
               </div>
               
-              {/* 切片Count - 减小宽度 */}
+              {/* ClipCount - 减小宽度 */}
               <div style={{
                 background: 'rgba(102, 126, 234, 0.15)',
                 border: '1px solid rgba(102, 126, 234, 0.3)',
@@ -720,7 +720,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
                   {project.total_clips || 0}
                 </div>
                 <div style={{ color: '#999999', fontSize: '8px', lineHeight: '9px' }}>
-                  切片
+                  Clip
                 </div>
               </div>
               

@@ -9,7 +9,7 @@ interface UploadToBilibiliProps {
 }
 
 const UploadToBilibili: React.FC<UploadToBilibiliProps> = ({ partitionId }) => {
-  // 获取分区Name
+  // Get 分区Name
   const getPartitionName = (id: number) => {
     const partition = BILIBILI_PARTITIONS.find(p => p.id === id)
     return partition ? partition.name : 'Unknown分区'
@@ -21,7 +21,7 @@ const UploadToBilibili: React.FC<UploadToBilibiliProps> = ({ partitionId }) => {
         <Space>
           <span>Bilibili partition info</span>
           {partitionId && (
-            <Tag color="blue">当前分区: {getPartitionName(partitionId)}</Tag>
+            <Tag color="blue">Current分区: {getPartitionName(partitionId)}</Tag>
           )}
         </Space>
       }

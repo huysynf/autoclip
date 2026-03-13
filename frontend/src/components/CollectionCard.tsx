@@ -235,7 +235,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
           </div>
         </div>
         
-        {/* 操作Button - 固定在底部 */}
+        {/* Operation buttons - 固定在底部 */}
         <div style={{ 
           display: 'flex', 
           gap: '8px',

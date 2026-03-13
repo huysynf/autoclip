@@ -124,18 +124,18 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
             />
           </div>
 
-          {/* 选择clips */}
+          {/* Selectclips */}
           <div className="form-item">
             <div className="form-label">
               <VideoCameraOutlined className="label-icon" />
-              <Text strong>选择clips</Text>
+              <Text strong>Selectclips</Text>
               <span className="required-mark">*</span>
             </div>
             
             <div className="clips-selection">
               <div className="selection-header">
                 <Text className="selection-info">
-                  已选择 {selectedClips.length} clips
+                  已Select {selectedClips.length} clips
                 </Text>
                 <div className="selection-actions">
                   <Button 
@@ -186,7 +186,7 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
           </div>
         </div>
 
-        {/* 底部操作 */}
+        {/* 底部Action */}
         <div className="modal-footer">
           <Button onClick={handleCancel} className="cancel-btn">
             Cancel

@@ -149,15 +149,15 @@ export const uploadApi = {
   },
 
   // Upload management
-  createUploadTask: async (projectId: string, uploadData: UploadRequest): Promise<{message: string, record_id: string, clip_count: number}> => {
+  createUpload tasks: async (projectId: string, uploadData: UploadRequest): Promise<{message: string, record_id: string, clip_count: number}> => {
     return api.post(`/upload/projects/${projectId}/upload`, uploadData)
   },
 
-  retryUploadTask: async (recordId: string): Promise<{message: string}> => {
+  retryUpload tasks: async (recordId: string): Promise<{message: string}> => {
     return api.post(`/upload/records/${recordId}/retry`)
   },
 
-  cancelUploadTask: async (recordId: string): Promise<{message: string}> => {
+  cancelUpload tasks: async (recordId: string): Promise<{message: string}> => {
     return api.post(`/upload/records/${recordId}/cancel`)
   },
 

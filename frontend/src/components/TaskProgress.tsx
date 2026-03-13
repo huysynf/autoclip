@@ -4,14 +4,14 @@ import { PlayCircleOutlined, CheckCircleOutlined, CloseCircleOutlined, ClockCirc
 
 const { Text, Title } = Typography;
 
-interface TaskProgressProps {
+interface  tasksProgressProps {
   projectId: string;
   taskId?: string;
   status: string;
   onProgressUpdate?: (progress: number, step: string) => void;
 }
 
-interface TaskProgressData {
+interface  tasksProgressData {
   id: string;
   name: string;
   status: string;
@@ -25,18 +25,18 @@ interface TaskProgressData {
   completed_at?: string;
 }
 
-const TaskProgress: React.FC<TaskProgressProps> = ({ 
+const  tasksProgress: React.FC< tasksProgressProps> = ({ 
   projectId, 
   taskId, 
   status, 
   onProgressUpdate 
 }) => {
-  const [progressData, setProgressData] = useState<TaskProgressData | null>(null);
+  const [progressData, setProgressData] = useState< tasksProgressData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // 获取TaskProgress
-  const fetchTaskProgress = async () => {
+  // Get  tasksProgress
+  const fetch tasksProgress = async () => {
     if (!projectId) return;
     
     try {
@@ -45,22 +45,22 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
       
       const response = await fetch(`http://localhost:8000/api/v1/progress/project/${projectId}`);
       if (!response.ok) {
-        throw new Error('获取ProgressFailed');
+        throw new Error('Get ProgressFailed');
       }
       
       const data = await response.json();
       if (data.tasks && data.tasks.length > 0) {
-        // 找到Current Task或第一Running的Task
-        const currentTask = taskId 
-          ? data.tasks.find((t: TaskProgressData) => t.id === taskId)
-          : data.tasks.find((t: TaskProgressData) => t.status === 'running') || data.tasks[0];
+        // 找到Current  tasks或第一Running的 tasks
+        const current tasks = taskId 
+          ? data.tasks.find((t:  tasksProgressData) => t.id === taskId)
+          : data.tasks.find((t:  tasksProgressData) => t.status === 'running') || data.tasks[0];
         
-        setProgressData(currentTask);
+        setProgressData(current tasks);
         
         // Notifications父ComponentProgressUpdate
         if (onProgressUpdate) {
-          const progress = currentTask.realtime_progress || currentTask.progress;
-          const step = currentTask.realtime_step || currentTask.current_step;
+          const progress = current tasks.realtime_progress || current tasks.progress;
+          const step = current tasks.realtime_step || current tasks.current_step;
           onProgressUpdate(progress, step);
         }
       }
@@ -75,15 +75,15 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
   useEffect(() => {
     if (status === 'processing') {
       // Fetch immediately
-      fetchTaskProgress();
+      fetch tasksProgress();
       
       // 每5secondsUpdate一次
-      const interval = setInterval(fetchTaskProgress, 5000);
+      const interval = setInterval(fetch tasksProgress, 5000);
       return () => clearInterval(interval);
     }
   }, [projectId, taskId, status]);
 
-  // 获取StatusIcon和Color
+  // Get StatusIcon和Color
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'running':
@@ -119,7 +119,7 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <Spin size="large" />
           <div style={{ marginTop: 16 }}>
-            <Text>正在获取TaskProgress...</Text>
+            <Text>正在Get  tasksProgress...</Text>
           </div>
         </div>
       </Card>
@@ -154,7 +154,7 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
         <Space>
           {statusConfig.icon}
           <Title level={5} style={{ margin: 0 }}>
-            {progressData.name || 'Video ProcessingTask'}
+            {progressData.name || 'Video Processing tasks'}
           </Title>
           <Tag color={statusConfig.color}>
             {statusConfig.text}
@@ -214,4 +214,4 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
   );
 };
 
-export default TaskProgress; 
+export default  tasksProgress; 

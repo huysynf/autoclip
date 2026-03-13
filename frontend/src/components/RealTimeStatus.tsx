@@ -7,7 +7,7 @@ import {
   ExclamationCircleOutlined,
   ReloadOutlined
 } from '@ant-design/icons';
-import { TaskProgress } from './TaskProgress';
+import {  tasksProgress } from './ tasksProgress';
 import { NotificationList } from './NotificationList';
 // import { useWebSocket, WebSocketEventMessage } from '../hooks/useWebSocket'  // DisabledWebSocket系统;
 import { useNotifications } from '../hooks/useNotifications';
@@ -24,12 +24,12 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
   console.log('🎬 RealTimeStatusComponent已加载');
   const { setProjects } = useProjectStore();
   
-  const [tasks, setTasks] = useState<any[]>([]);
+  const [tasks, set taskss] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   
-  // 直接使用简单的Status管理，不使用复杂的Hook
-  const loadProjectTasks = useCallback(async (projectId: string) => {
-    console.log('📤 Start加载projectsTask:', projectId);
+  // 直接Use 简单的StatusManage，不Use 复杂的Hook
+  const loadProject taskss = useCallback(async (projectId: string) => {
+    console.log('📤 Start加载projects tasks:', projectId);
     setLoading(true);
     try {
       const response = await fetch(`http://localhost:8000/api/v1/tasks/project/${projectId}`);
@@ -37,28 +37,28 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
       
       if (response.ok) {
         const data = await response.json();
-        const projectTasks = data.items || []; // 使用正确的字段名
-        console.log('📋 获取到TaskCount:', projectTasks.length);
+        const project taskss = data.items || []; // Use 正确的字段名
+        console.log('📋 Get 到 tasksCount:', project taskss.length);
         
-        // 转换为TaskProgressComponent期望的Format
-        const formattedTasks = projectTasks.map((task: any) => ({
+        // 转换为 tasksProgressComponent期望的Format
+        const formatted taskss = project taskss.map((task: any) => ({
           id: task.id,
           status: task.status,
           progress: task.progress || 0,
-          message: task.name || `Task ${task.id}`, // 使用name字段或Default值
+          message: task.name || ` tasks ${task.id}`, // Use name字段或Default值
           updatedAt: task.created_at || task.updated_at || new Date().toISOString(),
           project_id: task.project_id // AddprojectsID字段
         }));
         
-        setTasks(formattedTasks);
+        set taskss(formatted taskss);
       } else {
         console.error('❌ API调用Failed:', response.status, response.statusText);
       }
     } catch (error) {
-      console.error('❌ 加载projectsTaskFailed:', error);
+      console.error('❌ 加载projects tasksFailed:', error);
     } finally {
       setLoading(false);
-      console.log('✅ Task加载Completed');
+      console.log('✅  tasks加载Completed');
     }
   }, []);
 
@@ -73,17 +73,17 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
     handleErrorNotification
   } = useNotifications();
 
-  // WebSocket功能Disabled，使用新的简化Progress系统
+  // WebSocket功能Disabled，Use 新的简化Progress系统
   // const handleWebSocketMessage = async (message: WebSocketEventMessage) => {
   //   console.log('收到WebSocket message:', message);
   //   
   //   switch (message.type) {
   //     case 'task_update':
-  //       console.log('📈 收到TaskUpdate:', message);
-  //       // Processing TaskUpdate，UpdateprojectsStatus
+  //       console.log('📈 收到 tasksUpdate:', message);
+  //       // Processing  tasksUpdate，UpdateprojectsStatus
   //       if (message.task_id && message.status) {
-  //         console.log('TaskStatusUpdate:', message.task_id, message.status);
-  //         // RefreshProject List以获取最新Status
+  //         console.log(' tasksStatusUpdate:', message.task_id, message.status);
+  //         // RefreshProject List以Get 最新Status
   //         try {
   //           const projects = await projectApi.getProjects();
   //           setProjects(projects);
@@ -96,10 +96,10 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
   //       
   //     case 'project_update':
   //       console.log('📊 收到projectsUpdate:', message);
-  //       // 处理projectsUpdate
+  //       // ProcessingprojectsUpdate
   //       if (message.project_id && message.status) {
   //         console.log('projectsStatusUpdate:', message.project_id, message.status);
-  //         // RefreshProject List以获取最新Status
+  //         // RefreshProject List以Get 最新Status
   //         try {
   //           const projects = await projectApi.getProjects();
   //           setProjects(projects);
@@ -111,7 +111,7 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
   //       break;
   //       
   //     case 'system_notification':
-  //       // 只处理重要的系统Notifications
+  //       // 只Processing重要的系统Notifications
   //       if (message.level === 'success' || message.level === 'error') {
   //         handleSystemNotification(message);
   //       }
@@ -122,10 +122,10 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
   //       break;
   //       
   //     case 'task_progress_update':
-  //       console.log('📊 收到TaskProgressUpdate:', message);
-  //       // Processing TaskProgressUpdate
+  //       console.log('📊 收到 tasksProgressUpdate:', message);
+  //       // Processing  tasksProgressUpdate
   //       if (message.project_id && message.progress !== undefined) {
-  //         console.log('TaskProgressUpdate:', message.project_id, message.progress + '%', message.step_name);
+  //         console.log(' tasksProgressUpdate:', message.project_id, message.progress + '%', message.step_name);
   //         // 这里可以UpdateprojectsStatus或触发其他UIUpdate
   //       }
   //       break;
@@ -148,13 +148,13 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
   //   onMessage: handleWebSocketMessage
   // });
 
-  // 加载projectsTask
+  // 加载projects tasks
   useEffect(() => {
-    // 这里可以传入具体的projectsID，或者从props获取
+    // 这里可以传入具体的projectsID，或者从propsGet 
     const projectId = '64d5768e-7b6b-40d0-9aed-f216768a6526'; // 示例projectsID
-    console.log('🔄 Start加载projectsTask:', projectId);
-    loadProjectTasks(projectId);
-  }, []); // RemoveloadProjectTasks依赖，避免None限循环
+    console.log('🔄 Start加载projects tasks:', projectId);
+    loadProject taskss(projectId);
+  }, []); // RemoveloadProject taskss依赖，避免None限循环
 
   // WebSocketStatus相Off函数Disabled
   // const getConnectionStatusColor = () => {
@@ -214,7 +214,7 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
         <Col span={6}>
           <Card size="small">
             <Statistic
-              title="TaskTotal"
+              title=" tasksTotal"
               value={tasks.length}
               valueStyle={{ color: '#1890ff' }}
             />
@@ -249,13 +249,13 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
           </Card>
         </Col>
 
-        {/* TaskProgress */}
+        {/*  tasksProgress */}
         <Col span={12}>
           <Card 
-            title="TaskProgress" 
+            title=" tasksProgress" 
             size="small"
             extra={
-              <Button size="small" onClick={() => setTasks([])}>
+              <Button size="small" onClick={() => set taskss([])}>
                 清Empty
               </Button>
             }
@@ -267,10 +267,10 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
                 </div>
               ) : (
                 tasks.map((task) => (
-                  <TaskProgress 
+                  < tasksProgress 
                     key={task.id} 
                     task={task} 
-                    projectId={task.project_id || userId} // 使用Task的projectsID，如果没有则使用userId作为fallback
+                    projectId={task.project_id || userId} // Use  tasks的projectsID，如果没有则Use userId作为fallback
                   />
                 ))
               )}
@@ -278,7 +278,7 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId }) => {
           </Card>
         </Col>
 
-        {/* Notifications列表 */}
+        {/* NotificationsList */}
         <Col span={12}>
           <NotificationList
             notifications={notifications}

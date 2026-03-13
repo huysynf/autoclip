@@ -16,7 +16,7 @@ const ProjectStatusIndicator: React.FC<ProjectStatusIndicatorProps> = ({
   project,
   size = 'default'
 }) => {
-  // 暂时使用简单的Status处理
+  // 暂时Use 简单的StatusProcessing
   const normalizedStatus = project.status === 'error' ? 'failed' : project.status
 
   const getStepName = () => {

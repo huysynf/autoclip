@@ -57,7 +57,7 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
     }
   }, [progress, onProgressUpdate])
 
-  // 如果没有Progress数据，显示等待Status
+  // 如果没有ProgressData，显示等待Status
   if (!progress) {
     return (
       <Card size="small" style={{ margin: '8px 0' }}>

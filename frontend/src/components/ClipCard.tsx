@@ -44,7 +44,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
     
     const video = document.createElement('video')
     video.crossOrigin = 'anonymous'
-    video.currentTime = 1 // 获取第1seconds的帧作为缩略图
+    video.currentTime = 1 // Get 第1seconds的帧作为缩略图
     
     video.onloadeddata = () => {
       const canvas = document.createElement('canvas')
@@ -64,7 +64,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
 
   const handleDownloadWithTitle = async () => {
     try {
-      // 直接调用APIDownload方法，它会处理Filename
+      // 直接调用APIDownload方法，它会ProcessingFilename
       await onDownload(clip.id)
     } catch (error) {
       console.error('Download failed:', error)
@@ -77,7 +77,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
   }
 
   const handleOpenSubtitleEditor = async () => {
-    // 显示On发Medium提示
+    // 显示On发MediumPrompt
     message.info('Coming soon')
   }
 
@@ -172,19 +172,19 @@ const ClipCard: React.FC<ClipCardProps> = ({
   }
 
 
-  // 获取要显示的简介Content
+  // Get 要显示的简介Content
   const getDisplayContent = () => {
     // 优先显示推荐理由（这YesAI生成的Content要点）
     if (clip.recommend_reason && clip.recommend_reason.trim()) {
       return clip.recommend_reason
     }
     
-    // 如果没有推荐理由，尝试从contentMedium获取非转写文本的Content要点
+    // 如果没有推荐理由，尝试从contentMediumGet 非转写文本的Content要点
     if (clip.content && clip.content.length > 0) {
-      // 过滤掉可能Yes转写文本的Content（通常转写文本很长且包含标点符号）
+      // Filter掉可能Yes转写文本的Content（通常转写文本很长且Contains标点符号）
       const contentPoints = clip.content.filter(item => {
         const text = item.trim()
-        // 如果文本长度超过100chars或包含大量标点符号，可能Yes转写文本
+        // 如果文本长度超过100chars或Contains大量标点符号，可能Yes转写文本
         if (text.length > 100) return false
         if (text.split(/[，。！？；：""''（）【】]/).length > 3) return false
         return true
@@ -392,7 +392,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
               </div>
             </div>
             
-            {/* 操作Button - 固定在底部 */}
+            {/* Operation buttons - 固定在底部 */}
             <div style={{ 
               display: 'flex', 
               gap: '8px',
@@ -569,7 +569,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
         clipIds={[clip.id]}
         clipTitles={[clip.title || clip.generated_title || 'Video Clips']}
         onUploadSuccess={() => {
-          // UploadSuccess后可以Refresh数据或显示提示
+          // UploadSuccess后可以RefreshData或显示Prompt
           console.log('UploadSuccess')
         }}
       />

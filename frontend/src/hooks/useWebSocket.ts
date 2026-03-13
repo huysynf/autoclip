@@ -6,7 +6,7 @@ export interface WebSocketMessage {
   [key: string]: any;
 }
 
-export interface TaskUpdateMessage extends WebSocketMessage {
+export interface  tasksUpdateMessage extends WebSocketMessage {
   type: 'task_update';
   task_id: string;
   status: string;
@@ -38,7 +38,7 @@ export interface ErrorNotificationMessage extends WebSocketMessage {
   details?: any;
 }
 
-export interface TaskProgressUpdateMessage extends WebSocketMessage {
+export interface  tasksProgressUpdateMessage extends WebSocketMessage {
   type: 'task_progress_update';
   task_id?: string;
   project_id: string;
@@ -50,11 +50,11 @@ export interface TaskProgressUpdateMessage extends WebSocketMessage {
 }
 
 export type WebSocketEventMessage = 
-  | TaskUpdateMessage 
+  |  tasksUpdateMessage 
   | ProjectUpdateMessage 
   | SystemNotificationMessage 
   | ErrorNotificationMessage
-  | TaskProgressUpdateMessage;
+  |  tasksProgressUpdateMessage;
 
 interface UseWebSocketOptions {
   userId: string;
@@ -64,14 +64,14 @@ interface UseWebSocketOptions {
   onError?: (error: Event) => void;
 }
 
-export interface TaskSubscriptionStatus {
+export interface  tasksSubscriptionStatus {
   user_id: string;
   subscribed_tasks: string[];
   total_subscriptions: number;
   active_channels: number;
 }
 
-// 全局WebSocket连接管理
+// 全局WebSocket连接Manage
 let globalWs: WebSocket | null = null;
 let globalDesiredSubscriptions = new Set<string>();
 let globalUserId: string | null = null;
@@ -185,7 +185,7 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
           const data: WebSocketEventMessage = JSON.parse(event.data);
           console.log('收到WebSocket message:', data);
           
-          // 处理pong响应
+          // Processingpong响应
           if (data.type === 'pong') {
             console.log('收到心跳pong响应');
             if (heartbeatTimeout) {
@@ -287,14 +287,14 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
     });
   }, [sendMessage]);
 
-  const subscribeToTask = useCallback((taskId: string) => {
+  const subscribeTo tasks = useCallback((taskId: string) => {
     return sendMessage({
       type: 'subscribe_task',
       task_id: taskId
     });
   }, [sendMessage]);
 
-  const unsubscribeFromTask = useCallback((taskId: string) => {
+  const unsubscribeFrom tasks = useCallback((taskId: string) => {
     return sendMessage({
       type: 'unsubscribe_task',
       task_id: taskId
@@ -309,7 +309,7 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
     // 确保连接
     ensureConnected();
     
-    // 防抖处理
+    // 防抖Processing
     if (syncDebounceTimeout) {
       clearTimeout(syncDebounceTimeout);
     }
@@ -381,8 +381,8 @@ export const useWebSocket = (options: UseWebSocketOptions) => {
     sendMessage,
     subscribeToTopic,
     unsubscribeFromTopic,
-    subscribeToTask,
-    unsubscribeFromTask,
+    subscribeTo tasks,
+    unsubscribeFrom tasks,
     syncSubscriptions,
     subscribeToMany,
     unsubscribeFromMany,

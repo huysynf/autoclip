@@ -9,7 +9,7 @@ const { Title, Text } = Typography
 const SubtitleEditorDemo: React.FC = () => {
   const [isEditorOpen, setIsEditorOpen] = useState(false)
 
-  // 模拟Subtitle数据
+  // 模拟SubtitleData
   const mockSubtitles: SubtitleSegment[] = [
     {
       id: '1',
@@ -18,7 +18,7 @@ const SubtitleEditorDemo: React.FC = () => {
       words: [
         { id: '1-1', text: '欢迎', startTime: 0, endTime: 2 },
         { id: '1-2', text: '大家', startTime: 2, endTime: 4 },
-        { id: '1-3', text: '使用', startTime: 4, endTime: 6 },
+        { id: '1-3', text: 'Use ', startTime: 4, endTime: 6 },
         { id: '1-4', text: '字影', startTime: 6, endTime: 8 },
         { id: '1-5', text: '。', startTime: 8, endTime: 11 }
       ]
@@ -82,7 +82,7 @@ const SubtitleEditorDemo: React.FC = () => {
   ]
 
   const handleSave = (operations: VideoEditOperation[]) => {
-    console.log('Save的Edit操作:', operations)
+    console.log('Save的EditAction:', operations)
     setIsEditorOpen(false)
   }
 
@@ -102,25 +102,25 @@ const SubtitleEditorDemo: React.FC = () => {
               主要功能特性：
             </Text>
             <ul style={{ color: '#cccccc', fontSize: '14px', lineHeight: '1.6' }}>
-              <li>三栏Layout：左侧Subtitle List、Medium间样式选择、右侧Video播放器</li>
-              <li>右键菜单：支持Deleteclips、Off联素材、Reset、隐藏Subtitle、High亮等操作</li>
+              <li>三栏Layout：左侧Subtitle List、Medium间样式Select、右侧Video播放器</li>
+              <li>右键菜单：支持Deleteclips、Off联素材、Reset、隐藏Subtitle、High亮等Action</li>
               <li>Real-timePreview：点击Subtitle段可跳转到对应Time点</li>
-              <li>样式模板：提供多种Subtitle样式选择</li>
-              <li>Edit历史：支持撤销/重做操作</li>
+              <li>样式模板：提供多种Subtitle样式Select</li>
+              <li>EditHistory：支持撤销/重做Action</li>
               <li>现代化UI：深色Theme，流畅的动画效果</li>
             </ul>
           </div>
 
           <div>
             <Text style={{ color: '#ffffff', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
-              操作说明：
+              Action说明：
             </Text>
             <ul style={{ color: '#cccccc', fontSize: '14px', lineHeight: '1.6' }}>
               <li>点击Subtitle段可跳转到Video对应Time点</li>
-              <li>点击单词Optional择/Cancel选择（Ctrl/Cmd+点击可多选）</li>
+              <li>点击单词Optional择/CancelSelect（Ctrl/Cmd+点击可多选）</li>
               <li>右键点击Subtitle段可打On上下文菜单</li>
-              <li>使用Edit工具进行Delete、撤销、重做等操作</li>
-              <li>选择样式模板可Preview不同效果</li>
+              <li>Use Edit工具进行Delete、撤销、重做等Action</li>
+              <li>Select样式模板可Preview不同效果</li>
             </ul>
           </div>
 

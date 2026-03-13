@@ -15,7 +15,7 @@ export const useCollectionVideoDownload = () => {
     setIsGenerating(true)
     
     try {
-      // 直接按User当前调整的顺序生成CollectionVideo
+      // 直接按UserCurrent调整的顺序生成CollectionVideo
       message.info('正在按您的顺序生成CollectionVideo...')
       
       // 生成CollectionVideo（按User调整的顺序）

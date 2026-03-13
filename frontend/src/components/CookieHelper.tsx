@@ -35,7 +35,7 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
               2. 点击右上角的"Login"Button
             </Paragraph>
             <Paragraph>
-              3. 使用您的Bilibili AccountLogin
+              3. Use 您的Bilibili AccountLogin
             </Paragraph>
             <Paragraph>
               4. ConfirmLogged in successfully后，您应该能看到您的Username显示在右上角
@@ -51,7 +51,7 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
         <div>
           <Alert
             message="第二步：Open developer tools"
-            description="使用快捷键Open browser的On发者工具"
+            description="Use 快捷键Open browser的On发者工具"
             type="info"
             showIcon
             style={{ marginBottom: 16 }}
@@ -64,11 +64,11 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
               <Text strong>Mac:</Text> 按 <Text code>Command + Option + I</Text>
             </Paragraph>
             <Paragraph>
-              或者右键点击PageEmpty白处，选择"检查"或"Inspect"
+              或者右键点击PageEmpty白处，Select"检查"或"Inspect"
             </Paragraph>
             <Divider />
             <Paragraph type="secondary">
-              On发者工具会在Page底部或右侧打On，包含多Tags页
+              On发者工具会在Page底部或右侧打On，Contains多Tags页
             </Paragraph>
           </Card>
         </div>
@@ -124,11 +124,11 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
               2. 按 <Text code>F5</Text> 或点击浏览器的RefreshButton
             </Paragraph>
             <Paragraph>
-              3. 观察Network面板Medium出现的请求列表
+              3. 观察Network面板Medium出现的请求List
             </Paragraph>
             <Divider />
             <Paragraph type="secondary">
-              Refresh后，Network面板会显示Page加载过程Medium的所有Network请求
+              Refresh后，Network面板会显示Page加载过程Medium的AllNetwork请求
             </Paragraph>
           </Card>
         </div>
@@ -148,7 +148,7 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
           />
           <Card size="small">
             <Paragraph>
-              1. 在Network面板Medium找到任意一请求（通常选择第一）
+              1. 在Network面板Medium找到任意一请求（通常Select第一）
             </Paragraph>
             <Paragraph>
               2. 点击该请求，在右侧面板Medium找到 <Text code>Headers</Text> Tags
@@ -161,7 +161,7 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
             </Paragraph>
             <Divider />
             <Paragraph type="secondary">
-              Cookiechars串通常很长，包含多键值对，用分号分隔
+              Cookiechars串通常很长，Contains多键值对，用分号分隔
             </Paragraph>
           </Card>
         </div>
@@ -184,7 +184,7 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
               1. 右键点击Cookie字段的值
             </Paragraph>
             <Paragraph>
-              2. 选择"Copy值"或"Copy value"
+              2. Select"Copy值"或"Copy value"
             </Paragraph>
             <Paragraph>
               3. 或者双击选Medium整Cookie值，然后按 <Text code>Ctrl+C</Text> Copy
@@ -194,8 +194,8 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
               Copy的Cookiechars串可以直接粘贴到AutoClip的CookieInputMedium
             </Paragraph>
             <Alert
-              message="重要提示"
-              description="Cookie包含您的LoginInfo，请妥善保管，不要分享给他人"
+              message="重要Prompt"
+              description="CookieContains您的LoginInfo，请妥善保管，不要分享给他人"
               type="warning"
               showIcon
             />
@@ -218,7 +218,7 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
       title={
         <Space>
           <QuestionCircleOutlined />
-          <span>Cookie获取指南</span>
+          <span>CookieGet 指南</span>
         </Space>
       }
       open={visible}
@@ -263,7 +263,7 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
           SESSDATA=your_sessdata_here; bili_jct=your_bili_jct_here; DedeUserID=your_dedeuserid_here; buvid3=your_buvid3_here
         </Paragraph>
         <Paragraph type="secondary" style={{ fontSize: '12px' }}>
-          注意：实际的Cookie值会比这示例长很多，包含More的字段
+          注意：实际的Cookie值会比这示例长很多，ContainsMore的字段
         </Paragraph>
       </Card>
     </Modal>

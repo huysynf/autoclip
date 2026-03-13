@@ -27,20 +27,20 @@ const HomePage: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [activeTab, setActiveTab] = useState<'upload' | 'bilibili'>('upload')
 
-  // WebSocket连接Disabled，使用新的简化Progress系统
+  // WebSocket连接Disabled，Use 新的简化Progress系统
   // const handleWebSocketMessage = (message: WebSocketEventMessage) => {
   //   console.log('HomePage收到WebSocket message:', message)
   //   
   //   switch (message.type) {
   //     case 'task_progress_update':
-  //       console.log('📊 收到TaskProgressUpdate:', message)
-  //       // RefreshProject List以获取最新Status
+  //       console.log('📊 收到 tasksProgressUpdate:', message)
+  //       // RefreshProject List以Get 最新Status
   //       loadProjects()
   //       break
   //       
   //     case 'project_update':
   //       console.log('📊 收到projectsUpdate:', message)
-  //       // RefreshProject List以获取最新Status
+  //       // RefreshProject List以Get 最新Status
   //       loadProjects()
   //       break
   //       
@@ -54,7 +54,7 @@ const HomePage: React.FC = () => {
   //   onMessage: handleWebSocketMessage
   // })
 
-  // 使用projects轮询Hook
+  // Use projects轮询Hook
   const { refreshNow } = useProjectPolling({
     onProjectsUpdate: (updatedProjects) => {
       setProjects(updatedProjects || [])
@@ -70,7 +70,7 @@ const HomePage: React.FC = () => {
   const loadProjects = async () => {
     setLoading(true)
     try {
-      // 从后端API获取真实projects数据
+      // 从后端APIGet 真实projectsData
       const projects = await projectApi.getProjects()
       setProjects(projects || [])
     } catch (error) {
@@ -83,16 +83,16 @@ const HomePage: React.FC = () => {
     }
   }
 
-  // 使用集合差异对齐订阅projectsWebSocketTheme
-  // WebSocket订阅Disabled，使用新的简化Progress系统
+  // Use 集合差异对齐订阅projectsWebSocketTheme
+  // WebSocket订阅Disabled，Use 新的简化Progress系统
   // useEffect(() => {
   //   if (isConnected && projects.length > 0) {
   //     const desiredChannels = projects.map(project => `project_${project.id}`)
   //     console.log('同步订阅projects频道:', desiredChannels)
   //     syncSubscriptions(desiredChannels)
   //   } else if (isConnected && projects.length === 0) {
-  //     // 如果没有projects，清Empty所有订阅
-  //     console.log('清Empty所有projects订阅')
+  //     // 如果没有projects，清EmptyAll订阅
+  //     console.log('清EmptyAllprojects订阅')
   //     syncSubscriptions([])
   //   }
   // }, [isConnected, projects, syncSubscriptions])
@@ -117,7 +117,7 @@ const HomePage: React.FC = () => {
         return
       }
       
-      // 统一使用retryProcessing API，它会Auto处理VideoFile不存在的情况
+      // 统一Use retryProcessing API，它会AutoProcessingVideoFile不存在的情况
       await projectApi.retryProcessing(projectId)
       message.success('Project retry started')
       
@@ -145,7 +145,7 @@ const HomePage: React.FC = () => {
       message.error(errorMessage)
       console.error('Start processing error:', error)
       
-      // 如果YesTimeoutError，提示Userprojects可能仍在处理
+      // 如果YesTimeoutError，PromptUserprojects可能仍在Processing
       if ((error as { code?: string; message?: string })?.code === 'ECONNABORTED' || (error as { code?: string; message?: string })?.message?.includes('timeout')) {
         message.info('Request timed out, but the project may have started processing. Please check the project status.', 5)
         // DelayRefreshProject List
@@ -255,7 +255,7 @@ const HomePage: React.FC = () => {
                   <BilibiliDownload onDownloadSuccess={async (projectId: string) => {
                     // Done后RefreshProject List
                     await loadProjects()
-                    // 不再显示重复的toast提示，BilibiliDownloadComponent已经显示了统一的提示
+                    // 不再显示重复的toastPrompt，BilibiliDownloadComponent已经显示了统一的Prompt
                   }} />
                 )}
                 {activeTab === 'upload' && (
@@ -269,7 +269,7 @@ const HomePage: React.FC = () => {
             </div>
           </div>
 
-          {/* projects管理区域 */}
+          {/* projectsManage区域 */}
           <div style={{
             background: 'rgba(26, 26, 46, 0.7)',
             backdropFilter: 'blur(20px)',

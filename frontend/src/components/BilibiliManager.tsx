@@ -39,27 +39,27 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
   const [selectedRecord, setSelectedRecord] = useState<UploadRecord | null>(null)
   const [detailModalVisible, setDetailModalVisible] = useState(false)
 
-  // 获取Account List
+  // Get Account List
   const fetchAccounts = async () => {
     try {
       setLoading(true)
       const data = await uploadApi.getAccounts()
       setAccounts(data)
     } catch (error: any) {
-      message.error('获取Account ListFailed: ' + (error.message || 'Unknown error'))
+      message.error('Failed to get account list: ' + (error.message || 'Unknown error'))
     } finally {
       setLoading(false)
     }
   }
 
-  // 获取Upload记录
+  // Get UploadRecords
   const fetchUploadRecords = async () => {
     try {
       setRecordsLoading(true)
       const data = await uploadApi.getUploadRecords()
       setUploadRecords(data)
     } catch (error: any) {
-      message.error('获取Upload记录Failed: ' + (error.message || 'Unknown error'))
+      message.error('Get UploadRecordsFailed: ' + (error.message || 'Unknown error'))
     } finally {
       setRecordsLoading(false)
     }
@@ -80,7 +80,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
   const handleCancel = async (recordId: string | number) => {
     try {
       await uploadApi.cancelUpload(recordId)
-      message.success('Task cancelled')
+      message.success(' tasks cancelled')
       fetchUploadRecords()
     } catch (error: any) {
       message.error('CancelFailed: ' + (error.message || 'Unknown error'))
@@ -91,7 +91,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
   const handleDelete = async (recordId: string | number) => {
     try {
       await uploadApi.deleteUpload(recordId)
-      message.success('Task deleted')
+      message.success(' tasks deleted')
       fetchUploadRecords()
     } catch (error: any) {
       message.error('DeleteFailed: ' + (error.message || 'Unknown error'))
@@ -108,7 +108,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
     if (visible) {
       fetchAccounts()
       fetchUploadRecords()
-      // 如果有切片数据，Default显示UploadTags页
+      // 如果有ClipData，Default显示UploadTags页
       if (clipIds.length > 0) {
         setActiveTab('upload')
       } else {
@@ -168,13 +168,13 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
 
   // SubmitUpload
   const handleUpload = async (values: any) => {
-    // 显示On发Medium提示
+    // 显示On发MediumPrompt
     message.info('Bilibili upload coming soon!', 3)
     return
     
     // 原有代码Disabled
     if (!projectId || clipIds.length === 0) {
-      message.error('没有选择要Upload的切片')
+      message.error('没有Select要Upload的Clip')
       return
     }
 
@@ -200,7 +200,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
       })
 
       if (response.ok) {
-        message.success('UploadTask已Create，正在后台Processing...')
+        message.success('Upload tasks已Create，正在后台Processing...')
         onUploadSuccess?.()
         onClose()
       } else {
@@ -214,7 +214,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
     }
   }
 
-  // 获取StatusTags
+  // Get status tags
   const getStatusTag = (status: string) => {
     const statusConfig = {
       pending: { color: 'default', icon: <ClockCircleOutlined />, text: 'Waiting' },
@@ -233,7 +233,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
     )
   }
 
-  // 获取分区Name
+  // Get 分区Name
   const getPartitionName = (partitionId: number) => {
     const partition = BILIBILI_PARTITIONS.find(p => p.id === partitionId)
     return partition ? partition.name : `Category ${partitionId}`
@@ -263,7 +263,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
     }
   }
 
-  // 获取StatisticsInfo
+  // Get StatisticsInfo
   const getStatistics = () => {
     const total = uploadRecords.length
     const success = uploadRecords.filter(r => r.status === 'success' || r.status === 'completed').length
@@ -274,10 +274,10 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
     return { total, success, failed, processing, pending }
   }
 
-  // Cookie获取指南Content
+  // CookieGet 指南Content
   const cookieGuideContent = (
     <div style={{ maxWidth: 300 }}>
-      <div style={{ marginBottom: 8, fontWeight: 'bold' }}>Cookie获取Step：</div>
+      <div style={{ marginBottom: 8, fontWeight: 'bold' }}>CookieGet Step：</div>
       <ol style={{ margin: 0, paddingLeft: 16 }}>
         <li>打OnB站网站并Login</li>
         <li>按F12Open developer tools</li>
@@ -285,7 +285,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
         <li>Refresh Page</li>
         <li>找到任意请求，点击View</li>
         <li>在Request HeadersMedium找到Cookie字段</li>
-        <li>CopyCookie的值（不包含"Cookie: "前缀）</li>
+        <li>CopyCookie的值（不Contains"Cookie: "前缀）</li>
       </ol>
     </div>
   )
@@ -324,7 +324,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
       render: (_: any, record: BilibiliAccount) => (
         <Popconfirm
           title="OK要Delete这Account?"
-          description="Delete后将None法恢复，请谨慎操作。"
+          description="Delete后将None法恢复，请谨慎Action。"
           onConfirm={() => handleDeleteAccount(record.id)}
           okText="OK"
           cancelText="Cancel"
@@ -340,7 +340,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
   // UploadStatus表格列
   const uploadStatusColumns = [
     {
-      title: 'Task ID',
+      title: ' tasks ID',
       dataIndex: 'id',
       key: 'id',
       width: 80,
@@ -505,8 +505,8 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
           <h2 className="bilibili-manager-header-title">Bilibili Management</h2>
           <p className="bilibili-manager-header-subtitle">
             {clipIds.length > 0 
-              ? `准备Upload ${clipIds.length} 切片到B站` 
-              : '管理您的Bilibili Account和UploadSettings'
+              ? `准备Upload ${clipIds.length} Clip到B站` 
+              : 'Manage您的Bilibili Account和UploadSettings'
             }
           </p>
         </div>
@@ -528,7 +528,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
             <div className="bilibili-manager-content">
               <Alert
                 message="UploadInfo"
-                description={`准备Upload ${clipIds.length} 切片到B站`}
+                description={`准备Upload ${clipIds.length} Clip到B站`}
                 type="info"
                 showIcon
                 style={{ marginBottom: 16 }}
@@ -548,13 +548,13 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
                   <Form.Item
                     label="Select Account"
                     name="account_id"
-                    rules={[{ required: true, message: '请选择Bilibili Account' }]}
+                    rules={[{ required: true, message: '请SelectBilibili Account' }]}
                   >
                     <Select 
-                      placeholder="选择要使用的Bilibili Account"
+                      placeholder="Select要Use 的Bilibili Account"
                       notFoundContent={
                         <div style={{ textAlign: 'center', padding: '20px' }}>
-                          <p>暂None可用Account</p>
+                          <p>暂NoneAvailable accounts</p>
                           <Button 
                             type="link" 
                             icon={<PlusOutlined />}
@@ -577,9 +577,9 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
                   <Form.Item
                     label="Video Category"
                     name="partition_id"
-                    rules={[{ required: true, message: '请选择Video Category' }]}
+                    rules={[{ required: true, message: '请SelectVideo Category' }]}
                   >
-                    <Select placeholder="选择Video Category" showSearch>
+                    <Select placeholder="SelectVideo Category" showSearch>
                       {BILIBILI_PARTITIONS.map(partition => (
                         <Option key={partition.id} value={partition.id}>
                           {partition.name}
@@ -680,7 +680,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
         >
           <div className="bilibili-manager-content">
             <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ margin: 0, color: '#ffffff' }}>Upload Task Status</h3>
+              <h3 style={{ margin: 0, color: '#ffffff' }}>Upload  tasks Status</h3>
               <Button 
                 type="primary" 
                 icon={<ReloadOutlined />} 
@@ -699,7 +699,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
                   <Col span={6}>
                     <Card style={{ background: '#262626', border: '1px solid #404040' }}>
                       <Statistic 
-                        title={<span style={{ color: '#ffffff' }}>Total Tasks</span>} 
+                        title={<span style={{ color: '#ffffff' }}>Total  taskss</span>} 
                         value={stats.total} 
                         valueStyle={{ color: '#ffffff' }} 
                       />
@@ -739,7 +739,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
               )
             })()}
 
-            {/* Task List */}
+            {/*  tasks List */}
             <Table
               columns={uploadStatusColumns}
               dataSource={uploadRecords}
@@ -771,7 +771,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
         width={600}
       >
         <Alert
-          message="推荐使用CookieImport"
+          message="推荐Use CookieImport"
           description="CookieImportYes最安全、最稳定的Login方式，不会触发B站风控。"
           type="info"
           showIcon
@@ -798,7 +798,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
                     size="small" 
                     icon={<QuestionCircleOutlined />}
                   >
-                    获取指南
+                    Get 指南
                   </Button>
                 </Tooltip>
               </Space>
@@ -829,7 +829,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
 
       {/* UploadStatusDetails模态框 */}
       <Modal
-        title="Upload Task Details"
+        title="Upload  tasks Details"
         open={detailModalVisible}
         onCancel={() => setDetailModalVisible(false)}
         footer={null}
@@ -857,7 +857,7 @@ const BilibiliManager: React.FC<BilibiliManagerProps> = ({
                 border: '1px solid #303030'
               }}
             >
-              <Descriptions.Item label="Task ID" span={1}>
+              <Descriptions.Item label=" tasks ID" span={1}>
                 <Text code>{selectedRecord.id}</Text>
               </Descriptions.Item>
               <Descriptions.Item label="Status" span={1}>

@@ -58,7 +58,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
       if (['mp4', 'avi', 'mov', 'mkv', 'webm'].includes(extension || '')) {
         newFiles.video = file
         // AutoSettingsprojectsName为VideoFilename（去掉Extension名）
-        // 每次选择新VideoFile时都UpdateprojectsName
+        // 每次Select新VideoFile时都UpdateprojectsName
         setProjectName(file.name.replace(/\.[^/.]+$/, ''))
       } else if (extension === 'srt') {
         newFiles.srt = file
@@ -99,7 +99,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
             clearInterval(progressInterval)
             return prev
           }
-          // 使用递减的增量，模拟真实UploadProgress
+          // Use 递减的增量，模拟真实UploadProgress
           const increment = Math.max(1, Math.floor((90 - prev) / 10))
           return prev + increment
         })
@@ -107,7 +107,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
 
       console.log('StartUploadFile:', {
         video_file: files.video.name,
-        srt_file: files.srt?.name || '(将使用Speech recognition生成)',
+        srt_file: files.srt?.name || '(将Use Speech recognition生成)',
         project_name: projectName.trim(),
         video_category: selectedCategory
       })
@@ -161,7 +161,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
           errorMessage = 'File format或Content有问题，请检查后Retry'
         }
       } else if (error.response?.status === 500) {
-        errorMessage = 'Server处理File时出错，请稍后Retry'
+        errorMessage = 'ServerProcessingFile时出错，请稍后Retry'
       } else if (error.code === 'ECONNABORTED') {
         errorMessage = 'UploadTimeout，请检查Network连接后Retry'
       } else if (error.response?.data?.detail) {
@@ -269,7 +269,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
         </div>
       </div>
 
-      {/* projectsName输入 - 只有在选择File后才显示 */}
+      {/* projectsName输入 - 只有在SelectFile后才显示 */}
       {files.video && (
         <div style={{ marginBottom: '16px' }}>
           <Text strong style={{ color: '#ffffff', fontSize: '14px', marginBottom: '8px', display: 'block' }}>
@@ -291,7 +291,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
         </div>
       )}
 
-      {/* Video Category选择 - 只有在选择File后才显示 */}
+      {/* Video CategorySelect - 只有在SelectFile后才显示 */}
       {files.video && (
         <div style={{ marginBottom: '16px' }}>
           <Text strong style={{ color: '#ffffff', fontSize: '14px', marginBottom: '8px', display: 'block' }}>
@@ -352,7 +352,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
         </div>
       )}
 
-      {/* File列表 */}
+      {/* FileList */}
       {Object.keys(files).length > 0 && (
         <div style={{ marginBottom: '16px' }}>
           <Text strong style={{ color: '#ffffff', fontSize: '14px', marginBottom: '12px', display: 'block' }}>
@@ -457,7 +457,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
             )}
           </Space>
           
-          {/* AISubtitle Generation提示 */}
+          {/* AISubtitle GenerationPrompt */}
           {files.video && !files.srt && (
             <div style={{
               marginTop: '12px',
@@ -471,7 +471,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
             }}>
               <SubnodeOutlined style={{ color: '#52c41a', fontSize: '16px' }} />
               <Text style={{ color: '#52c41a', fontSize: '14px', fontWeight: 500 }}>
-                将使用AISpeech recognitionAuto生成Subtitle File
+                将Use AISpeech recognitionAuto生成Subtitle File
               </Text>
             </div>
           )}
@@ -512,7 +512,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
         </div>
       )}
 
-      {/* UploadButton - 只有在选择File后才显示 */}
+      {/* UploadButton - 只有在SelectFile后才显示 */}
       {files.video && (
         <div style={{ textAlign: 'center', marginTop: '8px' }}>
           <Button 
@@ -533,7 +533,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
               transition: 'all 0.3s ease'
             }}
           >
-            {uploading ? 'Importing...' : 'StartImport并处理'}
+            {uploading ? 'Importing...' : 'StartImport并Processing'}
           </Button>
         </div>
       )}

@@ -19,7 +19,7 @@ const SettingsPageTest: React.FC = () => {
         <Card title="API Configuration" className="settings-card">
           <Alert
             message="Configuration说明"
-            description="请Configuration通义千问API密钥以EnableAIAuto切片功能。您可以在阿里云控制台获取API密钥。"
+            description="请Configuration通义千问API密钥以EnableAIAutoClip功能。您可以在阿里云控制台Get API密钥。"
             type="info"
             showIcon
             className="settings-alert"
@@ -111,7 +111,7 @@ const SettingsPageTest: React.FC = () => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label="每CollectionMax切片数"
+                  label="每CollectionMaxClip数"
                   name="max_clips_per_collection"
                   className="form-item"
                 >
@@ -143,10 +143,10 @@ const SettingsPageTest: React.FC = () => {
           <Space direction="vertical" size="large" className="instructions-space">
             <div className="instruction-item">
               <Title level={5} className="instruction-title">
-                <InfoCircleOutlined /> 1. 获取API密钥
+                <InfoCircleOutlined /> 1. Get API密钥
               </Title>
               <Paragraph className="instruction-text">
-                访问阿里云控制台 → 人工智能 → 通义千问 → API密钥管理，Create新的API密钥
+                访问阿里云控制台 → 人工智能 → 通义千问 → API密钥Manage，Create新的API密钥
               </Paragraph>
             </div>
             
@@ -155,9 +155,9 @@ const SettingsPageTest: React.FC = () => {
                 <InfoCircleOutlined /> 2. Configuration Parameters
               </Title>
               <Paragraph className="instruction-text">
-                • <Text strong>文本分块Size</Text>：影响处理Speed和精度，建议5000chars<br />
+                • <Text strong>文本分块Size</Text>：影响ProcessingSpeed和精度，建议5000chars<br />
                 • <Text strong>Score阈值</Text>：只有High于此分数的clips才会被保留<br />
-                • <Text strong>Collection切片数</Text>：控制每themed collections包含的clipsCount
+                • <Text strong>CollectionClip数</Text>：控制每themed collectionsContains的clipsCount
               </Paragraph>
             </div>
             
