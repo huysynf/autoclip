@@ -13,7 +13,7 @@ const SettingsPageTest: React.FC = () => {
     <Content className="settings-page">
       <div className="settings-container">
         <Title level={2} className="settings-title">
-          <SettingOutlined /> 系统配置测试
+          <SettingOutlined /> 系统配置Test
         </Title>
         
         <Card title="API 配置" className="settings-card">
@@ -41,12 +41,12 @@ const SettingsPageTest: React.FC = () => {
               name="dashscope_api_key"
               className="form-item"
               rules={[
-                { required: true, message: '请输入API密钥' },
-                { min: 10, message: 'API密钥长度不能少于10位' }
+                { required: true, message: 'Please enter an API key' },
+                { min: 10, message: 'API key must be at least 10 characters' }
               ]}
             >
               <Input.Password
-                placeholder="请输入通义千问API密钥"
+                placeholder="Enter Qwen API key"
                 prefix={<KeyOutlined />}
                 className="settings-input"
               />
@@ -58,18 +58,18 @@ const SettingsPageTest: React.FC = () => {
                 icon={<ApiOutlined />}
                 className="test-button"
               >
-                测试连接
+                Test连接
               </Button>
             </Form.Item>
 
             <Divider className="settings-divider" />
 
-            <Title level={4} className="section-title">模型配置</Title>
+            <Title level={4} className="section-title">Model Configuration</Title>
             
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
-                  label="模型名称"
+                  label="模型Name"
                   name="model_name"
                   className="form-item"
                 >
@@ -78,14 +78,14 @@ const SettingsPageTest: React.FC = () => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label="文本分块大小"
+                  label="文本分块Size"
                   name="chunk_size"
                   className="form-item"
                 >
                   <Input 
                     type="number" 
                     placeholder="5000" 
-                    addonAfter="字符" 
+                    addonAfter="chars" 
                     className="settings-input"
                   />
                 </Form.Item>
@@ -95,7 +95,7 @@ const SettingsPageTest: React.FC = () => {
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
-                  label="最低评分阈值"
+                  label="最低Score阈值"
                   name="min_score_threshold"
                   className="form-item"
                 >
@@ -111,14 +111,14 @@ const SettingsPageTest: React.FC = () => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label="每个合集最大切片数"
+                  label="每CollectionMax切片数"
                   name="max_clips_per_collection"
                   className="form-item"
                 >
                   <Input 
                     type="number" 
                     placeholder="5" 
-                    addonAfter="个" 
+                    addonAfter="" 
                     className="settings-input"
                   />
                 </Form.Item>
@@ -133,40 +133,40 @@ const SettingsPageTest: React.FC = () => {
                 size="large"
                 className="save-button"
               >
-                保存配置
+                Save配置
               </Button>
             </Form.Item>
           </Form>
         </Card>
 
-        <Card title="使用说明" className="settings-card">
+        <Card title="Instructions" className="settings-card">
           <Space direction="vertical" size="large" className="instructions-space">
             <div className="instruction-item">
               <Title level={5} className="instruction-title">
                 <InfoCircleOutlined /> 1. 获取API密钥
               </Title>
               <Paragraph className="instruction-text">
-                访问阿里云控制台 → 人工智能 → 通义千问 → API密钥管理，创建新的API密钥
+                访问阿里云控制台 → 人工智能 → 通义千问 → API密钥管理，Create新的API密钥
               </Paragraph>
             </div>
             
             <div className="instruction-item">
               <Title level={5} className="instruction-title">
-                <InfoCircleOutlined /> 2. 配置参数说明
+                <InfoCircleOutlined /> 2. Configuration Parameters
               </Title>
               <Paragraph className="instruction-text">
-                • <Text strong>文本分块大小</Text>：影响处理速度和精度，建议5000字符<br />
-                • <Text strong>评分阈值</Text>：只有高于此分数的片段才会被保留<br />
-                • <Text strong>合集切片数</Text>：控制每个主题合集包含的片段数量
+                • <Text strong>文本分块Size</Text>：影响处理速度和精度，建议5000chars<br />
+                • <Text strong>Score阈值</Text>：只有高于此分数的clips才会被保留<br />
+                • <Text strong>Collection切片数</Text>：控制每themed collections包含的clips数量
               </Paragraph>
             </div>
             
             <div className="instruction-item">
               <Title level={5} className="instruction-title">
-                <InfoCircleOutlined /> 3. 测试连接
+                <InfoCircleOutlined /> 3. Test连接
               </Title>
               <Paragraph className="instruction-text">
-                保存前建议先测试API密钥是否有效，确保服务正常运行
+                Save前建议先TestAPI密钥是否有效，确保服务正常运行
               </Paragraph>
             </div>
           </Space>

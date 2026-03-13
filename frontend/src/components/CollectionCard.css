@@ -39,7 +39,7 @@
   box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
 }
 
-/* 类型标签动画 */
+/* TypeTags动画 */
 .collection-card:hover [style*="collection_type"] {
   transform: scale(1.05);
   transition: transform 0.2s ease;

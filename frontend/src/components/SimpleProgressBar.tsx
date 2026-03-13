@@ -1,5 +1,5 @@
 /**
- * 简化的进度条组件 - 基于固定阶段
+ * 简化的Progress条组件 - 基于固定阶段
  */
 
 import React, { useEffect } from 'react'
@@ -39,7 +39,7 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
 
   const progress = getProgress(projectId)
 
-  // 自动开始轮询
+  // 自动Start Polling
   useEffect(() => {
     if (autoStart && projectId) {
       startPolling([projectId], pollingInterval)
@@ -50,19 +50,19 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
     }
   }, [projectId, autoStart, pollingInterval, startPolling, stopPolling])
 
-  // 通知父组件进度更新
+  // Notifications父组件ProgressUpdate
   useEffect(() => {
     if (progress && onProgressUpdate) {
       onProgressUpdate(progress)
     }
   }, [progress, onProgressUpdate])
 
-  // 如果没有进度数据，显示等待状态
+  // 如果没有Progress数据，显示等待Status
   if (!progress) {
     return (
       <Card size="small" style={{ margin: '8px 0' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Text type="secondary">等待开始处理...</Text>
+          <Text type="secondary">等待Start Processing...</Text>
           <Progress 
             percent={0} 
             status="active" 
@@ -80,7 +80,7 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
   const completed = isCompleted(stage)
   const failed = isFailed(message)
 
-  // 确定进度条状态
+  // OKProgress条Status
   let progressStatus: 'normal' | 'active' | 'success' | 'exception' = 'normal'
   if (failed) {
     progressStatus = 'exception'
@@ -93,7 +93,7 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
   return (
     <Card size="small" style={{ margin: '8px 0' }}>
       <Space direction="vertical" style={{ width: '100%' }}>
-        {/* 阶段标签和进度 */}
+        {/* 阶段Tags和Progress */}
         <Space align="center" style={{ width: '100%', justifyContent: 'space-between' }}>
           <Tag color={stageColor} style={{ margin: 0 }}>
             {stageDisplayName}
@@ -103,7 +103,7 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
           </Text>
         </Space>
 
-        {/* 进度条 */}
+        {/* Progress条 */}
         <Progress
           percent={percent}
           status={progressStatus}
@@ -119,10 +119,10 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
           </Text>
         )}
 
-        {/* 时间戳 */}
+        {/* Time戳 */}
         {showDetails && ts > 0 && (
           <Text type="secondary" style={{ fontSize: '11px' }}>
-            更新时间: {new Date(ts * 1000).toLocaleTimeString()}
+            UpdateTime: {new Date(ts * 1000).toLocaleTimeString()}
           </Text>
         )}
       </Space>
@@ -130,7 +130,7 @@ export const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
   )
 }
 
-// 批量进度显示组件
+// 批量Progress显示组件
 interface BatchProgressBarProps {
   projectIds: string[]
   autoStart?: boolean
@@ -155,7 +155,7 @@ export const BatchProgressBar: React.FC<BatchProgressBarProps> = ({
 
   const allProgress = getAllProgress()
 
-  // 自动开始轮询
+  // 自动Start Polling
   useEffect(() => {
     if (autoStart && projectIds.length > 0) {
       startPolling(projectIds, pollingInterval)
@@ -166,7 +166,7 @@ export const BatchProgressBar: React.FC<BatchProgressBarProps> = ({
     }
   }, [projectIds, autoStart, pollingInterval, startPolling, stopPolling])
 
-  // 通知父组件进度更新
+  // Notifications父组件ProgressUpdate
   useEffect(() => {
     if (onProgressUpdate) {
       projectIds.forEach(projectId => {
@@ -184,7 +184,7 @@ export const BatchProgressBar: React.FC<BatchProgressBarProps> = ({
         <SimpleProgressBar
           key={projectId}
           projectId={projectId}
-          autoStart={false} // 批量模式下不自动开始
+          autoStart={false} // 批量模式下不自动Start
           showDetails={showDetails}
           onProgressUpdate={(progress) => onProgressUpdate?.(projectId, progress)}
         />

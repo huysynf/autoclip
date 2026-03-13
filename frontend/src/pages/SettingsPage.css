@@ -11,7 +11,7 @@
   margin: 0 auto;
 }
 
-/* 标题样式 */
+/* Title样式 */
 .settings-title {
   color: #ffffff !important;
   margin-bottom: 32px !important;
@@ -228,7 +228,7 @@
   font-weight: 500;
 }
 
-/* 章节标题 */
+/* 章节Title */
 .section-title {
   color: #ffffff !important;
   font-weight: 600;
@@ -343,14 +343,14 @@
   margin-top: 4px;
 }
 
-/* 加载状态样式 */
+/* 加载Status样式 */
 .test-button.ant-btn-loading,
 .save-button.ant-btn-loading {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
-/* 焦点状态增强 */
+/* 焦点Status增强 */
 .settings-input:focus-within {
   border-color: #4facfe !important;
   box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.2) !important;

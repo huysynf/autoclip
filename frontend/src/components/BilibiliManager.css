@@ -1,4 +1,4 @@
-/* B站管理弹窗样式 */
+/* Bilibili Management弹窗样式 */
 .bilibili-manager-modal .ant-modal-content {
   background: #1a1a1a !important;
   border: 1px solid #2d2d2d !important;
@@ -32,7 +32,7 @@
   background: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* 自定义标题栏 */
+/* 自定义Title栏 */
 .bilibili-manager-header {
   display: flex;
   align-items: center;
@@ -74,7 +74,7 @@
   line-height: 1.4;
 }
 
-/* 标签页样式优化 */
+/* Tags页样式优化 */
 .bilibili-manager-tabs {
   padding: 0 24px;
 }
@@ -110,12 +110,12 @@
   padding: 24px 0;
 }
 
-/* 表单内容区域 */
+/* 表单Content区域 */
 .bilibili-manager-content {
   padding: 0 24px 24px 24px;
 }
 
-/* 投稿信息提示框样式优化 */
+/* Upload信息提示框样式优化 */
 .bilibili-manager-content .ant-alert {
   background: #262626 !important;
   border: 1px solid #404040 !important;
@@ -209,7 +209,7 @@
   color: #ffffff !important;
 }
 
-/* 账号管理表格样式 */
+/* Account Management表格样式 */
 .bilibili-manager-content .ant-table {
   background: #1a1a1a !important;
   border-radius: 12px !important;
@@ -233,7 +233,7 @@
   background: #262626 !important;
 }
 
-/* 添加账号按钮样式 */
+/* Add账号按钮样式 */
 .bilibili-manager-content .ant-btn-dashed {
   background: #262626 !important;
   border: 1px dashed #404040 !important;

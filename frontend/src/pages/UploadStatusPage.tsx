@@ -41,83 +41,83 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
   const [selectedRecord, setSelectedRecord] = useState<UploadRecord | null>(null);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
 
-  // 获取投稿记录
+  // 获取Upload记录
   const fetchRecords = async () => {
     setLoading(true);
     try {
       const data = await uploadApi.getUploadRecords();
       setRecords(data);
     } catch (error) {
-      message.error('获取投稿记录失败');
-      console.error('获取投稿记录失败:', error);
+      message.error('Failed to get upload records');
+      console.error('Failed to get upload records:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  // 重试投稿
+  // RetryUpload
   const handleRetry = async (recordId: string | number) => {
-    message.info('B站上传功能正在开发中，敬请期待！', 3);
+    message.info('Bilibili upload coming soon!', 3);
     return;
     
     // 原有代码已禁用
     try {
       await uploadApi.retryUpload(recordId);
-      message.success('重试任务已提交');
+      message.success('Retry task submitted');
       fetchRecords();
     } catch (error) {
-      message.error('重试失败');
-      console.error('重试失败:', error);
+      message.error('Retry failed');
+      console.error('Retry failed:', error);
     }
   };
 
-  // 取消投稿
+  // CancelUpload
   const handleCancel = async (recordId: string | number) => {
-    message.info('B站上传功能正在开发中，敬请期待！', 3);
+    message.info('Bilibili upload coming soon!', 3);
     return;
     
     // 原有代码已禁用
     try {
       await uploadApi.cancelUpload(recordId);
-      message.success('任务已取消');
+      message.success('Task cancelled');
       fetchRecords();
     } catch (error) {
-      message.error('取消失败');
-      console.error('取消失败:', error);
+      message.error('Cancel failed');
+      console.error('Cancel failed:', error);
     }
   };
 
-  // 删除投稿
+  // DeleteUpload
   const handleDelete = async (recordId: string | number) => {
-    message.info('B站上传功能正在开发中，敬请期待！', 3);
+    message.info('Bilibili upload coming soon!', 3);
     return;
     
     // 原有代码已禁用
     try {
       await uploadApi.deleteUpload(recordId);
-      message.success('任务已删除');
+      message.success('Task deleted');
       fetchRecords();
     } catch (error) {
-      message.error('删除失败');
-      console.error('删除失败:', error);
+      message.error('Delete failed');
+      console.error('Delete failed:', error);
     }
   };
 
-  // 查看详情
+  // ViewDetails
   const handleViewDetail = (record: UploadRecord) => {
     setSelectedRecord(record);
     setDetailModalVisible(true);
   };
 
-  // 获取状态标签
+  // 获取StatusTags
   const getStatusTag = (status: string) => {
     const statusConfig = {
-      pending: { color: 'default', icon: <ClockCircleOutlined />, text: '等待中' },
-      processing: { color: 'processing', icon: <PlayCircleOutlined />, text: '处理中' },
-      success: { color: 'success', icon: <CheckCircleOutlined />, text: '成功' },
-      completed: { color: 'success', icon: <CheckCircleOutlined />, text: '完成' },
-      failed: { color: 'error', icon: <ExclamationCircleOutlined />, text: '失败' },
-      cancelled: { color: 'default', icon: <StopOutlined />, text: '已取消' }
+      pending: { color: 'default', icon: <ClockCircleOutlined />, text: 'Waiting' },
+      processing: { color: 'processing', icon: <PlayCircleOutlined />, text: 'Processing' },
+      success: { color: 'success', icon: <CheckCircleOutlined />, text: 'Success' },
+      completed: { color: 'success', icon: <CheckCircleOutlined />, text: 'Done' },
+      failed: { color: 'error', icon: <ExclamationCircleOutlined />, text: 'Failed' },
+      cancelled: { color: 'default', icon: <StopOutlined />, text: 'Cancelled' }
     };
     
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.pending;
@@ -128,13 +128,13 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     );
   };
 
-  // 获取分区名称
+  // 获取分区Name
   const getPartitionName = (partitionId: number) => {
     const partition = BILIBILI_PARTITIONS.find(p => p.id === partitionId);
-    return partition ? partition.name : `分区${partitionId}`;
+    return partition ? partition.name : `Category ${partitionId}`;
   };
 
-  // 格式化文件大小
+  // 格式化文件Size
   const formatFileSize = (bytes?: number) => {
     if (!bytes) return '-';
     const sizes = ['B', 'KB', 'MB', 'GB'];
@@ -150,25 +150,25 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
     const secs = seconds % 60;
     
     if (hours > 0) {
-      return `${hours}小时${minutes}分钟`;
+      return `${hours}h ${minutes}m`;
     } else if (minutes > 0) {
-      return `${minutes}分钟${secs}秒`;
+      return `${minutes}m ${secs}s`;
     } else {
-      return `${secs}秒`;
+      return `${secs}s`;
     }
   };
 
   // 表格列定义
   const columns = [
     {
-      title: '任务ID',
+      title: 'Task ID',
       dataIndex: 'id',
       key: 'id',
       width: 80,
       render: (id: string | number) => <Text code style={{ color: '#ffffff' }}>{id}</Text>
     },
     {
-      title: '标题',
+      title: 'Title',
       dataIndex: 'title',
       key: 'title',
       ellipsis: true,
@@ -179,7 +179,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
       )
     },
     {
-      title: '投稿账号',
+      title: 'Upload Account',
       dataIndex: 'account_nickname',
       key: 'account_nickname',
       width: 120,
@@ -193,7 +193,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
       )
     },
     {
-      title: '分区',
+      title: 'Category',
       dataIndex: 'partition_id',
       key: 'partition_id',
       width: 100,
@@ -202,14 +202,14 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
       )
     },
     {
-      title: '状态',
+      title: 'Status',
       dataIndex: 'status',
       key: 'status',
       width: 100,
       render: (status: string) => getStatusTag(status)
     },
     {
-      title: '进度',
+      title: 'Progress',
       dataIndex: 'progress',
       key: 'progress',
       width: 120,
@@ -226,21 +226,21 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
       }
     },
     {
-      title: '文件大小',
+      title: 'File Size',
       dataIndex: 'file_size',
       key: 'file_size',
       width: 100,
       render: (fileSize: number) => <span style={{ color: '#ffffff' }}>{formatFileSize(fileSize)}</span>
     },
     {
-      title: '创建时间',
+      title: 'CreateTime',
       dataIndex: 'created_at',
       key: 'created_at',
       width: 150,
       render: (date: string) => <span style={{ color: '#ffffff' }}>{new Date(date).toLocaleString()}</span>
     },
     {
-      title: '操作',
+      title: 'Actions',
       key: 'actions',
       width: 200,
       render: (_, record: UploadRecord) => (
@@ -252,14 +252,14 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
             size="small"
             style={{ color: '#4facfe' }}
           >
-            详情
+            Details
           </Button>
           {record.status === 'failed' && (
             <Popconfirm
-              title="确定要重试这个投稿任务吗？"
+              title="Retry this upload task?"
               onConfirm={() => handleRetry(record.id)}
-              okText="确定"
-              cancelText="取消"
+              okText="OK"
+              cancelText="Cancel"
             >
               <Button 
                 type="link" 
@@ -267,16 +267,16 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
                 size="small"
                 style={{ color: '#4facfe' }}
               >
-                重试
+                Retry
               </Button>
             </Popconfirm>
           )}
           {(record.status === 'pending' || record.status === 'processing') && (
             <Popconfirm
-              title="确定要取消这个投稿任务吗？"
+              title="Cancel this upload task?"
               onConfirm={() => handleCancel(record.id)}
-              okText="确定"
-              cancelText="取消"
+              okText="OK"
+              cancelText="Cancel"
             >
               <Button 
                 type="link" 
@@ -285,16 +285,16 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
                 size="small"
                 style={{ color: '#ff4d4f' }}
               >
-                取消
+                Cancel
               </Button>
             </Popconfirm>
           )}
           {(record.status === 'success' || record.status === 'completed' || record.status === 'failed' || record.status === 'cancelled') && (
             <Popconfirm
-              title="确定要删除这个投稿任务吗？删除后无法恢复。"
+              title="Delete this upload task? This cannot be undone."
               onConfirm={() => handleDelete(record.id)}
-              okText="确定"
-              cancelText="取消"
+              okText="OK"
+              cancelText="Cancel"
             >
               <Button 
                 type="link" 
@@ -303,7 +303,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
                 size="small"
                 style={{ color: '#ff4d4f' }}
               >
-                删除
+                Delete
               </Button>
             </Popconfirm>
           )}
@@ -327,7 +327,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
 
   useEffect(() => {
     fetchRecords();
-    // 每30秒自动刷新
+    // 每30秒自动Refresh
     const interval = setInterval(fetchRecords, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -387,7 +387,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           .dark-table .anticon {
             color: inherit !important;
           }
-          /* 确保标签文字可见 */
+          /* 确保Tags文字可见 */
           .dark-table .ant-tag {
             color: #ffffff !important;
           }
@@ -403,7 +403,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           .dark-table .ant-tag-orange {
             color: #faad14 !important;
           }
-          /* 确保进度条文字可见 */
+          /* 确保Progress条文字可见 */
           .dark-table .ant-progress-text {
             color: #ffffff !important;
           }
@@ -448,14 +448,14 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
       </style>
       <Card style={{ background: '#1f1f1f', border: '1px solid #303030' }}>
         <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Title level={3} style={{ margin: 0, color: '#ffffff' }}>投稿任务状态</Title>
+          <Title level={3} style={{ margin: 0, color: '#ffffff' }}>Upload Task Status</Title>
           <Button 
             type="primary" 
             icon={<ReloadOutlined />} 
             onClick={fetchRecords}
             loading={loading}
           >
-            刷新
+            Refresh
           </Button>
         </div>
 
@@ -464,7 +464,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           <Col span={6}>
             <Card style={{ background: '#262626', border: '1px solid #404040' }}>
               <Statistic 
-                title={<span style={{ color: '#ffffff' }}>总任务数</span>} 
+                title={<span style={{ color: '#ffffff' }}>Total Tasks</span>} 
                 value={stats.total} 
                 valueStyle={{ color: '#ffffff' }} 
               />
@@ -473,7 +473,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           <Col span={6}>
             <Card style={{ background: '#262626', border: '1px solid #404040' }}>
               <Statistic 
-                title={<span style={{ color: '#ffffff' }}>成功</span>} 
+                title={<span style={{ color: '#ffffff' }}>Success</span>} 
                 value={stats.success} 
                 valueStyle={{ color: '#52c41a' }}
                 prefix={<CheckCircleOutlined />}
@@ -483,7 +483,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           <Col span={6}>
             <Card style={{ background: '#262626', border: '1px solid #404040' }}>
               <Statistic 
-                title={<span style={{ color: '#ffffff' }}>失败</span>} 
+                title={<span style={{ color: '#ffffff' }}>Failure</span>} 
                 value={stats.failed} 
                 valueStyle={{ color: '#ff4d4f' }}
                 prefix={<ExclamationCircleOutlined />}
@@ -493,7 +493,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           <Col span={6}>
             <Card style={{ background: '#262626', border: '1px solid #404040' }}>
               <Statistic 
-                title={<span style={{ color: '#ffffff' }}>进行中</span>} 
+                title={<span style={{ color: '#ffffff' }}>In Progress</span>} 
                 value={stats.processing + stats.pending} 
                 valueStyle={{ color: '#1890ff' }}
                 prefix={<PlayCircleOutlined />}
@@ -502,7 +502,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
           </Col>
         </Row>
 
-        {/* 任务列表 */}
+        {/* Task List */}
         <Table
           columns={columns}
           dataSource={records}
@@ -512,7 +512,7 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
             pageSize: 20,
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal: (total, range) => `第 ${range[0]}-${range[1]} 条，共 ${total} 条`
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`
           }}
           scroll={{ x: 1200 }}
           style={{ background: '#1f1f1f' }}
@@ -520,9 +520,9 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
         />
       </Card>
 
-      {/* 详情模态框 */}
+      {/* Details模态框 */}
       <Modal
-        title="投稿任务详情"
+        title="Upload Task Details"
         open={detailModalVisible}
         onCancel={() => setDetailModalVisible(false)}
         footer={null}
@@ -555,28 +555,28 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
                 border: '1px solid #303030'
               }}
             >
-              <Descriptions.Item label="任务ID" span={1}>
+              <Descriptions.Item label="Task ID" span={1}>
                 <Text code style={{ color: '#ffffff' }}>{selectedRecord.id}</Text>
               </Descriptions.Item>
-              <Descriptions.Item label="状态" span={1}>
+              <Descriptions.Item label="Status" span={1}>
                 {getStatusTag(selectedRecord.status)}
               </Descriptions.Item>
-              <Descriptions.Item label="标题" span={2}>
+              <Descriptions.Item label="Title" span={2}>
                 <Text style={{ color: '#ffffff' }}>{selectedRecord.title}</Text>
               </Descriptions.Item>
-              <Descriptions.Item label="投稿账号" span={1}>
+              <Descriptions.Item label="Upload Account" span={1}>
                 <Text style={{ color: '#ffffff' }}>{selectedRecord.account_nickname || selectedRecord.account_username}</Text>
               </Descriptions.Item>
-              <Descriptions.Item label="分区" span={1}>
+              <Descriptions.Item label="Category" span={1}>
                 <Tag>{getPartitionName(selectedRecord.partition_id)}</Tag>
               </Descriptions.Item>
-              <Descriptions.Item label="项目名称" span={1}>
+              <Descriptions.Item label="Project Name" span={1}>
                 <Text style={{ color: '#ffffff' }}>{selectedRecord.project_name || '-'}</Text>
               </Descriptions.Item>
-              <Descriptions.Item label="切片ID" span={1}>
+              <Descriptions.Item label="Clip ID" span={1}>
                 <Text code style={{ color: '#ffffff' }}>{selectedRecord.clip_id}</Text>
               </Descriptions.Item>
-              <Descriptions.Item label="进度" span={2}>
+              <Descriptions.Item label="Progress" span={2}>
                 <Progress 
                   percent={selectedRecord.progress} 
                   status={
@@ -586,45 +586,45 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
                   }
                 />
               </Descriptions.Item>
-              <Descriptions.Item label="文件大小" span={1}>
+              <Descriptions.Item label="File Size" span={1}>
                 <Text style={{ color: '#ffffff' }}>{formatFileSize(selectedRecord.file_size)}</Text>
               </Descriptions.Item>
-              <Descriptions.Item label="上传时长" span={1}>
+              <Descriptions.Item label="Upload Duration" span={1}>
                 <Text style={{ color: '#ffffff' }}>{formatDuration(selectedRecord.upload_duration)}</Text>
               </Descriptions.Item>
-              <Descriptions.Item label="BV号" span={1}>
+              <Descriptions.Item label="BV ID" span={1}>
                 {selectedRecord.bv_id ? <Text code style={{ color: '#ffffff' }}>{selectedRecord.bv_id}</Text> : <Text style={{ color: '#ffffff' }}>-</Text>}
               </Descriptions.Item>
-              <Descriptions.Item label="AV号" span={1}>
+              <Descriptions.Item label="AV ID" span={1}>
                 {selectedRecord.av_id ? <Text code style={{ color: '#ffffff' }}>{selectedRecord.av_id}</Text> : <Text style={{ color: '#ffffff' }}>-</Text>}
               </Descriptions.Item>
-              <Descriptions.Item label="创建时间" span={1}>
+              <Descriptions.Item label="CreateTime" span={1}>
                 <Text style={{ color: '#ffffff' }}>{new Date(selectedRecord.created_at).toLocaleString()}</Text>
               </Descriptions.Item>
-              <Descriptions.Item label="更新时间" span={1}>
+              <Descriptions.Item label="UpdateTime" span={1}>
                 <Text style={{ color: '#ffffff' }}>{new Date(selectedRecord.updated_at).toLocaleString()}</Text>
               </Descriptions.Item>
             </Descriptions>
 
             {selectedRecord.description && (
               <div style={{ marginTop: '16px' }}>
-                <Title level={5} style={{ color: '#ffffff' }}>描述</Title>
+                <Title level={5} style={{ color: '#ffffff' }}>Description</Title>
                 <Text style={{ color: '#ffffff' }}>{selectedRecord.description}</Text>
               </div>
             )}
 
             {selectedRecord.tags && (
               <div style={{ marginTop: '16px' }}>
-                <Title level={5} style={{ color: '#ffffff' }}>标签</Title>
+                <Title level={5} style={{ color: '#ffffff' }}>Tags</Title>
                 <Text style={{ color: '#ffffff' }}>{selectedRecord.tags}</Text>
               </div>
             )}
 
             {selectedRecord.error_message && (
               <div style={{ marginTop: '16px' }}>
-                <Title level={5} style={{ color: '#ffffff' }}>错误信息</Title>
+                <Title level={5} style={{ color: '#ffffff' }}>Error Info</Title>
                 <Alert
-                  message="投稿失败"
+                  message="Upload Failed"
                   description={selectedRecord.error_message}
                   type="error"
                   showIcon
@@ -636,21 +636,21 @@ const UploadStatusPage: React.FC<UploadStatusPageProps> = () => {
               <Space>
                 {selectedRecord.status === 'failed' && (
                   <Popconfirm
-                    title="确定要重试这个投稿任务吗？"
+                    title="Retry this upload task?"
                     onConfirm={() => {
                       handleRetry(selectedRecord.id);
                       setDetailModalVisible(false);
                     }}
-                    okText="确定"
-                    cancelText="取消"
+                    okText="OK"
+                    cancelText="Cancel"
                   >
                     <Button type="primary" icon={<RedoOutlined />}>
-                      重试
+                      Retry
                     </Button>
                   </Popconfirm>
                 )}
                 <Button onClick={() => setDetailModalVisible(false)}>
-                  关闭
+                  Close
                 </Button>
               </Space>
             </div>

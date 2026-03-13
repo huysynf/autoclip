@@ -23,7 +23,7 @@
   background: #0f0f0f;
 }
 
-/* 头部标题栏 */
+/* 头部Title栏 */
 .preview-header {
   display: flex;
   justify-content: space-between;
@@ -84,7 +84,7 @@
   align-items: center;
 }
 
-/* 主体内容 */
+/* 主体Content */
 .preview-content {
   flex: 1;
   overflow: hidden;
@@ -453,13 +453,13 @@
   animation: slideInRight 0.3s ease-out;
 }
 
-/* 加载状态 */
+/* 加载Status */
 .clip-item .ant-btn-loading {
   pointer-events: none;
   opacity: 0.6;
 }
 
-/* 空状态 */
+/* 空Status */
 .clips-list .ant-empty {
   padding: 40px 20px;
   color: #999999;

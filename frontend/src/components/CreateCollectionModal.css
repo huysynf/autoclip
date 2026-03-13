@@ -1,4 +1,4 @@
-/* 创建合集弹窗样式 */
+/* CreateCollection弹窗样式 */
 .create-collection-modal .ant-modal-content {
   background: #1a1a1a !important;
   border: 1px solid #2d2d2d !important;
@@ -29,7 +29,7 @@
   border-radius: 8px !important;
 }
 
-/* 弹窗内容 */
+/* 弹窗Content */
 .modal-content {
   padding: 32px;
   background: #1a1a1a;
@@ -154,7 +154,7 @@
   color: #666666 !important;
 }
 
-/* 片段选择区域 */
+/* clips选择区域 */
 .clips-selection {
   border: 1px solid #2d2d2d;
   border-radius: 8px;
@@ -192,7 +192,7 @@
   color: #00a8ff !important;
 }
 
-/* 片段网格 */
+/* clips网格 */
 .clips-grid {
   max-height: 300px;
   overflow-y: auto;
@@ -216,7 +216,7 @@
   background: #555555;
 }
 
-/* 片段项 */
+/* clips项 */
 .clip-item {
   display: flex;
   align-items: center;

@@ -37,20 +37,20 @@ class SubtitleEditorApi {
   private baseUrl = '/api/v1/subtitle-editor'
 
   /**
-   * 获取片段的字粒度字幕数据
+   * 获取clips的字粒度字幕数据
    */
   async getClipSubtitles(projectId: string, clipId: string): Promise<SubtitleDataResponse> {
     const response = await fetch(`${this.baseUrl}/${projectId}/clips/${clipId}/subtitles`)
     
     if (!response.ok) {
-      throw new Error(`获取字幕数据失败: ${response.statusText}`)
+      throw new Error(`Failed to get subtitle data: ${response.statusText}`)
     }
     
     return response.json()
   }
 
   /**
-   * 基于字幕删除编辑视频片段
+   * 基于字幕DeleteEditVideo Clips
    */
   async editClipBySubtitles(
     projectId: string, 
@@ -73,21 +73,21 @@ class SubtitleEditorApi {
 
     if (!response.ok) {
       const errorText = await response.text()
-      throw new Error(`编辑视频失败: ${errorText}`)
+      throw new Error(`Video edit failed: ${errorText}`)
     }
 
     return response.json()
   }
 
   /**
-   * 获取编辑后的视频文件URL
+   * 获取Edit后的视频文件URL
    */
   getEditedVideoUrl(projectId: string, clipId: string): string {
     return `${this.baseUrl}/${projectId}/clips/${clipId}/edited-video`
   }
 
   /**
-   * 创建编辑预览片段
+   * CreateEditPreviewclips
    */
   async createEditPreview(
     projectId: string, 
@@ -110,21 +110,21 @@ class SubtitleEditorApi {
 
     if (!response.ok) {
       const errorText = await response.text()
-      throw new Error(`创建预览失败: ${errorText}`)
+      throw new Error(`Failed to create preview: ${errorText}`)
     }
 
     return response.json()
   }
 
   /**
-   * 获取预览片段文件URL
+   * 获取Previewclips文件URL
    */
   getPreviewSegmentUrl(projectId: string, clipId: string, segmentId: string): string {
     return `${this.baseUrl}/${projectId}/clips/${clipId}/preview/${segmentId}`
   }
 
   /**
-   * 下载编辑后的视频
+   * DownloadEdit后的视频
    */
   async downloadEditedVideo(projectId: string, clipId: string, filename?: string): Promise<void> {
     const url = this.getEditedVideoUrl(projectId, clipId)
@@ -133,7 +133,7 @@ class SubtitleEditorApi {
       const response = await fetch(url)
       
       if (!response.ok) {
-        throw new Error(`下载失败: ${response.statusText}`)
+        throw new Error(`Download failed: ${response.statusText}`)
       }
 
       const blob = await response.blob()
@@ -148,13 +148,13 @@ class SubtitleEditorApi {
       
       window.URL.revokeObjectURL(downloadUrl)
     } catch (error) {
-      console.error('下载编辑后的视频失败:', error)
+      console.error('Failed to download edited video:', error)
       throw error
     }
   }
 
   /**
-   * 验证编辑操作
+   * 验证Edit操作
    */
   async validateEditOperations(
     projectId: string, 
@@ -165,18 +165,18 @@ class SubtitleEditorApi {
       // 先获取字幕数据来验证
       const subtitleData = await this.getClipSubtitles(projectId, clipId)
       
-      // 检查删除的字幕段是否存在
+      // 检查Delete的字幕段是否存在
       const existingIds = new Set(subtitleData.segments.map(seg => seg.id))
       const invalidIds = deletedSegments.filter(id => !existingIds.has(id))
       
       if (invalidIds.length > 0) {
         return {
           valid: false,
-          error: `无效的字幕段ID: ${invalidIds.join(', ')}`
+          error: `Invalid subtitle segment ID: ${invalidIds.join(', ')}`
         }
       }
 
-      // 检查删除后是否还有剩余内容
+      // 检查Delete后是否还有剩余Content
       const remainingSegments = subtitleData.segments.filter(
         seg => !deletedSegments.includes(seg.id)
       )
@@ -184,7 +184,7 @@ class SubtitleEditorApi {
       if (remainingSegments.length === 0) {
         return {
           valid: false,
-          error: '删除所有字幕段后没有剩余内容'
+          error: 'No content remains after deleting all subtitle segments'
         }
       }
 
@@ -192,7 +192,7 @@ class SubtitleEditorApi {
     } catch (error) {
       return {
         valid: false,
-        error: `验证失败: ${error instanceof Error ? error.message : '未知错误'}`
+        error: `Validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
       }
     }
   }

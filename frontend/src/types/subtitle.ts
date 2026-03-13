@@ -1,4 +1,4 @@
-// 字幕单词类型
+// 字幕单词Type
 export interface SubtitleWord {
   id: string
   text: string
@@ -7,7 +7,7 @@ export interface SubtitleWord {
   confidence?: number // 语音识别置信度
 }
 
-// 字幕段落类型
+// 字幕段落Type
 export interface SubtitleSegment {
   id: string
   startTime: number  // 秒
@@ -17,7 +17,7 @@ export interface SubtitleSegment {
   index: number      // 原始SRT索引
 }
 
-// 视频编辑操作类型
+// 视频Edit操作Type
 export interface VideoEditOperation {
   type: 'delete' | 'insert' | 'modify'
   segmentIds: string[]
@@ -32,7 +32,7 @@ export interface VideoEditOperation {
   }
 }
 
-// 字幕编辑器状态
+// 字幕Edit器Status
 export interface SubtitleEditorState {
   currentTime: number
   playing: boolean
@@ -51,7 +51,7 @@ export interface SubtitleDataResponse {
   segment_count: number
 }
 
-// 视频编辑结果
+// 视频Edit结果
 export interface VideoEditResult {
   originalVideoPath: string
   editedVideoPath: string

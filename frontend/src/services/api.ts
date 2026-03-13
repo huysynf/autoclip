@@ -1,11 +1,11 @@
 import axios from 'axios'
 import { Project, Clip, Collection } from '../store/useProjectStore'
 
-// 格式化时间函数（暂时未使用，保留备用）
+// 格式化Time函数（暂时未使用，保留备用）
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api/v1', // FastAPI后端服务器地址
-  timeout: 300000, // 增加到5分钟超时
+  baseURL: 'http://localhost:8000/api/v1', // FastAPI backend server address
+  timeout: 300000, // increased to 5-minute timeout
   headers: {
     'Content-Type': 'application/json',
   },
@@ -31,20 +31,20 @@ api.interceptors.response.use(
     
     // 特殊处理429错误（系统繁忙）
     if (error.response?.status === 429) {
-      const message = error.response?.data?.detail || '系统正在处理其他项目，请稍后再试'
+      const message = error.response?.data?.detail || 'System is busy, please try again later'
       error.userMessage = message
     }
     // 处理超时错误
     else if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
-      error.userMessage = '请求超时，项目可能仍在后台处理中，请稍后查看项目状态'
+      error.userMessage = 'Request timed out; project may still be processing in background. Check status later.'
     }
     // 处理网络错误
     else if (error.code === 'NETWORK_ERROR' || !error.response) {
-      error.userMessage = '网络连接失败，请检查网络连接'
+      error.userMessage = 'Network connection failed. Please check your network.'
     }
-    // 处理服务器错误
+    // 处理Server error
     else if (error.response?.status >= 500) {
-      error.userMessage = '服务器内部错误，请稍后重试'
+      error.userMessage = 'Internal server error. Please try again later.'
     }
     
     return Promise.reject(error)
@@ -80,7 +80,7 @@ export interface ProcessingStatus {
   error_message?: string
 }
 
-// B站相关接口类型
+// B站相关接口Type
 export interface BilibiliVideoInfo {
   title: string
   description: string
@@ -115,19 +115,19 @@ export interface BilibiliDownloadTask {
   updated_at: string
 }
 
-// 设置相关API
+// Settings相关API
 export const settingsApi = {
   // 获取系统配置
   getSettings: (): Promise<any> => {
     return api.get('/settings')
   },
 
-  // 更新系统配置
+  // Update系统配置
   updateSettings: (settings: any): Promise<any> => {
     return api.post('/settings', settings)
   },
 
-  // 测试API密钥
+  // TestAPI密钥
   testApiKey: (provider: string, apiKey: string, modelName: string): Promise<{ success: boolean; error?: string }> => {
     return api.post('/settings/test-api-key', { 
       provider, 
@@ -147,26 +147,26 @@ export const settingsApi = {
   }
 }
 
-// 项目相关API
+// projects相关API
 export const projectApi = {
-  // 获取视频分类配置
+  // 获取Video Category配置
   getVideoCategories: async (): Promise<VideoCategoriesResponse> => {
     return api.get('/video-categories')
   },
 
-  // 获取所有项目
+  // 获取所有projects
   getProjects: async (): Promise<Project[]> => {
     const response = await api.get('/projects/')
-    // 处理分页响应结构，返回items数组
+    // 处理分页响应结构，Backitems数组
     return (response as any).items || response || []
   },
 
-  // 获取单个项目
+  // 获取单projects
   getProject: async (id: string): Promise<Project> => {
     return api.get(`/projects/${id}`)
   },
 
-  // 上传文件并创建项目
+  // Upload文件并Createprojects
   uploadFiles: async (data: UploadFilesRequest): Promise<Project> => {
     const formData = new FormData()
     formData.append('video_file', data.video_file)
@@ -185,32 +185,32 @@ export const projectApi = {
     })
   },
 
-  // 删除项目
+  // Deleteprojects
   deleteProject: async (id: string): Promise<void> => {
     await api.delete(`/projects/${id}`)
   },
 
-  // 开始处理项目
+  // Start Processingprojects
   startProcessing: async (id: string): Promise<void> => {
     await api.post(`/projects/${id}/process`)
   },
 
-  // 重试处理项目
+  // Retry处理projects
   retryProcessing: async (id: string): Promise<void> => {
     await api.post(`/projects/${id}/retry`)
   },
 
-  // 获取处理状态
+  // 获取处理Status
   getProcessingStatus: async (id: string): Promise<ProcessingStatus> => {
     return api.get(`/projects/${id}/status`)
   },
 
-  // 获取项目日志
+  // 获取projects日志
   getProjectLogs: async (id: string, lines: number = 50): Promise<{logs: Array<{timestamp: string, module: string, level: string, message: string}>}> => {
     return api.get(`/projects/${id}/logs?lines=${lines}`)
   },
 
-  // 获取项目切片
+  // 获取projects切片
   getClips: async (projectId: string): Promise<any[]> => {
     try {
       // 只从数据库获取数据，不再回退到文件系统
@@ -222,7 +222,7 @@ export const projectApi = {
       
       // 转换后端数据格式为前端期望的格式
       const convertedClips = clips.map((clip: any) => {
-        // 转换秒数为时间字符串格式
+        // 转换秒数为Timechars串格式
         const formatSecondsToTime = (seconds: number) => {
           const hours = Math.floor(seconds / 3600)
           const minutes = Math.floor((seconds % 3600) / 60)
@@ -230,7 +230,7 @@ export const projectApi = {
           return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
         }
         
-        // 获取metadata中的内容
+        // 获取metadata中的Content
         const metadata = clip.clip_metadata || {}
         
         return {
@@ -258,7 +258,7 @@ export const projectApi = {
     }
   },
 
-  // 获取项目合集
+  // 获取projectsCollection
   getCollections: async (projectId: string): Promise<any[]> => {
     try {
       // 只从数据库获取数据，不再回退到文件系统
@@ -282,27 +282,27 @@ export const projectApi = {
     }
   },
 
-  // 重启指定步骤
+  // 重启指定Step
   restartStep: async (id: string, step: number): Promise<void> => {
     await api.post(`/projects/${id}/restart-step`, { step })
   },
 
-  // 更新切片信息
+  // Update切片信息
   updateClip: (projectId: string, clipId: string, updates: Partial<Clip>): Promise<Clip> => {
     return api.patch(`/projects/${projectId}/clips/${clipId}`, updates)
   },
 
-  // 更新切片标题
+  // Update切片Title
   updateClipTitle: async (clipId: string, title: string): Promise<any> => {
     return api.patch(`/clips/${clipId}/title`, { title })
   },
 
-  // 生成切片标题
+  // 生成切片Title
   generateClipTitle: async (clipId: string): Promise<{clip_id: string, generated_title: string, success: boolean}> => {
     return api.post(`/clips/${clipId}/generate-title`)
   },
 
-  // 创建合集
+  // CreateCollection
   createCollection: (projectId: string, collectionData: { collection_title: string, collection_summary: string, clip_ids: string[] }): Promise<Collection> => {
     return api.post(`/collections/`, {
       project_id: projectId,
@@ -315,7 +315,7 @@ export const projectApi = {
     })
   },
 
-  // 更新合集信息
+  // UpdateCollection信息
   updateCollection: (_projectId: string, collectionId: string, updates: Partial<Collection>): Promise<Collection> => {
     // 如果updates包含clip_ids，需要将其包装在metadata中
     const apiUpdates = { ...updates }
@@ -326,34 +326,34 @@ export const projectApi = {
     return api.put(`/collections/${collectionId}`, apiUpdates)
   },
 
-  // 重新排序合集切片
+  // 重新SortCollection切片
   reorderCollectionClips: (projectId: string, collectionId: string, clipIds: string[]): Promise<Collection> => {
     return api.patch(`/projects/${projectId}/collections/${collectionId}/reorder`, clipIds)
   },
 
-  // 删除合集
+  // DeleteCollection
   deleteCollection: (_projectId: string, collectionId: string): Promise<{message: string, deleted_collection: string}> => {
     return api.delete(`/collections/${collectionId}`)
   },
 
-  // 生成合集标题
+  // 生成CollectionTitle
   generateCollectionTitle: (collectionId: string): Promise<{collection_id: string, generated_title: string, success: boolean}> => {
     return api.post(`/collections/${collectionId}/generate-title`)
   },
 
-  // 更新合集标题
+  // UpdateCollectionTitle
   updateCollectionTitle: (collectionId: string, title: string): Promise<{collection_id: string, title: string, success: boolean}> => {
     return api.put(`/collections/${collectionId}/title`, { title })
   },
 
-  // 下载切片视频
+  // Download切片视频
   downloadClip: (_projectId: string, clipId: string): Promise<Blob> => {
     return api.get(`/files/projects/${_projectId}/clips/${clipId}`, {
       responseType: 'blob'
     })
   },
 
-  // 下载合集视频
+  // DownloadCollection视频
   downloadCollection: (projectId: string, collectionId: string): Promise<Blob> => {
     return api.get(`/files/projects/${projectId}/collections/${collectionId}`, {
       responseType: 'blob'
@@ -367,7 +367,7 @@ export const projectApi = {
     })
   },
 
-  // 生成合集视频
+  // 生成Collection视频
   generateCollectionVideo: (projectId: string, collectionId: string) => {
     return api.post(`/projects/${projectId}/collections/${collectionId}/generate`)
   },
@@ -381,7 +381,7 @@ export const projectApi = {
     }
     
     try {
-      // 对于blob类型的响应，需要直接使用axios而不是经过拦截器
+      // 对于blobType的响应，需要直接使用axios而不是经过拦截器
       const response = await axios.get(`http://localhost:8000/api/v1${url}`, { 
         responseType: 'blob',
         headers: {
@@ -389,7 +389,7 @@ export const projectApi = {
         }
       })
       
-      // 从响应头获取文件名，如果没有则使用默认名称
+      // 从响应头获取文件名，如果没有则使用默认Name
       const contentDisposition = response.headers['content-disposition']
       let filename = clipId ? `clip_${clipId}.mp4` : 
                      collectionId ? `collection_${collectionId}.mp4` : 
@@ -409,14 +409,14 @@ export const projectApi = {
         }
       }
       
-      // 创建下载链接
+      // CreateDownload链接
       const blob = new Blob([response.data], { type: 'video/mp4' })
       const downloadUrl = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = downloadUrl
       link.download = filename
       
-      // 触发下载
+      // 触发Download
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -424,17 +424,17 @@ export const projectApi = {
       
       return response.data
     } catch (error) {
-      console.error('下载失败:', error)
+      console.error('Download failed:', error)
       throw error
     }
   },
 
-  // 获取项目文件URL
+  // 获取projects文件URL
   getProjectFileUrl: (projectId: string, filename: string): string => {
     return `${api.defaults.baseURL}/projects/${projectId}/files/${filename}`
   },
 
-  // 获取项目视频URL
+  // 获取projects视频URL
   getProjectVideoUrl: (projectId: string): string => {
     return `${api.defaults.baseURL}/projects/${projectId}/video`
   },
@@ -445,21 +445,21 @@ export const projectApi = {
     return `http://localhost:8000/api/v1/projects/${projectId}/clips/${clipId}`
   },
 
-  // 获取合集视频URL
+  // 获取Collection视频URL
   getCollectionVideoUrl: (projectId: string, collectionId: string): string => {
-    // 使用files路由获取合集视频
+    // 使用files路由获取Collection视频
     return `http://localhost:8000/api/v1/files/projects/${projectId}/collections/${collectionId}`
   },
 
-  // 生成项目缩略图
+  // 生成projects缩略图
   generateThumbnail: async (projectId: string): Promise<{success: boolean, thumbnail: string, message: string}> => {
     return api.post(`/projects/${projectId}/generate-thumbnail`)
   }
 }
 
-// 视频下载相关API
+// 视频Download相关API
 export const bilibiliApi = {
-  // 解析B站视频信息
+  // 解析B站Video Info
   parseVideoInfo: async (url: string, browser?: string): Promise<{success: boolean, video_info: BilibiliVideoInfo}> => {
     const formData = new FormData()
     formData.append('url', url)
@@ -473,7 +473,7 @@ export const bilibiliApi = {
     })
   },
 
-  // 解析YouTube视频信息
+  // 解析YouTubeVideo Info
   parseYouTubeVideoInfo: async (url: string, browser?: string): Promise<{success: boolean, video_info: BilibiliVideoInfo}> => {
     const formData = new FormData()
     formData.append('url', url)
@@ -487,40 +487,40 @@ export const bilibiliApi = {
     })
   },
 
-  // 创建B站下载任务
+  // CreateB站Download任务
   createDownloadTask: async (data: BilibiliDownloadRequest): Promise<BilibiliDownloadTask> => {
     return api.post('/bilibili/download', data)
   },
 
-  // 创建YouTube下载任务
+  // CreateYouTubeDownload任务
   createYouTubeDownloadTask: async (data: BilibiliDownloadRequest): Promise<BilibiliDownloadTask> => {
     return api.post('/youtube/download', data)
   },
 
-  // 获取下载任务状态
+  // 获取Download任务Status
   getTaskStatus: async (taskId: string): Promise<BilibiliDownloadTask> => {
     return api.get(`/bilibili/tasks/${taskId}`)
   },
 
-  // 获取YouTube下载任务状态
+  // 获取YouTubeDownload任务Status
   getYouTubeTaskStatus: async (taskId: string): Promise<BilibiliDownloadTask> => {
     return api.get(`/youtube/tasks/${taskId}`)
   },
 
-  // 获取所有下载任务
+  // 获取所有Download任务
   getAllTasks: async (): Promise<BilibiliDownloadTask[]> => {
     return api.get('/bilibili/tasks')
   },
 
-  // 获取所有YouTube下载任务
+  // 获取所有YouTubeDownload任务
   getAllYouTubeTasks: async (): Promise<BilibiliDownloadTask[]> => {
     return api.get('/youtube/tasks')
   }
 }
 
-// 系统状态相关API
+// 系统Status相关API
 export const systemApi = {
-  // 获取系统状态
+  // 获取系统Status
   getSystemStatus: (): Promise<{
     current_processing_count: number
     max_concurrent_processing: number

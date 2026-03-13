@@ -3,15 +3,15 @@ import { projectApi } from '../services/api'
 
 export interface Clip {
   id: string
-  title?: string  // 可能没有原始title
+  title?: string  // may not have original title
   start_time: string
   end_time: string
-  final_score: number  // 匹配后端字段名
-  recommend_reason: string  // 匹配后端字段名
+  final_score: number  // matches backend field name
+  recommend_reason: string  // matches backend field name
   generated_title?: string
   outline: string
   content: string[]
-  chunk_index?: number  // 添加缺失字段
+  chunk_index?: number  // adds missing fields
 }
 
 export interface Collection {
@@ -25,7 +25,7 @@ export interface Collection {
   thumbnail_path?: string
 }
 
-// 项目状态类型定义，与后端保持一致
+// projectsStatusType定义，与后端保持一致
 type ProjectStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'error'
 
 export interface Project {
@@ -103,7 +103,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       projects: projects
     })
     
-    // 如果正在拖拽，则跳过更新以避免冲突
+    // 如果正在拖拽，则SkipUpdate以避免冲突
     if (state.isDragging) {
       console.log('Skipping update: dragging in progress')
       return
@@ -225,7 +225,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       return
     }
     
-    // 乐观更新：立即更新前端状态
+    // 乐观Update：立即Update前端Status
     const updateState = (clipIds: string[]) => {
       set((state) => ({
         projects: state.projects.map(project => 
@@ -260,7 +260,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       }))
     }
     
-    // 立即应用更新
+    // 立即应用Update
     updateState(updatedClipIds)
     
     // 调用后端API
@@ -276,7 +276,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         statusText: (error as any)?.response?.statusText,
         data: (error as any)?.response?.data
       })
-      // 回滚到原始状态
+      // 回滚到原始Status
       updateState(originalClipIds)
       throw error
     }
@@ -287,7 +287,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   reorderCollectionClips: async (projectId: string, collectionId: string, newClipIds: string[]) => {
     console.log('Starting reorderCollectionClips:', { projectId, collectionId, newClipIds })
     
-    // 获取原始状态
+    // 获取原始Status
     const state = get()
     console.log('Current state projects:', state.projects.map(p => ({ id: p.id, collectionsCount: p.collections?.length || 0 })))
     console.log('Current state currentProject:', state.currentProject ? { id: state.currentProject.id, collectionsCount: state.currentProject.collections?.length || 0 } : null)
@@ -327,10 +327,10 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       return
     }
     
-    // 记录编辑时间戳
+    // 记录EditTime戳
     const now = Date.now()
     
-    // 乐观更新：立即更新前端状态
+    // 乐观Update：立即Update前端Status
     const updateState = (clipIds: string[]) => {
       set((state) => ({
         projects: state.projects.map(project => 
@@ -369,7 +369,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       console.log('Backend API call successful')
     } catch (error) {
       console.error('Backend API call failed:', error)
-      // 回滚到原始状态
+      // 回滚到原始Status
       updateState(originalClipIds)
       throw error
     }
@@ -378,7 +378,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   addClipToCollection: async (projectId: string, collectionId: string, clipIds: string[]) => {
     console.log('Starting addClipToCollection:', { projectId, collectionId, clipIds })
     
-    // 获取原始状态
+    // 获取原始Status
     const state = get()
     
     // 优先从currentProject中查找，如果找不到再从projects数组中查找
@@ -407,7 +407,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       return
     }
     
-    // 乐观更新：立即更新前端状态
+    // 乐观Update：立即Update前端Status
     const updateState = (clipIds: string[]) => {
       set((state) => ({
         projects: state.projects.map(project => 
@@ -436,7 +436,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       }))
     }
     
-    // 立即应用更新
+    // 立即应用Update
     updateState(updatedClipIds)
     
     // 调用后端API
@@ -446,7 +446,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       console.log('Clips added to collection successfully')
     } catch (error) {
       console.error('Failed to add clips to collection, rolling back:', error)
-      // 回滚到原始状态
+      // 回滚到原始Status
       updateState(originalClipIds)
       throw error
     }

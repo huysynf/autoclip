@@ -38,13 +38,13 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
     if (message.type === 'task_progress_update' && message.task_id === taskId) {
       const progressMessage = message as TaskProgressUpdateMessage;
       
-      // 消息去重和排序检查
+      // 消息去重和Sort检查
       if (progressMessage.seq <= lastSeq && progressMessage.ts <= lastTs) {
         console.log(`忽略过期消息: seq=${progressMessage.seq}, ts=${progressMessage.ts}`);
         return;
       }
       
-      // 更新状态
+      // UpdateStatus
       const newState: TaskProgressState = {
         task_id: progressMessage.task_id,
         progress: progressMessage.progress,
@@ -91,7 +91,7 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
     onMessage: handleWebSocketMessage
   });
 
-  // 终态校准：从HTTP API获取最新状态
+  // 终态校准：从HTTP API获取最新Status
   const performFinalStateCheck = useCallback(async () => {
     if (finalStateChecked.current) return;
     finalStateChecked.current = true;
@@ -107,7 +107,7 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
           step: response.data.current_step || 0,
           total: 6,
           phase: 'unknown',
-          message: response.data.current_step || '未知状态',
+          message: response.data.current_step || '未知Status',
           status: response.data.status || 'unknown',
           seq: lastSeq + 1,
           ts: Date.now() / 1000,
@@ -122,29 +122,29 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
     }
   }, [taskId, lastSeq]);
 
-  // 订阅任务进度
+  // 订阅任务Progress
   const subscribe = useCallback(() => {
     if (isConnected && !isSubscribed) {
       const success = subscribeToTask(taskId);
       if (success) {
         setIsSubscribed(true);
-        console.log(`已订阅任务进度: ${taskId}`);
+        console.log(`已订阅任务Progress: ${taskId}`);
       }
     }
   }, [isConnected, isSubscribed, subscribeToTask, taskId]);
 
-  // 取消订阅任务进度
+  // Cancel订阅任务Progress
   const unsubscribe = useCallback(() => {
     if (isConnected && isSubscribed) {
       const success = unsubscribeFromTask(taskId);
       if (success) {
         setIsSubscribed(false);
-        console.log(`已取消订阅任务进度: ${taskId}`);
+        console.log(`已Cancel订阅任务Progress: ${taskId}`);
       }
     }
   }, [isConnected, isSubscribed, unsubscribeFromTask, taskId]);
 
-  // 自动订阅/取消订阅
+  // 自动订阅/Cancel订阅
   useEffect(() => {
     if (isConnected) {
       subscribe();

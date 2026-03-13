@@ -125,7 +125,7 @@
   background: rgba(255, 255, 255, 0.5);
 }
 
-/* 搜索框样式 */
+/* Search框样式 */
 .add-clip-modal .ant-input-affix-wrapper {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid #404040;
@@ -169,7 +169,7 @@
   color: #40a9ff;
 }
 
-/* 标签样式 */
+/* Tags样式 */
 .add-clip-modal .ant-tag {
   border-radius: 4px;
   font-size: 11px;

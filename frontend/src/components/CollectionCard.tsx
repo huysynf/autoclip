@@ -92,7 +92,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
             <PlayCircleOutlined style={{ fontSize: '40px', color: 'white' }} />
           </div>
           
-          {/* 右上角合集类型标签 */}
+          {/* 右上角CollectionTypeTags */}
           <div 
             style={{
               position: 'absolute',
@@ -111,10 +111,10 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
               gap: '4px'
             }}
           >
-            {collection.collection_type === 'ai_recommended' ? 'AI推荐' : '手动创建'}
+            {collection.collection_type === 'ai_recommended' ? 'AI推荐' : '手动Create'}
           </div>
           
-          {/* 左下角片段数量 */}
+          {/* 左下角clips数量 */}
           <div 
             style={{
               position: 'absolute',
@@ -131,7 +131,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
               gap: '4px'
             }}
           >
-            {collectionClips.length} 个片段
+            {collectionClips.length} clips
           </div>
           
           {/* 右下角总时长 */}
@@ -163,14 +163,14 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
         flexDirection: 'column',
         justifyContent: 'space-between'
       }}>
-        {/* 内容区域 - 固定高度 */}
+        {/* Content区域 - 固定高度 */}
         <div style={{ 
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
           minHeight: 0 // 允许flex子项收缩
         }}>
-          {/* 标题区域 - 固定高度 */}
+          {/* Title区域 - 固定高度 */}
           <div style={{ 
             height: '44px',
             marginBottom: '8px',
@@ -181,7 +181,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
               title={collection.collection_title}
               collectionId={collection.id}
               onTitleUpdate={(newTitle) => {
-                // 更新合集标题
+                // UpdateCollectionTitle
                 if (onUpdate) {
                   onUpdate(collection.id, { collection_title: newTitle })
                 }
@@ -201,7 +201,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
             />
           </div>
           
-          {/* 合集描述 - 固定高度 */}
+          {/* CollectionDescription - 固定高度 */}
           <div style={{ 
             height: '58px',
             marginBottom: '12px',
@@ -209,7 +209,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
             alignItems: 'flex-start'
           }}>
             <Tooltip 
-              title={collection.collection_summary || '暂无描述'} 
+              title={collection.collection_summary || '暂无Description'} 
               placement="top" 
               overlayStyle={{ maxWidth: '300px' }}
               mouseEnterDelay={0.5}
@@ -229,7 +229,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
                   width: '100%'
                 }}
               >
-                {collection.collection_summary || '暂无描述'}
+                {collection.collection_summary || '暂无Description'}
               </div>
             </Tooltip>
           </div>
@@ -276,14 +276,14 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
                 background: 'rgba(82, 196, 26, 0.1)'
               }}
             >
-              下载
+              Download
             </Button>
           )}
           <Button 
             type="text" 
             size="small"
             icon={<EditOutlined />}
-            onClick={() => message.info('开发中，敬请期待', 3)}
+            onClick={() => message.info('Coming soon', 3)}
             style={{
               color: '#ff7875',
               border: '1px solid rgba(255, 120, 117, 0.3)',
@@ -294,7 +294,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
               background: 'rgba(255, 120, 117, 0.1)'
             }}
           >
-            投稿
+            Upload
           </Button>
         </div>
       </div>

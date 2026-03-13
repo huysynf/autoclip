@@ -29,16 +29,16 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
     userId,
     taskId,
     onProgressUpdate: (state) => {
-      console.log('任务进度更新:', state);
+      console.log('任务ProgressUpdate:', state);
     },
     onTaskComplete: (state) => {
       console.log('任务完成:', state);
-      message.success('任务处理完成！');
+      message.success('任务Done！');
       onTaskComplete?.(state);
     },
     onTaskFailed: (state) => {
       console.log('任务失败:', state);
-      message.error(`任务处理失败: ${state.message}`);
+      message.error(`任务Failed: ${state.message}`);
       onTaskFailed?.(state);
     }
   });
@@ -57,10 +57,10 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
   const getPhaseText = (phase: string) => {
     switch (phase) {
       case 'transcribe': return '语音识别';
-      case 'analyze': return '内容分析';
+      case 'analyze': return 'Content分析';
       case 'clip': return '视频切片';
       case 'encode': return '视频编码';
-      case 'upload': return '上传处理';
+      case 'upload': return 'Upload处理';
       default: return phase;
     }
   };
@@ -77,9 +77,9 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'PENDING': return '等待中';
-      case 'PROGRESS': return '进行中';
-      case 'DONE': return '已完成';
+      case 'PENDING': return 'Waiting';
+      case 'PROGRESS': return 'In Progress';
+      case 'DONE': return 'Completed';
       case 'FAIL': return '失败';
       default: return status;
     }
@@ -91,7 +91,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
         <Space>
           <Text type="secondary">任务 {taskId}</Text>
           <Tag color={isConnected ? 'success' : 'error'}>
-            {isConnected ? '已连接' : '未连接'}
+            {isConnected ? 'Connected' : '未连接'}
           </Tag>
           <Tag color={isSubscribed ? 'success' : 'default'}>
             {isSubscribed ? '已订阅' : '未订阅'}
@@ -107,7 +107,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
       style={{ marginBottom: 16 }}
       title={
         <Space>
-          <Text strong>任务进度</Text>
+          <Text strong>任务Progress</Text>
           <Tag color={getStatusColor(taskState.status)}>
             {getStatusText(taskState.status)}
           </Tag>
@@ -135,7 +135,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
       }
     >
       <Space direction="vertical" style={{ width: '100%' }}>
-        {/* 进度条 */}
+        {/* Progress条 */}
         <div>
           <Progress 
             percent={taskState.progress}
@@ -147,7 +147,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
             }}
           />
           <Text type="secondary" style={{ fontSize: '12px' }}>
-            {taskState.step}/{taskState.total} 步骤
+            {taskState.step}/{taskState.total} Step
           </Text>
         </div>
 
@@ -170,10 +170,10 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
                 <Text strong>序列号:</Text> {taskState.seq}
               </div>
               <div>
-                <Text strong>时间戳:</Text> {new Date(taskState.ts * 1000).toLocaleString()}
+                <Text strong>Time戳:</Text> {new Date(taskState.ts * 1000).toLocaleString()}
               </div>
               <div>
-                <Text strong>最后更新:</Text> {new Date(taskState.last_updated).toLocaleString()}
+                <Text strong>最后Update:</Text> {new Date(taskState.last_updated).toLocaleString()}
               </div>
               {taskState.meta && (
                 <div>
@@ -181,9 +181,9 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
                 </div>
               )}
               <div>
-                <Text strong>连接状态:</Text> 
+                <Text strong>连接Status:</Text> 
                 <Tag color={isConnected ? 'success' : 'error'} style={{ marginLeft: 8 }}>
-                  {isConnected ? '已连接' : '未连接'}
+                  {isConnected ? 'Connected' : '未连接'}
                 </Tag>
                 <Tag color={isSubscribed ? 'success' : 'default'} style={{ marginLeft: 4 }}>
                   {isSubscribed ? '已订阅' : '未订阅'}

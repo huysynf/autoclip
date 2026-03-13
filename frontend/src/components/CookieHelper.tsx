@@ -16,42 +16,42 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
 
   const steps = [
     {
-      title: '登录B站',
-      description: '在浏览器中登录B站账号',
+      title: 'Log in to Bilibili',
+      description: '在浏览器中登录Bilibili Account',
       content: (
         <div>
           <Alert
-            message="第一步：登录B站"
-            description="请确保您已经在浏览器中成功登录了B站账号"
+            message="第一步：Log in to Bilibili"
+            description="请确保您已经在浏览器中成功登录了Bilibili Account"
             type="info"
             showIcon
             style={{ marginBottom: 16 }}
           />
           <Card size="small">
             <Paragraph>
-              1. 打开浏览器，访问 <Text code>https://www.bilibili.com</Text>
+              1. Open browser，访问 <Text code>https://www.bilibili.com</Text>
             </Paragraph>
             <Paragraph>
               2. 点击右上角的"登录"按钮
             </Paragraph>
             <Paragraph>
-              3. 使用您的B站账号登录
+              3. 使用您的Bilibili Account登录
             </Paragraph>
             <Paragraph>
-              4. 确认登录成功后，您应该能看到您的用户名显示在右上角
+              4. Confirm登录成功后，您应该能看到您的用户名显示在右上角
             </Paragraph>
           </Card>
         </div>
       )
     },
     {
-      title: '打开开发者工具',
-      description: '按F12打开浏览器开发者工具',
+      title: 'Open developer tools',
+      description: '按F12Open browser开发者工具',
       content: (
         <div>
           <Alert
-            message="第二步：打开开发者工具"
-            description="使用快捷键打开浏览器的开发者工具"
+            message="第二步：Open developer tools"
+            description="使用快捷键Open browser的开发者工具"
             type="info"
             showIcon
             style={{ marginBottom: 16 }}
@@ -68,67 +68,67 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
             </Paragraph>
             <Divider />
             <Paragraph type="secondary">
-              开发者工具会在页面底部或右侧打开，包含多个标签页
+              开发者工具会在页面底部或右侧打开，包含多Tags页
             </Paragraph>
           </Card>
         </div>
       )
     },
     {
-      title: '切换到Network标签',
-      description: '找到Network（网络）标签页',
+      title: '切换到NetworkTags',
+      description: '找到Network（网络）Tags页',
       content: (
         <div>
           <Alert
-            message="第三步：切换到Network标签"
-            description="在开发者工具中找到Network标签页"
+            message="第三步：切换到NetworkTags"
+            description="在开发者工具中找到NetworkTags页"
             type="info"
             showIcon
             style={{ marginBottom: 16 }}
           />
           <Card size="small">
             <Paragraph>
-              1. 在开发者工具顶部找到标签页
+              1. 在开发者工具顶部找到Tags页
             </Paragraph>
             <Paragraph>
-              2. 点击 <Text code>Network</Text> 标签
+              2. 点击 <Text code>Network</Text> Tags
             </Paragraph>
             <Paragraph>
-              3. 确保Network面板是空的（如果有内容，点击清除按钮）
+              3. 确保Network面板是空的（如果有Content，点击清除按钮）
             </Paragraph>
             <Divider />
             <Paragraph type="secondary">
-              Network标签页用于监控网页的网络请求，包括Cookie信息
+              NetworkTags页用于监控网页的网络请求，包括Cookie信息
             </Paragraph>
           </Card>
         </div>
       )
     },
     {
-      title: '刷新页面',
-      description: '刷新B站页面以捕获请求',
+      title: 'Refresh Page',
+      description: 'RefreshB站页面以捕获请求',
       content: (
         <div>
           <Alert
-            message="第四步：刷新页面"
-            description="刷新B站页面以捕获网络请求"
+            message="第四步：Refresh Page"
+            description="RefreshB站页面以捕获网络请求"
             type="info"
             showIcon
             style={{ marginBottom: 16 }}
           />
           <Card size="small">
             <Paragraph>
-              1. 确保Network标签页已打开
+              1. 确保NetworkTags页已打开
             </Paragraph>
             <Paragraph>
-              2. 按 <Text code>F5</Text> 或点击浏览器的刷新按钮
+              2. 按 <Text code>F5</Text> 或点击浏览器的Refresh按钮
             </Paragraph>
             <Paragraph>
               3. 观察Network面板中出现的请求列表
             </Paragraph>
             <Divider />
             <Paragraph type="secondary">
-              刷新后，Network面板会显示页面加载过程中的所有网络请求
+              Refresh后，Network面板会显示页面加载过程中的所有网络请求
             </Paragraph>
           </Card>
         </div>
@@ -148,33 +148,33 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
           />
           <Card size="small">
             <Paragraph>
-              1. 在Network面板中找到任意一个请求（通常选择第一个）
+              1. 在Network面板中找到任意一请求（通常选择第一）
             </Paragraph>
             <Paragraph>
-              2. 点击该请求，在右侧面板中找到 <Text code>Headers</Text> 标签
+              2. 点击该请求，在右侧面板中找到 <Text code>Headers</Text> Tags
             </Paragraph>
             <Paragraph>
               3. 在 <Text code>Request Headers</Text> 部分找到 <Text code>Cookie</Text> 字段
             </Paragraph>
             <Paragraph>
-              4. Cookie字段的值就是您需要的完整Cookie字符串
+              4. Cookie字段的值就是您需要的完整Cookiechars串
             </Paragraph>
             <Divider />
             <Paragraph type="secondary">
-              Cookie字符串通常很长，包含多个键值对，用分号分隔
+              Cookiechars串通常很长，包含多键值对，用分号分隔
             </Paragraph>
           </Card>
         </div>
       )
     },
     {
-      title: '复制Cookie',
-      description: '复制完整的Cookie字符串',
+      title: 'CopyCookie',
+      description: 'Copy完整的Cookiechars串',
       content: (
         <div>
           <Alert
-            message="第六步：复制Cookie"
-            description="复制完整的Cookie字符串到剪贴板"
+            message="第六步：CopyCookie"
+            description="Copy完整的Cookiechars串到剪贴板"
             type="success"
             showIcon
             style={{ marginBottom: 16 }}
@@ -184,14 +184,14 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
               1. 右键点击Cookie字段的值
             </Paragraph>
             <Paragraph>
-              2. 选择"复制值"或"Copy value"
+              2. 选择"Copy值"或"Copy value"
             </Paragraph>
             <Paragraph>
-              3. 或者双击选中整个Cookie值，然后按 <Text code>Ctrl+C</Text> 复制
+              3. 或者双击选中整Cookie值，然后按 <Text code>Ctrl+C</Text> Copy
             </Paragraph>
             <Divider />
             <Paragraph type="secondary">
-              复制的Cookie字符串可以直接粘贴到AutoClip的Cookie输入框中
+              Copy的Cookiechars串可以直接粘贴到AutoClip的Cookie输入框中
             </Paragraph>
             <Alert
               message="重要提示"
@@ -225,14 +225,14 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
       onCancel={onClose}
       footer={[
         <Button key="back" onClick={onClose}>
-          关闭
+          Close
         </Button>,
         <Button
           key="copy"
           icon={copied ? <CheckOutlined /> : <CopyOutlined />}
           onClick={handleCopy}
         >
-          {copied ? '已复制' : '复制示例'}
+          {copied ? '已Copy' : 'Copy示例'}
         </Button>
       ]}
       width={700}
@@ -263,7 +263,7 @@ const CookieHelper: React.FC<CookieHelperProps> = ({ visible, onClose }) => {
           SESSDATA=your_sessdata_here; bili_jct=your_bili_jct_here; DedeUserID=your_dedeuserid_here; buvid3=your_buvid3_here
         </Paragraph>
         <Paragraph type="secondary" style={{ fontSize: '12px' }}>
-          注意：实际的Cookie值会比这个示例长很多，包含更多的字段
+          注意：实际的Cookie值会比这示例长很多，包含More的字段
         </Paragraph>
       </Card>
     </Modal>

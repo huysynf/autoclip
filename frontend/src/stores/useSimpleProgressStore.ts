@@ -1,5 +1,5 @@
 /**
- * 简化的进度状态管理 - 基于固定阶段和轮询
+ * 简化的ProgressStatus管理 - 基于固定阶段和轮询
  */
 
 import { create } from 'zustand'
@@ -13,7 +13,7 @@ export interface SimpleProgress {
 }
 
 interface SimpleProgressState {
-  // 状态数据
+  // Status数据
   byId: Record<string, SimpleProgress>
   
   // 轮询控制
@@ -36,12 +36,12 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
   let timer: ReturnType<typeof setInterval> | null = null
 
   return {
-    // 初始状态
+    // 初始Status
     byId: {},
     pollingInterval: null,
     isPolling: false,
 
-    // 更新或插入进度数据
+    // Update或插入Progress数据
     upsert: (progress: SimpleProgress) => {
       set((state) => ({
         byId: {
@@ -51,21 +51,21 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
       }))
     },
 
-    // 开始轮询
+    // Start Polling
     startPolling: (projectIds: string[], intervalMs: number = 2000) => {
       const { stopPolling, isPolling } = get()
       
-      // 如果已经在轮询，先停止
+      // 如果已经在轮询，先Stop
       if (isPolling) {
         stopPolling()
       }
 
       if (projectIds.length === 0) {
-        console.warn('没有项目ID，跳过轮询')
+        console.warn('没有projectsID，Skip轮询')
         return
       }
 
-      console.log(`开始轮询进度: ${projectIds.join(', ')}`)
+      console.log(`Start PollingProgress: ${projectIds.join(', ')}`)
 
       // 立即获取一次
       const fetchSnapshots = async () => {
@@ -79,23 +79,23 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
           
           const snapshots: SimpleProgress[] = await response.json()
           
-          // 更新状态
+          // UpdateStatus
           snapshots.forEach(snapshot => {
-            console.log(`更新进度: ${snapshot.project_id} - ${snapshot.stage} (${snapshot.percent}%)`)
+            console.log(`UpdateProgress: ${snapshot.project_id} - ${snapshot.stage} (${snapshot.percent}%)`)
             get().upsert(snapshot)
           })
           
-          console.log(`轮询更新: ${snapshots.length} 个项目`)
+          console.log(`轮询Update: ${snapshots.length} projects`)
           
         } catch (error) {
-          console.error('轮询进度失败:', error)
+          console.error('轮询Progress失败:', error)
         }
       }
 
       // 立即执行一次
       fetchSnapshots()
 
-      // 设置定时器
+      // Settings定时器
       timer = setInterval(fetchSnapshots, intervalMs)
 
       set({
@@ -104,7 +104,7 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
       })
     },
 
-    // 停止轮询
+    // Stop Polling
     stopPolling: () => {
       if (timer) {
         clearInterval(timer)
@@ -116,10 +116,10 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
         pollingInterval: null
       })
       
-      console.log('停止轮询进度')
+      console.log('Stop PollingProgress')
     },
 
-    // 清除单个项目进度
+    // 清除单projectsProgress
     clearProgress: (projectId: string) => {
       set((state) => {
         const newById = { ...state.byId }
@@ -128,31 +128,31 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
       })
     },
 
-    // 清除所有进度
+    // Clear AllProgress
     clearAllProgress: () => {
       set({ byId: {} })
     },
 
-    // 获取单个项目进度
+    // 获取单projectsProgress
     getProgress: (projectId: string) => {
       return get().byId[projectId] || null
     },
 
-    // 获取所有进度
+    // 获取所有Progress
     getAllProgress: () => {
       return get().byId
     }
   }
 })
 
-// 阶段显示名称映射
+// 阶段显示Name映射
 export const STAGE_DISPLAY_NAMES: Record<string, string> = {
   'INGEST': '素材准备',
   'SUBTITLE': '字幕处理',
-  'ANALYZE': '内容分析', 
-  'HIGHLIGHT': '片段定位',
+  'ANALYZE': 'Content分析', 
+  'HIGHLIGHT': 'clips定位',
   'EXPORT': '视频导出',
-  'DONE': '处理完成'
+  'DONE': 'Done'
 }
 
 // 阶段颜色映射
@@ -165,7 +165,7 @@ export const STAGE_COLORS: Record<string, string> = {
   'DONE': '#13c2c2'         // 青色
 }
 
-// 获取阶段显示名称
+// 获取阶段显示Name
 export const getStageDisplayName = (stage: string): string => {
   return STAGE_DISPLAY_NAMES[stage] || stage
 }
@@ -175,12 +175,12 @@ export const getStageColor = (stage: string): string => {
   return STAGE_COLORS[stage] || '#666666'
 }
 
-// 判断是否为完成状态
+// 判断是否为完成Status
 export const isCompleted = (stage: string): boolean => {
   return stage === 'DONE'
 }
 
-// 判断是否为失败状态
+// 判断是否为失败Status
 export const isFailed = (message: string): boolean => {
   return message.includes('失败') || message.includes('错误') || message.includes('失败')
 }

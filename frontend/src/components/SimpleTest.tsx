@@ -13,7 +13,7 @@ export const SimpleTest: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    console.log('📤 开始API调用测试');
+    console.log('📤 StartAPI调用Test');
     fetch('http://localhost:8000/api/v1/tasks/project/64d5768e-7b6b-40d0-9aed-f216768a6526')
       .then(response => response.json())
       .then(data => {
@@ -27,12 +27,12 @@ export const SimpleTest: React.FC = () => {
 
   return (
     <div style={{ padding: 16 }}>
-      <Card title="简单测试组件">
+      <Card title="简单Test组件">
         <Text>组件加载次数: {count}</Text>
         <br />
         <Text>任务数量: {tasks.length}</Text>
         <br />
-        <Text>任务列表:</Text>
+        <Text>Task List:</Text>
         <ul>
           {tasks.map((task, index) => (
             <li key={index}>

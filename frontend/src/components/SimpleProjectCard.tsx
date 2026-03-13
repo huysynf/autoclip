@@ -1,5 +1,5 @@
 /**
- * 简化的项目卡片组件 - 集成新的进度系统
+ * 简化的projects卡片组件 - 集成新的Progress系统
  */
 
 import React, { useState, useEffect } from 'react'
@@ -58,11 +58,11 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
   
   const progress = getProgress(project.id)
 
-  // 根据项目状态决定是否显示进度
+  // 根据projectsStatus决定是否显示Progress
   useEffect(() => {
     if (project.status === 'processing') {
       setShowProgress(true)
-      // 开始轮询这个项目的进度
+      // Start Polling这projects的Progress
       startPolling([project.id], 2000)
     } else {
       setShowProgress(false)
@@ -86,11 +86,11 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
 
   const handleDelete = () => {
     Modal.confirm({
-      title: '确认删除',
-      content: `确定要删除项目 "${project.title}" 吗？此操作不可撤销。`,
-      okText: '删除',
+      title: 'Confirm Delete',
+      content: `Are you sure you want to delete project "${project.title}" ?This action cannot be undone.`,
+      okText: 'Delete',
       okType: 'danger',
-      cancelText: '取消',
+      cancelText: 'Cancel',
       onOk: () => {
         if (onDelete) {
           onDelete(project.id)
@@ -105,13 +105,13 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
     }
   }
 
-  // 获取状态图标和颜色
+  // 获取Status图标和颜色
   const getStatusConfig = (status: string, progress?: SimpleProgress) => {
     if (progress && isFailed(progress.message)) {
       return {
         icon: <ExclamationCircleOutlined />,
         color: '#ff4d4f',
-        text: '处理失败'
+        text: 'Failed'
       }
     }
     
@@ -119,7 +119,7 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
       return {
         icon: <CheckCircleOutlined />,
         color: '#52c41a',
-        text: '处理完成'
+        text: 'Completed'
       }
     }
     
@@ -127,14 +127,14 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
       return {
         icon: <ReloadOutlined spin />,
         color: '#1890ff',
-        text: '处理中'
+        text: 'Processing'
       }
     }
     
     return {
       icon: <PlayCircleOutlined />,
       color: '#666666',
-      text: '等待处理'
+      text: 'Pending'
     }
   }
 
@@ -148,47 +148,47 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
       style={{ margin: '8px 0' }}
       actions={[
         canStart && (
-          <Tooltip title="开始处理">
+          <Tooltip title="Start Processing">
             <Button 
               type="primary" 
               icon={<PlayCircleOutlined />}
               onClick={handleStartProcessing}
             >
-              开始处理
+              Start Processing
             </Button>
           </Tooltip>
         ),
         canRetry && (
-          <Tooltip title="重试">
+          <Tooltip title="Retry">
             <Button 
               icon={<ReloadOutlined />}
               onClick={handleRetry}
             >
-              重试
+              Retry
             </Button>
           </Tooltip>
         ),
-        <Tooltip title="查看详情">
+        <Tooltip title="ViewDetails">
           <Button 
             icon={<EyeOutlined />}
             onClick={handleViewDetails}
           >
-            查看详情
+            ViewDetails
           </Button>
         </Tooltip>,
-        <Tooltip title="删除项目">
+        <Tooltip title="Deleteprojects">
           <Button 
             danger 
             icon={<DeleteOutlined />}
             onClick={handleDelete}
           >
-            删除
+            Delete
           </Button>
         </Tooltip>
       ].filter(Boolean)}
     >
       <Space direction="vertical" style={{ width: '100%' }}>
-        {/* 项目标题和状态 */}
+        {/* projectsTitle和Status */}
         <Space align="center" style={{ width: '100%', justifyContent: 'space-between' }}>
           <Title level={5} style={{ margin: 0, flex: 1 }}>
             {project.title}
@@ -202,45 +202,45 @@ export const SimpleProjectCard: React.FC<SimpleProjectCardProps> = ({
           </Tag>
         </Space>
 
-        {/* 项目描述 */}
+        {/* projectsDescription */}
         {project.description && (
           <Text type="secondary" style={{ fontSize: '12px' }}>
             {project.description}
           </Text>
         )}
 
-        {/* 分类标签 */}
+        {/* 分类Tags */}
         {project.category && (
           <Tag color="blue" style={{ fontSize: '11px' }}>
             {project.category}
           </Tag>
         )}
 
-        {/* 进度条 */}
+        {/* Progress条 */}
         {showProgress && (
           <SimpleProgressBar
             projectId={project.id}
             autoStart={false} // 已经在useEffect中处理
             showDetails={true}
             onProgressUpdate={(progress) => {
-              // 如果处理完成，更新显示状态
+              // 如果Done，Update显示Status
               if (isCompleted(progress.stage)) {
                 setShowProgress(false)
-                message.success('项目处理完成！')
+                message.success('Project processing complete!')
               } else if (isFailed(progress.message)) {
-                message.error('项目处理失败！')
+                message.error('Project processing failed!')
               }
             }}
           />
         )}
 
-        {/* 时间信息 */}
+        {/* Time信息 */}
         <Space style={{ fontSize: '11px', color: '#999' }}>
           <Text type="secondary">
-            创建: {new Date(project.created_at).toLocaleDateString()}
+            Created: {new Date(project.created_at).toLocaleDateString()}
           </Text>
           <Text type="secondary">
-            更新: {new Date(project.updated_at).toLocaleDateString()}
+            Updated: {new Date(project.updated_at).toLocaleDateString()}
           </Text>
         </Space>
       </Space>

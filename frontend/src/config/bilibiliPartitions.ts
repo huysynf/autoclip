@@ -1,4 +1,4 @@
-// B站分区信息 - 根据官方API文档更新，一级主分区
+// B站分区信息 - 根据官方API文档Update，一级主分区
 export const BILIBILI_PARTITIONS = [
   { id: 1, name: "动画" },
   { id: 4, name: "游戏" },

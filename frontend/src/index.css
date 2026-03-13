@@ -53,7 +53,7 @@ body {
   background: #555555;
 }
 
-/* 合集横向滚动容器样式 */
+/* Collection横向滚动容器样式 */
 .collections-scroll-container {
   scrollbar-width: thin;
   scrollbar-color: #404040 #1a1a1a;
@@ -271,7 +271,7 @@ body {
   font-weight: 500;
 }
 
-/* 空状态样式 */
+/* 空Status样式 */
 .ant-empty {
   color: #999999 !important;
 }
@@ -280,7 +280,7 @@ body {
   color: #999999 !important;
 }
 
-/* 加载状态 */
+/* 加载Status */
 .ant-spin-dot-item {
   background-color: #4facfe !important;
 }
@@ -341,7 +341,7 @@ body {
   border-radius: 0 0 12px 12px !important;
 }
 
-/* 标签页样式 */
+/* Tags页样式 */
 .ant-tabs-tab {
   color: #cccccc !important;
 }
@@ -447,7 +447,7 @@ body {
   color: #ffffff !important;
 }
 
-/* 进度条样式 */
+/* Progress条样式 */
 .ant-progress-bg {
   background-color: #4facfe !important;
 }
@@ -456,7 +456,7 @@ body {
   color: #ffffff !important;
 }
 
-/* 标签样式 */
+/* Tags样式 */
 .ant-tag {
   background-color: #2d2d2d !important;
   border-color: #404040 !important;
@@ -488,7 +488,7 @@ body {
   color: #faad14 !important;
 }
 
-/* 视频预览样式 - 深色主题 */
+/* 视频Preview样式 - 深色主题 */
 .video-preview {
   border-radius: 12px;
   overflow: hidden;
@@ -576,7 +576,7 @@ body {
   transform: translateY(-2px) !important;
 }
 
-/* 上传区域样式 */
+/* Upload区域样式 */
 .upload-area {
   background: #262626 !important;
   border: 2px dashed #404040 !important;
@@ -614,13 +614,13 @@ body {
   box-shadow: 0 12px 40px rgba(79, 172, 254, 0.3) !important;
 }
 
-/* 上传按钮悬停效果 */
+/* Upload按钮悬停效果 */
 .upload-area + div button[style*="linear-gradient"]:hover {
   transform: translateY(-2px) scale(1.05) !important;
   box-shadow: 0 8px 24px rgba(79, 172, 254, 0.6) !important;
 }
 
-/* 状态标签样式 */
+/* StatusTags样式 */
 .status-tag {
   border-radius: 20px;
   font-weight: 500;
