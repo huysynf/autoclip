@@ -1,10 +1,11 @@
-# AutoClip - AI-Powered Intelligent Video Clipping System
+# AutoClip - AI Video Intelligent Clipping System
 
 ![AutoClip Logo](https://img.shields.io/badge/AutoClip-AI%20Video%20Processing-blue?style=for-the-badge&logo=video)
 
-## AI-Based Intelligent Video Clipping and Processing System
+## AI-powered intelligent video clipping system
 
-Supports YouTube/Bilibili video downloading, automatic clipping, and intelligent collection generation
+Supporting YouTube/Bilibili video download, automatic clipping, and smart collection
+generation
 
 [![Python](https://img.shields.io/badge/Python-3.8+-green?style=flat&logo=python)](https://python.org)
 [![React](https://img.shields.io/badge/React-18+-blue?style=flat&logo=react)](https://reactjs.org)
@@ -17,31 +18,42 @@ Supports YouTube/Bilibili video downloading, automatic clipping, and intelligent
 [![GitHub forks](https://img.shields.io/badge/Forks-0-blue?style=social)](https://github.com/zhouxiaoka/autoclip)
 [![GitHub issues](https://img.shields.io/badge/Issues-0-blue)](https://github.com/zhouxiaoka/autoclip/issues)
 
-**Language**: [English](README.md) | [中文](README-CN.md)  
-**Contact**: [christine_zhouye@163.com](mailto:christine_zhouye@163.com)
+**Language**: [English](README-EN.md) | [中文](README.md)
 
 </div>
 
 ## 🎯 Project Overview
 
-AutoClip is an AI-powered intelligent video clipping system that can automatically download videos from YouTube, Bilibili, and other platforms, extract highlight segments through AI analysis, and intelligently generate collections. The system uses a modern separated frontend/backend architecture, providing an intuitive web interface and powerful backend processing capabilities.
-
-**Contact**: [christine_zhouye@163.com](mailto:christine_zhouye@163.com)
+AutoClip is an AI-powered intelligent video clipping system that can automatically
+download videos from YouTube, Bilibili, and other platforms, extract exciting clips
+through AI analysis, and intelligently generate collections. The system adopts a
+modern frontend-backend separation architecture, providing an intuitive web
+interface and powerful backend processing capabilities.
 
 ### ✨ Core Features
 
-- 🎬 **Multi-platform Support**: One-click download from YouTube and Bilibili, supports local file uploads
-- 🤖 **AI-Powered Analysis**: Video content understanding based on Qwen large language model
-- ✂️ **Auto Clipping**: Intelligently identifies highlight segments and auto-cuts, supports multiple video categories
-- 📚 **Smart Collections**: AI-recommended and manually created video collections with drag-and-drop sorting
-- 🚀 **Real-time Processing**: Async task queue, real-time progress feedback, WebSocket communication
-- 🎨 **Modern Interface**: React + TypeScript + Ant Design, responsive design
-- 📱 **Mobile Support** [In Development]: Responsive design, mobile experience being improved
-- 🔐 **Account Management** [In Development]: Supports multiple Bilibili account management with automatic health checks
-- 📊 **Data Statistics**: Complete project management and data statistics features
-- 🛠️ **Easy Deployment**: One-click startup scripts, Docker support, detailed documentation
-- 📤 **Bilibili Upload** [In Development]: Auto-upload clipped videos to Bilibili
-- ✏️ **Subtitle Editing** [In Development]: Visual subtitle editing and synchronization
+- 🎬 **Multi-platform Support**: One-click download from YouTube, Bilibili, and local
+  file upload
+- 🤖 **AI Intelligent Analysis**: Video content understanding based on Qwen large
+  language model
+- ✂️ **Automatic Clipping**: Intelligent recognition of exciting clips with automatic
+  cutting, supporting multiple video categories
+- 📚 **Smart Collections**: AI-recommended and manually created video collections
+  with drag-and-drop sorting
+- 🚀 **Real-time Processing**: Asynchronous task queue with real-time progress feedback
+  and WebSocket communication
+- 🎨 **Modern Interface**: React + TypeScript + Ant Design with responsive design
+- 📱 **Mobile Support** **[In Development]**: Responsive design, improving mobile
+  experience
+- 🔐 **Account Management** **[In Development]**: Support for multiple Bilibili account
+  management with automatic health checks
+- 📊 **Data Statistics**: Complete project management and data statistics functionality
+- 🛠️ **Easy Deployment**: One-click startup scripts, Docker support, and detailed
+  documentation
+- 📤 **Bilibili Upload** **[In Development]**: Automatic upload of clipped videos
+  to Bilibili
+- ✏️ **Subtitle Editing** **[In Development]**: Visual subtitle editing and
+  synchronization functionality
 
 ## 🏗️ System Architecture
 
@@ -60,22 +72,22 @@ graph TB
     L[Bilibili API] --> B
 ```
 
-### Tech Stack
+### Technology Stack
 
 #### Backend Technologies
 
 - **FastAPI**: Modern Python web framework with automatic API documentation generation
-- **Celery**: Distributed task queue supporting async processing
-- **Redis**: Message broker and cache, task status management
-- **SQLite**: Lightweight database, upgradeable to PostgreSQL
-- **yt-dlp**: YouTube video downloader supporting multiple formats
-- **Qwen (Tongyi Qianwen)**: AI content analysis, supports multiple models
-- **WebSocket**: Real-time communication, progress push
+- **Celery**: Distributed task queue supporting asynchronous processing
+- **Redis**: Message broker and cache for task status management
+- **SQLite**: Lightweight database with PostgreSQL upgrade support
+- **yt-dlp**: YouTube video download supporting multiple formats
+- **Qwen**: AI content analysis supporting multiple models
+- **WebSocket**: Real-time communication and progress push
 - **Pydantic**: Data validation and serialization
 
 #### Frontend Technologies
 
-- **React 18**: UI framework with Hooks and function components
+- **React 18**: User interface framework with Hooks and functional components
 - **TypeScript**: Type safety for better development experience
 - **Ant Design**: Enterprise-grade UI component library
 - **Vite**: Fast build tool with hot reload
@@ -86,7 +98,7 @@ graph TB
 
 ## 🚀 Quick Start
 
-### Requirements
+### Environment Requirements
 
 #### Docker Deployment (Recommended)
 
@@ -97,7 +109,7 @@ graph TB
 
 #### Local Deployment
 
-- **OS**: macOS / Linux / Windows (WSL)
+- **Operating System**: macOS / Linux / Windows (WSL)
 - **Python**: 3.8+ (recommended 3.9+)
 - **Node.js**: 16+ (recommended 18+)
 - **Redis**: 6.0+ (recommended 7.0+)
@@ -105,19 +117,19 @@ graph TB
 - **Memory**: Minimum 4GB, recommended 8GB+
 - **Storage**: Minimum 10GB available space
 
-### One-Click Launch
+### One-Click Startup
 
-#### Option 1: Docker Deployment (Recommended)
+#### Method 1: Docker Deployment (Recommended)
 
 ```bash
 # Clone the project
 git clone https://github.com/zhouxiaoka/autoclip.git
 cd autoclip
 
-# One-click Docker launch
+# Docker one-click startup
 ./docker-start.sh
 
-# Start in development mode
+# Development environment startup
 ./docker-start.sh dev
 
 # Stop services
@@ -127,23 +139,23 @@ cd autoclip
 ./docker-status.sh
 ```
 
-#### Option 2: Local Deployment
+#### Method 2: Local Deployment
 
 ```bash
 # Clone the project
 git clone https://github.com/zhouxiaoka/autoclip.git
 cd autoclip
 
-# One-click launch (recommended, includes full checks and monitoring)
+# One-click startup (recommended, includes complete checks and monitoring)
 ./start_autoclip.sh
 
-# Quick start (development environment, skips detailed checks)
+# Quick startup (development environment, skips detailed checks)
 ./quick_start.sh
 
 # Check system status
 ./status_autoclip.sh
 
-# Stop the system
+# Stop system
 ./stop_autoclip.sh
 ```
 
@@ -187,97 +199,99 @@ sudo yum install ffmpeg
 
 # 6. Configure environment variables
 cp env.example .env
-# Edit the .env file and fill in API keys and other configuration
+# Edit .env file and fill in necessary configurations
 ```
 
 ## 🎬 Feature Demo
 
-### Main Features
+### Main Feature Showcase
 
-1. **Video Download & Processing**
-   - Supports YouTube and Bilibili video URL parsing
-   - Automatically downloads video and subtitle files
-   - Supports local file uploads
+1. **Video Download and Processing**
+   - Support for YouTube, Bilibili video link parsing
+   - Automatic video and subtitle file download
+   - Support for local file upload
 
-2. **AI-Powered Analysis**
-   - Automatically extracts video outlines
-   - Intelligently identifies topic timestamps
-   - Scores segments for highlight quality
+2. **AI Intelligent Analysis**
+   - Automatic video outline extraction
+   - Intelligent topic timeline identification
+   - Exciting clip scoring
 
-3. **Video Clipping & Collections**
-   - Automatically generates highlight clips
-   - AI-recommended collection combinations
-   - Supports manual editing and sorting
+3. **Video Clipping and Collections**
+   - Automatic exciting clip generation
+   - Smart collection recommendations
+   - Support for manual editing and sorting
 
 4. **Real-time Progress Monitoring**
    - WebSocket real-time progress push
    - Detailed task status display
    - Error handling and retry mechanisms
 
-5. **Bilibili Upload** [In Development]
-   - Auto-upload clipped videos to Bilibili
-   - Supports multiple account management
+5. **Bilibili Upload Feature** **[In Development]**
+   - Automatic upload of clipped videos to Bilibili
+   - Support for multiple account management
    - Batch upload and queue management
 
-6. **Subtitle Editing** [In Development]
+6. **Subtitle Editing Feature** **[In Development]**
    - Visual subtitle editor
-   - Subtitle sync and adjustment
+   - Subtitle synchronization and adjustment
    - Multi-language subtitle support
 
-## 📖 Usage Guide
+## 📖 User Guide
 
 ### 1. Video Download
 
 #### YouTube Videos
 
-1. Click "New Project" on the home page
+1. Click "New Project" on the homepage
 2. Select "YouTube Link"
 3. Paste the video URL
-4. Select browser cookies (optional)
+4. Choose browser cookies (optional)
 5. Click "Start Download"
 
 #### Bilibili Videos
 
-1. Click "New Project" on the home page
+1. Click "New Project" on the homepage
 2. Select "Bilibili Link"
 3. Paste the video URL
-4. Select login account
+4. Choose login account
 5. Click "Start Download"
 
 #### Local Files
 
-1. Click "New Project" on the home page
+1. Click "New Project" on the homepage
 2. Select "File Upload"
-3. Drag and drop or select a video file
-4. Upload subtitle file (optional)
+3. Drag and drop or select video files
+4. Upload subtitle files (optional)
 5. Click "Start Processing"
 
 ### 2. Intelligent Processing
 
-The system automatically performs the following steps:
+The system will automatically execute the following steps:
 
 1. **Material Preparation**: Download video and subtitle files
 2. **Content Analysis**: AI extracts video outline and key information
-3. **Timeline Extraction**: Identify topic time ranges
-4. **Highlight Scoring**: AI scores each segment
-5. **Title Generation**: Generate engaging titles for highlight segments
-6. **Collection Recommendation**: AI recommends video collections
+3. **Timeline Extraction**: Identify topic time intervals
+4. **Exciting Scoring**: AI scoring for each clip
+5. **Title Generation**: Generate attractive titles for exciting clips
+6. **Collection Recommendation**: AI-recommended video collections
 7. **Video Generation**: Generate clipped videos and collection videos
 
 ### 3. Result Management
 
-- **View Clips**: See all generated video clips on the project detail page
-- **Edit Info**: Modify clip titles, descriptions, and other information
+- **View Clips**: View all generated video clips on the project detail page
+- **Edit Information**: Modify clip titles, descriptions, etc.
 - **Create Collections**: Manually create or use AI-recommended collections
-- **Download & Export**: Download individual clips or complete collections
-- **Bilibili Upload** [In Development]: One-click upload of clips to Bilibili
-- **Subtitle Editing** [In Development]: Visually edit and sync subtitle files
+- **Download Export**: Download individual clips or complete collections
+- **Bilibili Upload** **[In Development]**: One-click upload of clipped videos to
+  Bilibili
+- **Subtitle Editing** **[In Development]**: Visual editing and synchronization of
+  subtitle files
 
 ## 🔧 Configuration
 
-### Environment Variables
+### Environment Variable Configuration
 
-Create a `.env` file:
+Create `.env` file:
 
 ```bash
 # Database configuration
@@ -300,14 +314,15 @@ UPLOAD_DIR=./data/uploads
 PROJECT_DIR=./data/projects
 ```
 
-### Bilibili Account Configuration [In Development]
+### Bilibili Account Configuration **[In Development]**
 
-1. Click "Bilibili Account Management" in the settings page
-2. Select login method:
+1. Click "Bilibili Account Management" on the settings page
+2. Choose login method:
    - **Cookie Import** (recommended): Export cookies from browser
-   - **Username & Password**: Enter credentials directly
-   - **QR Code Login**: Scan QR code to log in
-3. Once added, the system will automatically manage account health status
+   - **Account Password**: Directly input account and password
+   - **QR Code Login**: Scan QR code to login
+3. After successful addition, the system will automatically manage account health
+  status
 
 ## 📁 Project Structure
 
@@ -315,7 +330,7 @@ PROJECT_DIR=./data/projects
 autoclip/
 ├── backend/                 # Backend code
 │   ├── api/                # API routes
-│   │   ├── v1/            # API v1
+│   │   ├── v1/            # API v1 version
 │   │   │   ├── youtube.py # YouTube download API
 │   │   │   ├── bilibili.py # Bilibili download API
 │   │   │   ├── projects.py # Project management API
@@ -344,7 +359,7 @@ autoclip/
 │   ├── pipeline/          # Processing pipeline
 │   │   ├── step1_outline.py # Outline extraction
 │   │   ├── step2_timeline.py # Timeline analysis
-│   │   ├── step3_scoring.py # Highlight scoring
+│   │   ├── step3_scoring.py # Exciting scoring
 │   │   └── step6_video.py # Video generation
 │   └── utils/             # Utility functions
 ├── frontend/              # Frontend code
@@ -353,7 +368,7 @@ autoclip/
 │   │   │   ├── UploadModal.tsx # Upload modal
 │   │   │   ├── ClipCard.tsx # Clip card
 │   │   │   ├── CollectionCard.tsx # Collection card
-│   │   │   └── BilibiliManager.tsx # Bilibili manager
+│   │   │   └── BilibiliManager.tsx # Bilibili management
 │   │   ├── pages/         # Page components
 │   │   │   ├── HomePage.tsx # Home page
 │   │   │   ├── ProjectDetailPage.tsx # Project detail
@@ -364,37 +379,34 @@ autoclip/
 │   └── package.json
 ├── data/                  # Data storage
 │   ├── projects/          # Project data
-│   ├── uploads/           # Uploaded files
+│   ├── uploads/           # Upload files
 │   ├── temp/              # Temporary files
 │   ├── output/            # Output files
 │   └── autoclip.db        # Database file
 ├── scripts/               # Utility scripts
-│   ├── start_autoclip.sh  # Start script
+│   ├── start_autoclip.sh  # Startup script
 │   ├── stop_autoclip.sh   # Stop script
 │   └── status_autoclip.sh # Status check
 ├── docs/                  # Documentation
-│   ├── README.md          # Documentation center
-│   ├── i18n.md           # Internationalization config
-│   └── *.md              # Other docs
 ├── logs/                  # Log files
 ├── Dockerfile             # Docker image build file
-├── Dockerfile.dev         # Development Docker file
-├── docker-compose.yml     # Production Docker Compose
-├── docker-compose.dev.yml # Development Docker Compose
-├── docker-start.sh        # Docker start script
+├── Dockerfile.dev         # Development environment Docker file
+├── docker-compose.yml     # Production environment Docker orchestration
+├── docker-compose.dev.yml # Development environment Docker orchestration
+├── docker-start.sh        # Docker startup script
 ├── docker-stop.sh         # Docker stop script
 ├── docker-status.sh       # Docker status check script
 ├── .dockerignore          # Docker ignore file
-├── DOCKER.md              # Docker deployment docs
+├── DOCKER.md              # Docker deployment documentation
 └── *.sh                   # Startup scripts
 ```
 
 ## 🌐 API Documentation
 
-After starting the system, access API documentation at:
+After starting the system, visit the following addresses to view API documentation:
 
-- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs) (local development)
-- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc) (local development)
+- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
 ### Main API Endpoints
 
@@ -403,24 +415,24 @@ After starting the system, access API documentation at:
 | `/api/v1/projects` | GET | Get project list |
 | `/api/v1/projects` | POST | Create new project |
 | `/api/v1/projects/{id}` | GET | Get project details |
-| `/api/v1/youtube/parse` | POST | Parse YouTube video info |
+| `/api/v1/youtube/parse` | POST | Parse YouTube video information |
 | `/api/v1/youtube/download` | POST | Download YouTube video |
 | `/api/v1/bilibili/download` | POST | Download Bilibili video |
-| `/api/v1/projects/{id}/process` | POST | Start processing project |
+| `/api/v1/projects/{id}/process` | POST | Start project processing |
 | `/api/v1/projects/{id}/status` | GET | Get processing status |
 
 ## 🔍 Troubleshooting
 
 ### Common Issues
 
-#### 1. Port Already in Use
+#### 1. Port Occupied
 
 ```bash
 # Check port usage
 lsof -i :8000  # Backend port
 lsof -i :3000  # Frontend port
 
-# Kill the process
+# Stop occupying processes
 kill -9 <PID>
 ```
 
@@ -432,7 +444,7 @@ redis-cli ping
 
 # Start Redis service
 brew services start redis  # macOS
-systemctl start redis      # Linux
+systemctl start redis-server  # Linux
 ```
 
 #### 3. YouTube Download Failed
@@ -440,7 +452,7 @@ systemctl start redis      # Linux
 - Check network connection
 - Update yt-dlp: `pip install --upgrade yt-dlp`
 - Try using browser cookies
-- Check if the video is available
+- Check if video is available
 
 #### 4. Bilibili Download Failed
 
@@ -448,13 +460,13 @@ systemctl start redis      # Linux
 - Update account cookies
 - Check video permission settings
 
-### Viewing Logs
+### Log Viewing
 
 ```bash
 # View all logs
 tail -f logs/*.log
 
-# View logs for a specific service
+# View specific service logs
 tail -f logs/backend.log    # Backend logs
 tail -f logs/frontend.log   # Frontend logs
 tail -f logs/celery.log     # Task queue logs
@@ -466,7 +478,7 @@ tail -f logs/celery.log     # Task queue logs
 # Detailed status check
 ./status_autoclip.sh
 
-# Manually check services
+# Manual service check
 curl http://localhost:8000/api/v1/health/  # Backend health check
 curl http://localhost:3000/                # Frontend access test
 redis-cli ping                             # Redis connection test
@@ -490,7 +502,7 @@ python -m uvicorn backend.main:app --reload --port 8000
 ### Frontend Development
 
 ```bash
-# Navigate to frontend directory
+# Enter frontend directory
 cd frontend
 
 # Start development server
@@ -512,38 +524,38 @@ celery -A backend.core.celery_app flower --port=5555
 
 ## 📊 Performance Optimization
 
-### Production Configuration
+### Production Environment Configuration
 
-1. **Database optimization**
+1. **Database Optimization**
    - Use PostgreSQL instead of SQLite
    - Configure connection pooling
    - Enable query caching
 
-2. **Redis optimization**
+2. **Redis Optimization**
    - Configure memory limits
    - Enable persistence
    - Set expiration policies
 
-3. **Celery optimization**
+3. **Celery Optimization**
    - Adjust concurrency
    - Configure task routing
    - Enable result backend
 
 ## 🔒 Security Configuration
 
-### Production Security
+### Production Environment Security
 
-1. **Environment variables**
+1. **Environment Variables**
    - Use strong passwords
-   - Rotate keys regularly
-   - Restrict API access
+   - Regularly rotate keys
+   - Limit API access
 
-2. **Network security**
+2. **Network Security**
    - Configure firewall
    - Use HTTPS
-   - Restrict CORS
+   - Limit CORS
 
-3. **Data security**
+3. **Data Security**
    - Regular backups
    - Encrypt sensitive data
    - Access control
@@ -561,7 +573,7 @@ cd autoclip
 
 # Configure environment variables
 cp env.example .env
-# Edit the .env file and fill in the required configuration
+# Edit .env file and fill in necessary configurations
 
 # Start all services
 docker-compose up -d
@@ -570,12 +582,12 @@ docker-compose up -d
 docker-compose ps
 ```
 
-#### Accessing Services
+#### Access Services
 
-- **Frontend UI**: [http://localhost:3000](http://localhost:3000) (local development)
-- **Backend API**: [http://localhost:8000](http://localhost:8000) (local development)
-- **API Docs**: [http://localhost:8000/docs](http://localhost:8000/docs) (local development)
-- **Flower Monitoring**: [http://localhost:5555](http://localhost:5555) (local development)
+- **Frontend Interface**: [http://localhost:3000](http://localhost:3000)
+- **Backend API**: [http://localhost:8000](http://localhost:8000)
+- **API Documentation**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Flower Monitoring**: [http://localhost:5555](http://localhost:5555)
 
 #### Development Environment
 
@@ -583,13 +595,13 @@ docker-compose ps
 # Use development environment configuration
 docker-compose -f docker-compose.dev.yml up -d
 
-# View logs in real time
+# View logs in real-time
 docker-compose -f docker-compose.dev.yml logs -f
 ```
 
-#### Full Instructions
+#### Detailed Instructions
 
-For a complete Docker deployment guide, refer to the [DOCKER.md](DOCKER.md) documentation.
+Complete Docker deployment guide please refer to [DOCKER.md](DOCKER.md) documentation.
 
 ### System Service
 
@@ -617,70 +629,73 @@ WantedBy=multi-user.target
 
 ### Coming Soon
 
-- [ ] **Bilibili Upload**: Auto-upload clipped videos to Bilibili with multi-account management
-- [ ] **Subtitle Editing**: Visual subtitle editor and sync feature
-- [ ] **Multi-language Support**: Video processing support for more languages
+- [ ] **Bilibili Upload Feature**: Automatic upload of clipped videos to Bilibili
+  with multi-account management
+- [ ] **Subtitle Editing Feature**: Visual subtitle editor and synchronization functionality
+- [ ] **Multi-language Support**: Support for more language video processing
 - [ ] **Cloud Storage**: Integrate cloud storage services
-- [ ] **Batch Processing**: Support batch video processing
-- [ ] **Open API**: Provide a public API interface
-- [ ] **Mobile App**: Develop a mobile application
+- [ ] **Batch Processing**: Support for batch video processing
+- [ ] **API Open**: Provide public API interface
+- [ ] **Mobile App**: Develop mobile application
 
-### Long-term Plans
+### Long-term Planning
 
 - [ ] **AI Model Optimization**: Integrate more AI models
 - [ ] **Real-time Collaboration**: Support multi-user collaboration
 - [ ] **Plugin System**: Support third-party plugins
-- [ ] **Enterprise Edition**: Enterprise-grade features and services
+- [ ] **Enterprise Edition**: Enterprise-level features and services
 
 ## 🤝 Contributing
 
-We welcome all forms of contributions! Whether it's code contributions, documentation improvements, bug reports, or feature suggestions.
+We welcome all forms of contributions! Whether it's code contributions,
+documentation improvements, issue reports, or feature suggestions.
 
 ### How to Contribute
 
 1. **Fork** the project to your GitHub account
-2. Clone your fork locally:
+2. Clone your Fork to local:
 
    ```bash
    git clone https://github.com/zhouxiaoka/autoclip.git
    cd autoclip
    ```
 
-3. Create a feature branch:
+3. Create feature branch:
 
    ```bash
    git checkout -b feature/amazing-feature
    ```
 
 4. Develop and test
-5. Commit your changes:
+5. Commit changes:
 
    ```bash
    git add .
    git commit -m 'feat: add amazing feature'
    ```
 
-6. Push the branch:
+6. Push branch:
 
    ```bash
    git push origin feature/amazing-feature
    ```
 
-7. Create a **Pull Request** on GitHub
+7. Create **Pull Request** on GitHub
 
 ### Development Standards
 
 #### Code Standards
 
-- Backend: Follow PEP 8 Python code style
+- Backend: Follow PEP 8 Python code standards
 - Frontend: Use TypeScript, follow ESLint rules
-- Commit messages: Use conventional commits format (feat, fix, docs, style, refactor, test, chore)
+- Commit messages: Use conventional commit format (feat, fix, docs, style, refactor,
+  test, chore)
 
-#### Development Workflow
+#### Development Process
 
-1. Make sure all tests pass
+1. Ensure all tests pass
 2. Add necessary test cases
-3. Update relevant documentation
+3. Update related documentation
 4. Ensure code quality checks pass
 
 #### Commit Message Format
@@ -699,28 +714,24 @@ Examples:
 - `fix(ui): resolve upload modal display issue`
 - `docs(readme): update installation instructions`
 
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
-
 ## ❓ FAQ
 
-### Installation & Startup Issues
+### Installation and Startup Issues
 
-**Q: What should I do if the port is already in use at startup?**  
-A: Use the following commands to check and stop the process occupying the port:
+**Q: What to do when ports are occupied during startup?**
+A: Use the following commands to check and stop processes occupying ports:
 
 ```bash
 # Check port usage
 lsof -i :8000  # Backend port
 lsof -i :3000  # Frontend port
 
-# Kill the process
+# Stop processes
 kill -9 <PID>
 ```
 
-**Q: What should I do if Redis connection fails?**  
-A: Make sure the Redis service is running:
+**Q: What to do when Redis connection fails?**
+A: Ensure Redis service is running:
 
 ```bash
 # Check Redis status
@@ -731,8 +742,8 @@ brew services start redis  # macOS
 sudo systemctl start redis-server  # Linux
 ```
 
-**Q: What should I do if frontend dependency installation fails?**  
-A: Try cleaning the cache and reinstalling:
+**Q: What to do when frontend dependency installation fails?**
+A: Try clearing cache and reinstalling:
 
 ```bash
 cd frontend
@@ -743,40 +754,42 @@ npm install
 
 ### Feature Usage Issues
 
-**Q: What should I do if YouTube video download fails?**  
+**Q: What to do when YouTube video download fails?**
 A:
 
 1. Check network connection
 2. Update yt-dlp: `pip install --upgrade yt-dlp`
 3. Try using browser cookies
-4. Check if the video is available or requires login
+4. Check if video is available or requires login
 
-**Q: What should I do if Bilibili video download fails?**  
+**Q: What to do when Bilibili video download fails?**
 A:
 
 1. Check account login status
 2. Update account cookies
 3. Check video permission settings
-4. Try using a different account
+4. Try using other accounts
 
-**Q: What should I do if AI processing is slow?**  
+**Q: What to do when AI processing is slow?**
 A:
 
 1. Check API key configuration
 2. Adjust processing parameters (reduce chunk_size)
 3. Check network connection
-4. Consider using a faster AI model
+4. Consider using faster AI models
 
-**Q: When will the Bilibili upload feature be available?**  
-A: The Bilibili upload feature is in development and is expected to be released in the next version. It will support:
+**Q: When will Bilibili upload feature be available?**
+A: Bilibili upload feature is currently in development and is expected to be
+released in the next version. This feature will support:
 
-- Auto-upload of clipped videos to Bilibili
+- Automatic upload of clipped videos to Bilibili
 - Multi-account management and switching
 - Batch upload and queue management
 - Upload progress monitoring
 
-**Q: When will the subtitle editing feature be available?**  
-A: The subtitle editing feature is in development and is expected to be released in the next version. It will support:
+**Q: When will subtitle editing feature be available?**
+A: Subtitle editing feature is currently in development and is expected to be
+released in the next version. This feature will support:
 
 - Visual subtitle editor
 - Subtitle timeline synchronization
@@ -785,7 +798,7 @@ A: The subtitle editing feature is in development and is expected to be released
 
 ### Performance Optimization
 
-**Q: How can I improve processing speed?**  
+**Q: How to improve processing speed?**
 A:
 
 1. Increase Celery Worker concurrency
@@ -793,63 +806,66 @@ A:
 3. Increase system memory
 4. Optimize video quality settings
 
-**Q: How can I reduce storage space usage?**  
+**Q: How to reduce storage space usage?**
 A:
 
-1. Regularly clean up temporary files
+1. Regularly clean temporary files
 2. Compress output videos
 3. Delete unnecessary projects
 4. Use external storage
 
 ## 📞 Support & Feedback
 
-### Getting Help
+### Get Help
 
 - **Issue Reports**: [GitHub Issues](https://github.com/zhouxiaoka/autoclip/issues)
 - **Feature Suggestions**: [GitHub Discussions](https://github.com/zhouxiaoka/autoclip/discussions)
-  (available after repository creation)
-- **Bug Reports**: Please use the GitHub Issues template
-- **Documentation**: [Project Docs](docs/)
+- **Bug Reports**: Please use GitHub Issues template
+- **Documentation**: [Project Documentation](docs/)
 
 ### Contact
 
-If you have questions or suggestions, please reach out via:
+For questions or suggestions, please contact us through:
 
-### 💬 QQ
+#### 💬 QQ
 
 ![QQ QR Code](./qq_qr.jpg)
 
-### 📱 Feishu (Lark)
+#### 📱 Feishu
 
 ![Feishu QR Code](./feishu_qr.jpg)
 
-### 📧 Other Contact Methods
+#### 📧 Other Contact Methods
 
 - Submit a [GitHub Issue](https://github.com/zhouxiaoka/autoclip/issues)
-- Send an email to: [christine_zhouye@163.com](mailto:christine_zhouye@163.com)
-- Add the QQ or Feishu contacts above
+- Send email to: [christine_zhouye@163.com](mailto:christine_zhouye@163.com)
+- Add the above QQ or Feishu contact
 
-## 🙏 Acknowledgements
+## 📄 License
 
-Thanks to the following open-source projects and services for their support:
+This project is licensed under the [MIT License](LICENSE).
 
-### Core Tech Stack
+## 🙏 Acknowledgments
+
+Thanks to the following open source projects and services:
+
+### Core Technology Stack
 
 - [FastAPI](https://fastapi.tiangolo.com/) - Modern Python web framework
 - [React](https://reactjs.org/) - User interface library
 - [Ant Design](https://ant.design/) - Enterprise-grade UI design language
-- [TypeScript](https://typescriptlang.org/) - Superset of JavaScript
+- [TypeScript](https://typescriptlang.org/) - JavaScript superset
 - [Celery](https://docs.celeryproject.org/) - Distributed task queue
 - [Redis](https://redis.io/) - In-memory data structure store
 
 ### Video Processing
 
-- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - YouTube video downloader
-- [FFmpeg](https://ffmpeg.org/) - Audio/video processing framework
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - YouTube video download tool
+- [FFmpeg](https://ffmpeg.org/) - Audio and video processing framework
 
 ### AI Services
 
-- [Tongyi Qianwen (Qwen)](https://tongyi.aliyun.com/) - Alibaba Cloud large language model service
+- [Qwen](https://tongyi.aliyun.com/) - Alibaba Cloud large language model service
 - [DashScope](https://dashscope.aliyun.com/) - Alibaba Cloud AI service platform
 
 ### Development Tools
@@ -860,16 +876,16 @@ Thanks to the following open-source projects and services for their support:
 
 ### Special Thanks
 
-- All developers contributing to the open-source community
-- Users who provided feedback and suggestions
-- Community members who participated in testing and contributing code
+- All developers contributing to the open source community
+- Users providing feedback and suggestions
+- Community members participating in testing and code contributions
 
 ---
 
-## If this project helped you, please give us a ⭐ Star
+## If this project helps you, please give us a ⭐ Star
 
 [![Star History Chart](https://api.star-history.com/svg?repos=zhouxiaoka/autoclip&type=Date)](https://star-history.com/#zhouxiaoka/autoclip&Date)
 
 Made with ❤️ by AutoClip Team
 
-⭐ If you find it useful, please give it a Star!
+⭐ If you find it useful, please give us a Star!
